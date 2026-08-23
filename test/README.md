@@ -28,4 +28,24 @@ mot servern på port 8096 ovan.
 ```bash
 npm run test:webb
 SP=/tmp npm run test:e2e
+node test/arkiv-test.mjs
 ```
+
+## Publiceringslägen
+
+`test/pages-test.mjs` kontrollerar att sidan fungerar både när den publiceras
+via GitHub Actions (`web/` i roten) och direkt från grenen (appen under
+`/web/`). Starta två statiska servrar först:
+
+```bash
+python3 -m http.server 8095 --directory .            # grenläge
+mkdir -p /tmp/site && cp -r web/. /tmp/site/ \
+  && mkdir -p /tmp/site/content && cp -r content/. /tmp/site/content/
+python3 -m http.server 8094 --directory /tmp/site    # Actions-läge
+node test/pages-test.mjs
+```
+
+## Obs
+
+Sviterna byter lösenord på ledarkontona. Starta om servern med en tom
+`DATA_DIR` mellan körningarna, annars misslyckas inloggningen andra gången.

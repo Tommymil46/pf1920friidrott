@@ -43,7 +43,12 @@ skulle ligga nere.
 
 Slå på Pages i repots inställningar: **Settings → Pages → Build and
 deployment → Source: GitHub Actions**. Arbetsflödet publicerar sedan sajten
-automatiskt vid varje push till `main`.
+automatiskt vid varje push till `main`, och sidan hamnar direkt på
+`https://<användare>.github.io/pf1920friidrott/`.
+
+Står Pages i stället på **Deploy from a branch** fungerar sidan också, men
+då ligger appen under `/web/` och rot-adressen skickar dit via en
+omdirigering. Actions-läget ger den snyggare adressen.
 
 ### 2. Starta ledartjänsten på hallenskog
 
@@ -98,7 +103,11 @@ bash test/api-test.sh       # 27 kontroller av API och behörigheter
 npm run test:webb           # 15 kontroller av inloggning i webbläsare
 npm run test:e2e            # 20 kontroller av hela redigeringsflödet
 node test/arkiv-test.mjs    # 11 kontroller av arkivet
+node test/pages-test.mjs    # 12 kontroller av båda publiceringslägena
 ```
+
+Varje svit vill ha en nystartad server – de byter lösenord, så andra körningen
+mot samma `DATA_DIR` misslyckas annars. Se [test/README.md](test/README.md).
 
 ## Utveckling lokalt
 

@@ -67,16 +67,34 @@
       });
   }
 
+  /* Hämtar en statisk fil. Publiceras sajten via GitHub Actions ligger
+     web/ i roten och innehållet under content/. Publiceras den i stället
+     direkt från grenen hamnar sidan under /web/ och innehållet en nivå
+     upp – då fungerar ../content/. Vi provar båda. */
+  var innehallsPrefix = null;
+
+  function hamtaStatisk(vag) {
+    var prova = function (prefix) {
+      return fetch(prefix + vag + "?t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("Hittade inte " + prefix + vag);
+          innehallsPrefix = prefix;
+          return r.json();
+        });
+    };
+    if (innehallsPrefix !== null) return prova(innehallsPrefix);
+    return prova("").catch(function () { return prova("../"); });
+  }
+
+  /* Prefixet som visade sig fungera, för bilder och bilagor. */
+  function innehallsbas() { return innehallsPrefix || ""; }
+
   /* --- Innehåll --- */
   /* Läser i första hand live från API:t (färskast), annars den statiska
      filen som GitHub Pages publicerar. */
   function hamtaPass() {
     var statisk = function () {
-      return fetch(CFG.contentUrl + "?t=" + Date.now(), { cache: "no-store" })
-        .then(function (r) {
-          if (!r.ok) throw new Error("Kunde inte läsa " + CFG.contentUrl);
-          return r.json();
-        })
+      return hamtaStatisk(CFG.contentUrl)
         .then(function (p) { return { pass: p, kalla: "github" }; });
     };
     if (!harApi()) return statisk();
@@ -97,22 +115,15 @@
   }
 
   /* --- Arkiv --- */
-  function arkivStatiskt(vag) {
-    return fetch(vag + "?t=" + Date.now(), { cache: "no-store" }).then(function (r) {
-      if (!r.ok) throw new Error("Hittade inte " + vag);
-      return r.json();
-    });
-  }
-
   function arkiv() {
-    var statisk = function () { return arkivStatiskt(CFG.arkivUrl); };
+    var statisk = function () { return hamtaStatisk(CFG.arkivUrl); };
     if (!harApi()) return statisk();
     return anrop("/arkiv").catch(statisk);
   }
 
   function arkivPass(fil) {
     var statisk = function () {
-      return arkivStatiskt(CFG.arkivBas + fil).then(function (p) { return { pass: p }; });
+      return hamtaStatisk(CFG.arkivBas + fil).then(function (p) { return { pass: p }; });
     };
     if (!harApi()) return statisk();
     return anrop("/arkiv/" + encodeURIComponent(fil)).catch(statisk);
@@ -134,7 +145,7 @@
     var v = String(rel == null ? "" : rel).trim();
     if (/^https?:\/\//i.test(v)) return v;
     if (v.slice(0, 2) === "//") return "";        // protokollrelativ = annan värd
-    if (/^[\w./-]+$/.test(v) && v.indexOf("..") === -1) return v;
+    if (/^[\w./-]+$/.test(v) && v.indexOf("..") === -1) return innehallsbas() + v;
     return "";
   }
   function filUrlReserv(rel) {                    // om Pages inte hunnit publicera än
@@ -148,6 +159,7 @@
     bytLosenord: bytLosenord, hamtaPass: hamtaPass, sparaPass: sparaPass,
     laddaUpp: laddaUpp, historik: historik, historikVersion: historikVersion,
     arkiv: arkiv, arkivPass: arkivPass, arkivera: arkivera,
+    innehallsbas: innehallsbas,
     aterstall: aterstall, status: status, filUrl: filUrl, filUrlReserv: filUrlReserv
   };
 })();

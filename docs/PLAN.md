@@ -16,11 +16,18 @@
 | 8 | Arkiv över genomförda pass, läsbart och utskrivbart | C | ✅ |
 | 9 | Säkerhetsgenomgång och härdning – se [SAKERHET.md](SAKERHET.md) | C | ✅ |
 
-## Steg 10: slå på GitHub Pages (T)
+## Steg 10: ställ om Pages till GitHub Actions (T) – halvklart
 
-Repots **Settings → Pages → Build and deployment → Source: GitHub Actions**.
-Sidan hamnar då på `https://tommymil46.github.io/pf1920friidrott/`.
-Säg till när adressen är uppe, så pekar jag om det som behöver ändras.
+Pages är påslaget, men står på **Deploy from a branch**. Då serveras repot
+rakt av: appen hamnar under `/web/` och rot-adressen visade README:n.
+
+Jag har gjort sidan tålig mot båda lägena, så den fungerar redan nu –
+rot-adressen skickar vidare till appen. Men för den snyggare adressen:
+
+**Settings → Pages → Build and deployment → Source: GitHub Actions.**
+
+Då publicerar arbetsflödet `web/` i roten och sidan ligger direkt på
+`https://tommymil46.github.io/pf1920friidrott/`.
 
 ## Steg 11: skapa en GitHub-token (T)
 
