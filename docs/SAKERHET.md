@@ -41,7 +41,7 @@ att rättighetseskalering via setuid-program blockeras.
 
 | Risk | Åtgärd |
 |---|---|
-| **Startlösenordet = namnet, och namnen står på den öppna sidan.** Det räckte att gissa `anna/anna` | Konton med startlösenord kan nu **bara byta lösenord**. All redigering, uppladdning, arkivering och återställning svarar 403 tills bytet är gjort. Appen öppnar lösenordsrutan direkt vid inloggning |
+| **Startlösenordet = namnet, och namnen står på den öppna sidan.** Det räckte att gissa `anna/anna` | Byggt som en avstängningsbar spärr: `KRAV_LOSENORDSBYTE=1` gör att konton med startlösenord **bara kan byta lösenord** – all redigering, uppladdning, arkivering och återställning svarar 403 tills bytet är gjort, och appen öppnar lösenordsrutan direkt vid inloggning. **Avstängd som standard** under uppbyggnaden, på er begäran – se punkt 2 nedan |
 | `/api/status` listade alla ledarnas användarnamn publikt | Publik status säger bara att tjänsten lever. Namnen ligger bakom inloggning på `/api/status/detaljer` |
 | En inkräktares session levde kvar i upp till 12 timmar efter att lösenordet bytts | Sessionen binds till lösenordets hash. Vid byte slutar **alla** tidigare sessioner att gälla direkt, och den som byter får en ny session i samma svar |
 | Vem som helst kunde tömma GitHub-tokenens anropsbudget genom att ladda om sidan i loop | Publika läsningar cachas 20 sekunder i minnet (`LAS_CACHE_MS`) |
@@ -71,8 +71,11 @@ att rättighetseskalering via setuid-program blockeras.
 
 1. **Kör aldrig tjänsten över oskyddad HTTP.** Lösenorden skickas då i klartext.
    Antingen VPN, eller en omvänd proxy med HTTPS.
-2. **Byt startlösenorden direkt.** Appen tvingar fram det, men gör det ändå
-   samma dag som ledarna får sina konton.
+2. **Sätt `KRAV_LOSENORDSBYTE=1` innan sidan går i skarp drift** – alltså innan
+   ni bjuder in fler än er själva att läsa den, eller lägger upp riktiga
+   uppgifter ni bryr er om. Fram tills dess loggar servern en varning vid
+   uppstart som en påminnelse, och konton kan redigera med kontonamnet som
+   lösenord (t.ex. `anna/anna`).
 3. **Sätt `ALLOWED_ORIGINS`** till adressen där sidan publiceras. Lämnas den tom
    får vilken webbplats som helst anropa API:t.
 4. **Sätt en utgångstid på GitHub-tokenen** och skriv upp när den går ut.

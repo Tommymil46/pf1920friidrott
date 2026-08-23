@@ -75,10 +75,11 @@ Detaljerad driftbeskrivning finns i [docs/DRIFT.md](docs/DRIFT.md).
 
 ## Ledarkonton
 
-Anna, Eric, Johan, Ludvig och tommy. Startlösenordet är samma som
-kontonamnet, och **måste bytas innan något kan ändras** – tills bytet är gjort
-går kontot bara att byta lösenord med. Lösenorden lagras bcrypt-hashade i
-dockervolymen, aldrig i GitHub.
+Anna, Eric, Johan, Ludvig och tommy. Startlösenordet är samma som kontonamnet.
+Under uppbyggnaden (`KRAV_LOSENORDSBYTE=0`, standard) går det bra att fortsätta
+med det. Sätt `KRAV_LOSENORDSBYTE=1` i `server/.env` innan sidan går i skarp
+drift – då krävs ett riktigt lösenord innan något går att ändra. Lösenorden
+lagras bcrypt-hashade i dockervolymen, aldrig i GitHub.
 
 Sidan är öppen för alla att läsa. Lägg därför inget i passet som inte tål att
 läsas av vem som helst – se [docs/SAKERHET.md](docs/SAKERHET.md).

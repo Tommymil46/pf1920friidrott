@@ -24,6 +24,11 @@ const CONTENT_DIR = process.env.CONTENT_DIR || path.join(__dirname, "..", "conte
 const CACHE_DIR = path.join(DATA_DIR, "uploads");
 const ARKIV_DIR = process.env.ARKIV_PATH || "content/arkiv";
 
+/* Under uppbyggnaden kan ledarna jobba kvar med kontonamnet som lösenord
+   (t.ex. anna/anna). Sätt KRAV_LOSENORDSBYTE=1 i .env när ni är redo att
+   tvinga fram riktiga lösenord – se docs/SAKERHET.md. */
+const KRAV_LOSENORDSBYTE = process.env.KRAV_LOSENORDSBYTE === "1";
+
 if (!HEMLIGHET) {
   console.error("FEL: JWT_SECRET måste sättas. Skapa en med:  openssl rand -hex 32");
   process.exit(1);
@@ -59,6 +64,11 @@ app.use(cors({
 if (!TILLATNA.length) {
   console.warn("VARNING: ALLOWED_ORIGINS är tomt – alla webbplatser får anropa API:t. " +
                "Sätt den till adressen där sidan publiceras.");
+}
+if (!KRAV_LOSENORDSBYTE) {
+  console.warn("VARNING: KRAV_LOSENORDSBYTE är avstängt – ledarna kan logga in och " +
+               "ändra passet med kontonamnet som lösenord (t.ex. anna/anna). " +
+               "Sätt KRAV_LOSENORDSBYTE=1 i .env innan sidan är i skarp drift.");
 }
 
 /* ---------- Enkelt skydd mot lösenordsgissning ---------- */
@@ -126,7 +136,7 @@ function rensaCache() { cache.clear(); }
    Utan detta räcker det att gissa "anna/anna" för att kunna ändra
    innehållet – och namnen står på den öppna sidan. */
 function kravRiktigtLosenord(req, res, next) {
-  if (req.ledare && req.ledare.startlosenord) {
+  if (KRAV_LOSENORDSBYTE && req.ledare && req.ledare.startlosenord) {
     return res.status(403).json({
       fel: "Byt ditt startlösenord innan du ändrar något.",
       kod: "startlosenord"
@@ -170,7 +180,11 @@ api.post("/login", (req, res) => {
   forsok.delete(nyckel);
   const token = jwt.sign({ sub: l.id, namn: l.namn, pv: anv.losenordsversion(l) },
                          HEMLIGHET, { expiresIn: Number(GILTIGHET) + "h" });
-  res.json({ token, namn: l.namn, maste_byta_losenord: !!l.startlosenord });
+  res.json({
+    token, namn: l.namn,
+    maste_byta_losenord: !!l.startlosenord,
+    krav_losenordsbyte: KRAV_LOSENORDSBYTE
+  });
 });
 
 api.post("/losenord", kravInloggad, (req, res) => {

@@ -36,6 +36,7 @@ openssl rand -hex 32          # klistra in som JWT_SECRET
 | `TRUST_PROXY` | `1` bara när tjänsten står bakom en omvänd proxy och porten är bunden till `127.0.0.1` |
 | `LAS_CACHE_MS` | Hur länge publika läsningar cachas (standard 20 000 ms) |
 | `LEDARE` | Kommaseparerad lista med ledarnamn |
+| `KRAV_LOSENORDSBYTE` | `0` (standard) under uppbyggnaden – ledarna kan redigera med kontonamnet som lösenord. Sätt till `1` innan skarp drift, se [SAKERHET.md](SAKERHET.md) |
 | `MAX_FIL_MB` | Största tillåtna uppladdning (standard 10) |
 
 Nya namn i `LEDARE` läggs till automatiskt vid omstart, med kontonamnet som

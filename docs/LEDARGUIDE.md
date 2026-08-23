@@ -5,8 +5,11 @@
 1. Gå till sidan och klicka **Logga in som ledare** högst upp.
 2. Användarnamn är ditt förnamn: `Anna`, `Eric`, `Johan`, `Ludvig` eller `tommy`.
 3. Första gången är lösenordet detsamma som namnet.
-4. **Byt lösenord direkt.** Appen öppnar rutan åt dig, och du kommer inte åt
-   att ändra något förrän du gjort det. Nytt lösenord: minst 8 tecken.
+4. **Byt lösenord innan sidan går i skarp drift.** Under uppbyggnaden går det
+   bra att fortsätta med kontonamnet som lösenord. När Tommy säger till att
+   sidan är klar för allmänheten tvingar appen fram ett byte automatiskt –
+   du kommer då inte åt att ändra något förrän du bytt. Nytt lösenord: minst
+   8 tecken.
 
 ## Ändra ett träningsblock
 

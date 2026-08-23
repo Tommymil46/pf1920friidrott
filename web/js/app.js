@@ -317,10 +317,13 @@
         document.getElementById("form-login").reset();
         uppdateraInloggningsvy();
         return laddaOm().then(function () {
-          if (d.maste_byta_losenord) {
+          if (d.maste_byta_losenord && d.krav_losenordsbyte) {
             status("varning", "Du använder fortfarande startlösenordet. Du måste byta det " +
                               "innan du kan ändra något – klicka \"Byt lösenord\".", true);
             oppnaDialog("dlg-password");
+          } else if (d.maste_byta_losenord) {
+            status("info", "Välkommen " + d.namn + "! Du kan redigera passet. Kom ihåg att byta " +
+                           "bort startlösenordet innan sidan är i skarp drift.");
           } else {
             status("ok", "Välkommen " + d.namn + "! Du kan nu redigera passet.");
           }
