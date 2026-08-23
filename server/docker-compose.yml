@@ -14,10 +14,30 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+
+    # Endast lokalt på hallenskog. Släpp ut tjänsten via en
+    # omvänd proxy med HTTPS, inte genom att öppna porten rakt ut.
     ports:
-      - "8080:8080"
+      - "127.0.0.1:8080:8080"
+
     volumes:
       - ledardata:/data
+
+    # --- Härdning ---
+    read_only: true                  # bara /data och /tmp går att skriva i
+    tmpfs:
+      - /tmp:size=64m
+    cap_drop:
+      - ALL                          # inga Linux-privilegier behövs
+    security_opt:
+      - no-new-privileges:true       # ingen rättighetseskalering via setuid
+    pids_limit: 256
+    mem_limit: 512m
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
 volumes:
   ledardata:

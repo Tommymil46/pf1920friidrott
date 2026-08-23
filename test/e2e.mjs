@@ -7,6 +7,24 @@ const fel = [];
 p.on('pageerror', e => fel.push('PAGEERROR ' + e.message));
 p.on('dialog', d => d.accept());
 
+/* Startlösenordet duger bara till att byta lösenord – gör det först.
+   Appen öppnar lösenordsrutan automatiskt vid inloggning. */
+async function stangDialoger(p) {
+  await p.evaluate(() => document.querySelectorAll('dialog[open]').forEach(d => d.close()));
+  await p.waitForTimeout(200);
+}
+
+async function byteLosenord(p, start, nytt) {
+  await stangDialoger(p);
+  await p.click('#btn-password');
+  await p.waitForTimeout(300);
+  await p.fill('#pw-old', start);
+  await p.fill('#pw-new', nytt);
+  await p.fill('#pw-new2', nytt);
+  await p.click('#form-password button[type=submit]');
+  await p.waitForTimeout(1000);
+}
+
 const kollar = [];
 const k = (n, v) => kollar.push([n, !!v]);
 
@@ -19,6 +37,22 @@ await p.fill('#login-user','Eric'); await p.fill('#login-pass','Eric');
 await p.click('#form-login button[type=submit]');
 await p.waitForTimeout(1200);
 k('inloggad', await p.locator('#user-box').isVisible());
+
+k('lösenordsrutan öppnas direkt vid startlösenord',
+  await p.locator('#dlg-password').evaluate(d => d.open));
+
+// startlösenordet ska inte räcka för att ändra något
+await stangDialoger(p);
+await p.locator('#block-lopning button[data-action=redigera]').click();
+await p.waitForTimeout(400);
+await p.locator('#block-lopning .form-actions button', { hasText: 'Spara block' }).click();
+await p.waitForTimeout(1200);
+k('startlösenord blockeras vid sparning',
+  (await p.locator('#status').textContent()).includes('byta ditt startlösenord'));
+await byteLosenord(p, 'Eric', 'ettLangtLosenord1');
+k('lösenordsbyte klart', (await p.locator('#status').textContent()).includes('bytt'));
+await p.reload({ waitUntil: 'networkidle' });
+await p.waitForTimeout(1200);
 
 await p.locator('#block-lopning button[data-action=redigera]').click();
 await p.waitForTimeout(400);

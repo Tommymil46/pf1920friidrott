@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Arkiv – Friidrott PF 19/20</title>
+<meta name="description" content="Arkiv över genomförda träningspass för friidrottsgruppen PF 19/20, Hagunda IF.">
+<link rel="icon" href="img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+<div class="topbar no-print">
+  <div class="wrap topbar-inner">
+    <span class="topbar-brand">Hagunda IF · Friidrott</span>
+    <div class="topbar-actions">
+      <a class="btn btn-ghost" href="index.html">← Aktuellt pass</a>
+      <button id="btn-print" class="btn btn-ghost" type="button">🖨 Skriv ut</button>
+    </div>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <img src="img/logo.svg" alt="Hagunda IF" class="logo">
+    <div class="header-text">
+      <h1 id="sidrubrik">Arkiv</h1>
+      <p class="subtitle" id="group-name">Genomförda träningspass</p>
+    </div>
+  </div>
+</header>
+
+<nav class="navbar no-print">
+  <div class="wrap navbar-inner" id="block-nav"></div>
+</nav>
+
+<div id="status" class="status no-print" hidden></div>
+
+<main class="wrap" id="main">
+
+  <!-- Listvy -->
+  <section id="arkivlista" class="arkiv">
+    <p class="arkiv-intro no-print">
+      Här ligger de pass som ledarna arkiverat. Klicka på ett pass för att se
+      och skriva ut det precis som det såg ut den dagen.
+    </p>
+    <div id="arkivposter" class="arkiv-poster">Laddar arkivet…</div>
+  </section>
+
+  <!-- Detaljvy: samma uppbyggnad som förstasidan -->
+  <section id="arkivpass" hidden>
+    <p class="no-print" style="margin:0 0 12px">
+      <button id="btn-tillbaka" class="btn btn-ghost btn-liten" type="button">← Tillbaka till arkivet</button>
+    </p>
+    <div class="pass-head" id="pass-head">
+      <div class="pass-facts" id="pass-facts"></div>
+      <div class="pass-common" id="pass-common"></div>
+    </div>
+    <div id="blocks" class="blocks"></div>
+    <div class="add-block" id="add-block-row" hidden></div>
+    <footer class="pass-footer"><p id="meta-line"></p></footer>
+  </section>
+
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/markdown.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/arkiv.js"></script>
+</body>
+</html>

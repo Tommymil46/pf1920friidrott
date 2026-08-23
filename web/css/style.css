@@ -46,6 +46,7 @@ h1,h2,h3,h4{font-family:var(--rubrik);font-weight:700;line-height:1.15;margin:0}
   transition:background .12s ease,color .12s ease,border-color .12s ease;
 }
 .btn:focus-visible{outline:3px solid var(--gul);outline-offset:2px}
+a.btn{text-decoration:none;display:inline-block}
 .btn-accent{background:var(--gul);color:var(--bla-mork);border-color:var(--gul)}
 .btn-accent:hover{background:var(--gul-mork)}
 .btn-primary{background:var(--bla);color:#fff;border-color:var(--bla)}
@@ -194,6 +195,34 @@ main{padding-bottom:48px}
 .sidvarning{margin-top:14px;border-radius:var(--radie);padding:10px 14px;font-size:14px}
 .sidvarning.ok{background:#e8f6ec;color:#14622c;border:1px solid #b9e0c6}
 .sidvarning.varning{background:#fdf4d8;color:#7a5c00;border:1px solid #ecd9a0}
+
+/* ---------- Arkiv ---------- */
+.arkiv-intro{margin:22px 0 14px;color:var(--text-svag);font-size:15px}
+.arkiv-poster{display:grid;gap:12px;margin-bottom:24px}
+.arkiv-kort{
+  display:flex;gap:16px;align-items:flex-start;text-decoration:none;color:inherit;
+  background:var(--kort);border:1px solid var(--linje);border-left:6px solid var(--bla);
+  border-radius:var(--radie);box-shadow:var(--skugga);padding:14px 16px;
+  transition:border-color .12s ease,box-shadow .12s ease;
+}
+.arkiv-kort:hover{border-left-color:var(--gul);box-shadow:0 2px 8px rgba(0,0,0,.14)}
+.arkiv-kort:focus-visible{outline:3px solid var(--gul);outline-offset:2px}
+.arkiv-datum{flex:none;width:210px;color:var(--bla);font-size:14px;padding-top:2px}
+.arkiv-text{flex:1;min-width:0}
+.arkiv-text h2{font-size:20px;color:var(--bla);text-transform:uppercase;letter-spacing:.02em}
+.arkiv-meta{margin:2px 0 0;font-size:14px;color:var(--text-svag)}
+.arkiv-block{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.arkiv-etikett{
+  background:#eef0f8;border:1px solid #ccd2ea;color:var(--bla-mork);
+  border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;
+}
+.arkiv-tomt{color:var(--text-svag);background:var(--kort);border:1px solid var(--linje);
+  border-radius:var(--radie);padding:18px}
+
+@media (max-width:640px){
+  .arkiv-kort{flex-direction:column;gap:6px}
+  .arkiv-datum{width:auto}
+}
 
 /* ---------- Mobil ---------- */
 @media (max-width:640px){

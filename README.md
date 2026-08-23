@@ -10,6 +10,8 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
   tidigare version med ett klick.
+* **Arkiv.** Genomförda pass arkiveras och finns kvar under *Arkiv*, där de
+  kan läsas och skrivas ut precis som de såg ut den dagen.
 
 ## Så hänger delarna ihop
 
@@ -25,6 +27,7 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 
 * **web/** – själva webbappen. Ren HTML/CSS/JS, inget byggsteg.
 * **content/pass.json** – passets innehåll. Detta är "databasen".
+* **content/arkiv/** – genomförda pass, ett per fil, plus `index.json`.
 * **content/uploads/** – bilder och PDF:er som ledarna laddat upp.
 * **server/** – ledartjänsten: inloggning, uppladdning och commits till GitHub.
 * **.github/workflows/pages.yml** – publicerar sajten till GitHub Pages vid
@@ -68,10 +71,15 @@ Detaljerad driftbeskrivning finns i [docs/DRIFT.md](docs/DRIFT.md).
 ## Ledarkonton
 
 Anna, Eric, Johan, Ludvig och tommy. Startlösenordet är samma som
-kontonamnet – **byt det vid första inloggningen** under *Byt lösenord*.
-Lösenorden lagras bcrypt-hashade i Dockervolymen, aldrig i GitHub.
+kontonamnet, och **måste bytas innan något kan ändras** – tills bytet är gjort
+går kontot bara att byta lösenord med. Lösenorden lagras bcrypt-hashade i
+dockervolymen, aldrig i GitHub.
+
+Sidan är öppen för alla att läsa. Lägg därför inget i passet som inte tål att
+läsas av vem som helst – se [docs/SAKERHET.md](docs/SAKERHET.md).
 
 Kort guide för ledarna: [docs/LEDARGUIDE.md](docs/LEDARGUIDE.md).
+Säkerhetsgenomgång: [docs/SAKERHET.md](docs/SAKERHET.md).
 
 ## Utskrift
 
@@ -79,6 +87,18 @@ Knappen **Skriv ut** längst upp skriver ut förstasidan som träningsunderlag.
 Under passet visas hur många A4-sidor utskriften blir – siffran mäts genom
 att sidan renderas om med utskriftsstilen, så den stämmer med verkligheten.
 Blir det fler än tre sidor erbjuder appen ett kompakt läge utan bilder.
+
+## Test
+
+```bash
+npm install                 # Playwright
+cd server && npm install && cd ..
+node test/fejk-github.mjs & # låtsas-GitHub, se test/README.md
+bash test/api-test.sh       # 27 kontroller av API och behörigheter
+npm run test:webb           # 15 kontroller av inloggning i webbläsare
+npm run test:e2e            # 20 kontroller av hela redigeringsflödet
+node test/arkiv-test.mjs    # 11 kontroller av arkivet
+```
 
 ## Utveckling lokalt
 

@@ -10,6 +10,10 @@ window.PASS_CONFIG = {
   /* Var det statiska innehållet ligger (publicerat via GitHub Pages). */
   contentUrl: "content/pass.json",
 
+  /* Arkivet med genomförda pass. */
+  arkivUrl: "content/arkiv/index.json",
+  arkivBas: "content/arkiv/",
+
   /* Hur många A4-sidor utskriften får bli. */
   maxSidor: 3,
 

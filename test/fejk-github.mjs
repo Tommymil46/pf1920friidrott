@@ -13,7 +13,10 @@ function put(path, contentB64, message, author) {
   commits.unshift(c);
   return { content: { sha: s }, commit: { sha: c.sha } };
 }
-put('content/pass.json', Buffer.from(JSON.stringify({ schemaVersion:1, titel:'Start', block:[{id:'lopning',namn:'Löpning',text:'a',bilder:[],filer:[]}] }, null, 2)).toString('base64'), 'Initial', { name:'system' });
+/* Utgå från repots riktiga startinnehåll, så testerna speglar verkligheten. */
+import fs from 'node:fs';
+const startPass = fs.readFileSync(new URL('../content/pass.json', import.meta.url), 'utf8');
+put('content/pass.json', Buffer.from(startPass).toString('base64'), 'Startinnehåll', { name: 'system' });
 
 const srv = http.createServer((req, res) => {
   let kropp = '';
@@ -51,4 +54,4 @@ const srv = http.createServer((req, res) => {
     svar(404, { message: 'Not Found: ' + u.pathname });
   });
 });
-srv.listen(9099, () => console.log('fejk-github på 9099'));
+srv.listen(9099, '127.0.0.1', () => console.log('fejk-github på 9099'));
