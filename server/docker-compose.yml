@@ -1,0 +1,23 @@
+# ===========================================================
+# Kör på hallenskog:
+#   cd pf1920friidrott
+#   cp server/.env.example server/.env    # fyll i värdena
+#   docker compose -f server/docker-compose.yml up -d --build
+# ===========================================================
+services:
+  ledartjanst:
+    build:
+      context: ..
+      dockerfile: server/Dockerfile
+    image: pf1920-ledare:latest
+    container_name: pf1920-ledare
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      - ledardata:/data
+
+volumes:
+  ledardata:

@@ -1,0 +1,88 @@
+/* ===========================================================
+   Utskriftslayout – underlag för träningen, max 3 A4-sidor
+   =========================================================== */
+@page{
+  size:A4 portrait;
+  margin:11mm 12mm 13mm 12mm;
+}
+
+.no-print,
+.topbar,
+.navbar,
+.status,
+.add-block,
+.block-verktyg,
+.redigera-form,
+.sidvarning,
+dialog{display:none !important}
+
+html,body{background:#fff !important}
+body{font-size:9.6pt;line-height:1.34;color:#000}
+.wrap{max-width:none;padding:0}
+
+/* ---- Header kompakt ---- */
+.site-header{border-bottom:2pt solid #EFD73A;background:none}
+.header-inner{padding:0 0 4pt;gap:8pt;align-items:flex-end}
+.logo{width:38pt;height:38pt}
+.header-text h1{font-size:18pt;color:#293589}
+.subtitle{font-size:9pt}
+
+/* ---- Fakta ---- */
+main{padding-bottom:0}
+.pass-head{margin-top:6pt}
+.pass-facts{
+  box-shadow:none;border:0.6pt solid #999;border-left:2.5pt solid #293589;
+  padding:5pt 8pt;border-radius:0;
+}
+.pass-titel{font-size:14pt;margin-bottom:2pt}
+.fakta-rad{font-size:9pt;gap:2pt 12pt;color:#000}
+
+.pass-common{
+  margin-top:5pt;box-shadow:none;border:0.6pt solid #bbb;border-radius:0;padding:5pt 8pt;
+}
+.gem-post{margin-bottom:3pt}
+.gem-post h3{font-size:8.5pt;margin-bottom:0}
+.gem-post p{margin:0}
+
+/* ---- Block i två spalter ---- */
+/* En spalt: läsbart som underlag och ger förutsägbara sidbrytningar
+   (två spalter bryter sidor godtyckligt i webbläsarnas utskrift). */
+.blocks{margin-top:6pt;display:block}
+.block{
+  box-shadow:none;border:0.6pt solid #999;border-radius:0;
+  break-inside:avoid;page-break-inside:avoid;
+  margin:0 0 5pt;width:100%;
+}
+.block-head{background:#293589 !important;color:#fff !important;padding:3pt 6pt;gap:5pt;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.block-head h2{font-size:11.5pt}
+.block-ikon{font-size:11pt}
+.block-ansvarig{font-size:8pt;color:#EFD73A !important}
+.block-body{padding:5pt 7pt}
+.block-syfte{font-size:8pt;margin-bottom:3pt}
+.block-text p{margin:0 0 3pt}
+.block-text ul,.block-text ol{margin:0 0 3pt;padding-left:13pt}
+.block-text li{margin:0}
+
+/* ---- Bilder små i utskrift ---- */
+.bild-rad{gap:4pt;margin-top:4pt}
+.bild-kort{width:23%;margin:0}
+/* Fast bildformat => utskriftens höjd går att räkna ut exakt. */
+.bild-kort img{aspect-ratio:4/3;object-fit:cover}
+.bild-kort figcaption{font-size:7pt;margin-top:1pt}
+/* Max tre bilder per block skrivs ut – resten finns kvar på webben */
+.bild-kort:nth-of-type(n+4){display:none}
+
+.fil-lista{margin-top:4pt;gap:3pt}
+.fil-lista a{background:none;border:0.5pt solid #999;padding:1pt 5pt;font-size:8pt;color:#000}
+.fil-lista a::after{content:" (bilaga)";font-weight:400;color:#555}
+
+/* ---- Fot ---- */
+.pass-footer{margin-top:5pt;padding-top:3pt;font-size:7.5pt;border-top:0.5pt solid #bbb}
+
+/* ---- Kompakt läge: aktiveras av knappen "Skriv ut (kompakt)" ---- */
+body.kompakt{font-size:8.6pt;line-height:1.26}
+body.kompakt .header-text h1{font-size:15pt}
+body.kompakt .logo{width:30pt;height:30pt}
+body.kompakt .bild-rad{display:none}
+body.kompakt .block-head h2{font-size:10.5pt}

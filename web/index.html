@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aktuellt träningspass – Friidrott PF 19/20</title>
+<meta name="description" content="Aktuellt träningspass för friidrottsgruppen PF 19/20, Hagunda IF.">
+<link rel="icon" href="img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Roboto+Condensed:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/print.css" media="print">
+</head>
+<body>
+
+<!-- ===== Toppbar med inloggning ===== -->
+<div class="topbar no-print">
+  <div class="wrap topbar-inner">
+    <span class="topbar-brand">Hagunda IF · Friidrott</span>
+    <div class="topbar-actions">
+      <button id="btn-print" class="btn btn-ghost" type="button" title="Skriv ut underlaget (max 3 sidor)">
+        <span aria-hidden="true">🖨</span> Skriv ut
+      </button>
+      <button id="btn-login" class="btn btn-accent" type="button">Logga in som ledare</button>
+      <div id="user-box" class="user-box" hidden>
+        <span id="user-name" class="user-name"></span>
+        <button id="btn-history" class="btn btn-ghost" type="button">Historik</button>
+        <button id="btn-password" class="btn btn-ghost" type="button">Byt lösenord</button>
+        <button id="btn-logout" class="btn btn-ghost" type="button">Logga ut</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Header ===== -->
+<header class="site-header">
+  <div class="wrap header-inner">
+    <img src="img/logo.svg" alt="Hagunda IF" class="logo">
+    <div class="header-text">
+      <h1>Aktuellt träningspass</h1>
+      <p class="subtitle" id="group-name">Friidrott PF 19/20</p>
+    </div>
+  </div>
+</header>
+
+<nav class="navbar no-print">
+  <div class="wrap navbar-inner" id="block-nav"><!-- fylls av js --></div>
+</nav>
+
+<!-- ===== Statusrad ===== -->
+<div id="status" class="status no-print" hidden></div>
+
+<main class="wrap" id="main">
+
+  <!-- Passets fakta -->
+  <section class="pass-head" id="pass-head">
+    <div class="pass-facts" id="pass-facts"></div>
+    <div class="pass-common" id="pass-common"></div>
+  </section>
+
+  <!-- Blocken -->
+  <section id="blocks" class="blocks"></section>
+
+  <!-- Lägg till block (endast inloggad) -->
+  <div class="add-block no-print" id="add-block-row" hidden>
+    <button id="btn-add-block" class="btn btn-primary" type="button">+ Lägg till träningsblock</button>
+  </div>
+
+  <footer class="pass-footer">
+    <p id="meta-line"></p>
+  </footer>
+</main>
+
+<!-- ===== Modal: inloggning ===== -->
+<dialog id="dlg-login" class="dlg">
+  <form method="dialog" id="form-login">
+    <h2>Logga in som ledare</h2>
+    <label>Användarnamn
+      <input type="text" id="login-user" autocomplete="username" required>
+    </label>
+    <label>Lösenord
+      <input type="password" id="login-pass" autocomplete="current-password" required>
+    </label>
+    <p class="dlg-error" id="login-error" hidden></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-ghost" data-close>Avbryt</button>
+      <button type="submit" class="btn btn-primary">Logga in</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ===== Modal: byt lösenord ===== -->
+<dialog id="dlg-password" class="dlg">
+  <form method="dialog" id="form-password">
+    <h2>Byt lösenord</h2>
+    <label>Nuvarande lösenord
+      <input type="password" id="pw-old" autocomplete="current-password" required>
+    </label>
+    <label>Nytt lösenord (minst 8 tecken)
+      <input type="password" id="pw-new" autocomplete="new-password" minlength="8" required>
+    </label>
+    <label>Upprepa nytt lösenord
+      <input type="password" id="pw-new2" autocomplete="new-password" minlength="8" required>
+    </label>
+    <p class="dlg-error" id="pw-error" hidden></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn btn-ghost" data-close>Avbryt</button>
+      <button type="submit" class="btn btn-primary">Spara</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- ===== Modal: historik ===== -->
+<dialog id="dlg-history" class="dlg dlg-wide">
+  <h2>Ändringshistorik</h2>
+  <p class="dlg-help">Varje sparning blir en incheckning i GitHub. Ingenting försvinner – du kan alltid återställa en tidigare version.</p>
+  <div id="history-list" class="history-list">Laddar…</div>
+  <div class="dlg-actions">
+    <button type="button" class="btn btn-ghost" data-close>Stäng</button>
+  </div>
+</dialog>
+
+<script src="js/config.js"></script>
+<script src="js/markdown.js"></script>
+<script src="js/api.js"></script>
+<script src="js/render.js"></script>
+<script src="js/edit.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

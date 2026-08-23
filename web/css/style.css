@@ -1,0 +1,204 @@
+/* ===========================================================
+   Friidrott PF 19/20 – tema efter hagundaif.se
+   Klubbfärger: blå #293589, gul #EFD73A
+   =========================================================== */
+:root{
+  --bla:#293589;
+  --bla-mork:#1d2765;
+  --gul:#EFD73A;
+  --gul-mork:#d8c02a;
+  --text:#222;
+  --text-svag:#5a5a5a;
+  --linje:#e2e2e6;
+  --bg:#f5f6f8;
+  --kort:#ffffff;
+  --radie:6px;
+  --skugga:0 1px 3px rgba(0,0,0,.10);
+  --sans:'Open Sans',Tahoma,Arial,'Helvetica Neue',Helvetica,sans-serif;
+  --rubrik:'Roboto Condensed',Tahoma,Arial,'Helvetica Neue',Helvetica,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none !important}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:var(--sans); font-size:16px; line-height:1.55;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+img{max-width:100%;height:auto}
+
+h1,h2,h3,h4{font-family:var(--rubrik);font-weight:700;line-height:1.15;margin:0}
+
+/* ---------- Toppbar ---------- */
+.topbar{background:var(--bla-mork);color:#fff}
+.topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;flex-wrap:wrap}
+.topbar-brand{font-family:var(--rubrik);letter-spacing:.04em;text-transform:uppercase;font-size:14px;color:#cfd4ee}
+.topbar-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.user-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.user-name{font-weight:700;font-size:14px;color:var(--gul)}
+
+/* ---------- Knappar ---------- */
+.btn{
+  font-family:var(--sans);font-size:14px;font-weight:600;
+  border:1px solid transparent;border-radius:var(--radie);
+  padding:7px 14px;cursor:pointer;line-height:1.2;
+  transition:background .12s ease,color .12s ease,border-color .12s ease;
+}
+.btn:focus-visible{outline:3px solid var(--gul);outline-offset:2px}
+.btn-accent{background:var(--gul);color:var(--bla-mork);border-color:var(--gul)}
+.btn-accent:hover{background:var(--gul-mork)}
+.btn-primary{background:var(--bla);color:#fff;border-color:var(--bla)}
+.btn-primary:hover{background:var(--bla-mork)}
+.btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+.btn-ghost:hover{background:rgba(255,255,255,.14)}
+.btn-liten{padding:4px 10px;font-size:13px}
+.btn-fara{background:#fff;color:#a11;border-color:#e0b4b4}
+.btn-fara:hover{background:#fbeaea}
+main .btn-ghost{color:var(--bla);border-color:#c6cade}
+main .btn-ghost:hover{background:#eef0f8}
+
+/* ---------- Header ---------- */
+.site-header{background:#fff;border-bottom:4px solid var(--gul)}
+.header-inner{display:flex;align-items:center;gap:18px;padding-top:18px;padding-bottom:18px}
+.logo{width:76px;height:76px;flex:none}
+.header-text h1{font-size:34px;color:var(--bla);text-transform:uppercase;letter-spacing:.01em}
+.subtitle{margin:2px 0 0;color:var(--text-svag);font-size:15px}
+
+/* ---------- Navbar ---------- */
+.navbar{background:var(--bla)}
+.navbar-inner{display:flex;flex-wrap:wrap;gap:2px}
+.navbar a{
+  color:#fff;text-decoration:none;font-family:var(--rubrik);text-transform:uppercase;
+  font-size:15px;letter-spacing:.03em;padding:11px 16px;display:block;
+}
+.navbar a:hover{background:var(--bla-mork)}
+.navbar a.aktiv,.navbar a:focus-visible{background:var(--gul);color:var(--bla-mork)}
+
+/* ---------- Status ---------- */
+.status{padding:10px 16px;font-size:14px;border-bottom:1px solid var(--linje);text-align:center}
+.status.info{background:#eef1fb;color:var(--bla-mork)}
+.status.ok{background:#e8f6ec;color:#14622c}
+.status.varning{background:#fdf4d8;color:#7a5c00}
+.status.fel{background:#fbeaea;color:#8a1f1f}
+
+/* ---------- Passets fakta ---------- */
+main{padding-bottom:48px}
+.pass-head{margin-top:22px}
+.pass-facts{
+  background:var(--kort);border:1px solid var(--linje);border-left:6px solid var(--bla);
+  border-radius:var(--radie);box-shadow:var(--skugga);padding:16px 18px;
+}
+.pass-titel{font-size:26px;color:var(--bla);margin-bottom:6px}
+.fakta-rad{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:15px;color:var(--text-svag)}
+.fakta-rad strong{color:var(--text);font-weight:600}
+
+.pass-common{
+  margin-top:14px;background:var(--kort);border:1px solid var(--linje);
+  border-radius:var(--radie);box-shadow:var(--skugga);padding:14px 18px;
+}
+.gem-post{margin:0 0 10px}
+.gem-post:last-child{margin-bottom:0}
+.gem-post h3{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--bla);margin-bottom:2px}
+
+/* ---------- Block ---------- */
+.blocks{margin-top:22px;display:grid;gap:16px}
+.block{
+  background:var(--kort);border:1px solid var(--linje);border-radius:var(--radie);
+  box-shadow:var(--skugga);overflow:hidden;break-inside:avoid;
+}
+.block-head{
+  display:flex;align-items:center;gap:10px;
+  background:var(--bla);color:#fff;padding:9px 16px;
+}
+.block-ikon{font-size:20px;line-height:1}
+.block-head h2{font-size:20px;text-transform:uppercase;letter-spacing:.03em;flex:1}
+.block-ansvarig{font-size:13px;color:var(--gul);font-weight:600;white-space:nowrap}
+.block-body{padding:14px 16px}
+.block-syfte{
+  font-size:13px;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--bla);font-weight:700;margin:0 0 8px;
+}
+.block-text p{margin:0 0 8px}
+.block-text ul,.block-text ol{margin:0 0 8px;padding-left:22px}
+.block-text li{margin:2px 0}
+.block-text strong{font-weight:700}
+
+/* Bilder */
+.bild-rad{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
+.bild-kort{width:200px;max-width:100%;margin:0}
+.bild-kort img{border:1px solid var(--linje);border-radius:4px;display:block;width:100%;
+  aspect-ratio:4/3;object-fit:cover;background:#eef0f4}
+.bild-kort a{display:block}
+.bild-kort figcaption{font-size:12px;color:var(--text-svag);margin-top:3px}
+
+/* Filer / PDF */
+.fil-lista{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.fil-lista a{
+  display:inline-flex;align-items:center;gap:6px;text-decoration:none;
+  background:#eef0f8;color:var(--bla-mork);border:1px solid #ccd2ea;
+  border-radius:var(--radie);padding:5px 11px;font-size:13px;font-weight:600;
+}
+.fil-lista a:hover{background:#e0e4f4}
+
+/* Blockverktyg (redigering) */
+.block-verktyg{display:flex;gap:6px;margin-left:auto}
+.block-verktyg .btn{background:rgba(255,255,255,.15);color:#fff;border-color:rgba(255,255,255,.4)}
+.block-verktyg .btn:hover{background:rgba(255,255,255,.3)}
+
+/* ---------- Redigeringsläge ---------- */
+.redigerar .block{outline:2px dashed transparent}
+.redigera-form{padding:14px 16px;background:#fbfbfd;border-top:1px solid var(--linje)}
+.redigera-form label,.dlg label{display:block;margin:0 0 10px;font-size:14px;font-weight:600}
+.redigera-form input[type=text],
+.redigera-form textarea,
+.dlg input{
+  width:100%;font:inherit;font-weight:400;margin-top:3px;
+  padding:8px 10px;border:1px solid #bfc4d4;border-radius:var(--radie);background:#fff;
+}
+.redigera-form textarea{min-height:170px;resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px}
+.form-rad{display:flex;gap:12px;flex-wrap:wrap}
+.form-rad>label{flex:1 1 180px}
+.hjalp{font-size:12px;color:var(--text-svag);font-weight:400;margin:3px 0 0}
+.form-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+
+.bilaga-lista{list-style:none;margin:6px 0 10px;padding:0;display:grid;gap:6px}
+.bilaga-rad{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--linje);border-radius:var(--radie);padding:6px 8px;font-size:13px}
+.bilaga-rad img{width:44px;height:44px;object-fit:cover;border-radius:3px;flex:none}
+.bilaga-rad input[type=text]{flex:1;margin:0}
+
+/* ---------- Fot ---------- */
+.pass-footer{margin-top:26px;font-size:13px;color:var(--text-svag);border-top:1px solid var(--linje);padding-top:10px}
+.add-block{margin-top:18px}
+
+/* ---------- Dialoger ---------- */
+.dlg{border:none;border-radius:8px;padding:0;max-width:440px;width:calc(100% - 32px);box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.dlg-wide{max-width:720px}
+.dlg::backdrop{background:rgba(20,24,50,.55)}
+.dlg form,.dlg>h2,.dlg>.dlg-help,.dlg>.history-list,.dlg>.dlg-actions{padding:0 22px}
+.dlg>h2,.dlg form h2{padding-top:20px;font-size:22px;color:var(--bla)}
+.dlg form h2{padding-left:0;padding-right:0}
+.dlg-help{font-size:13px;color:var(--text-svag);margin:6px 0 12px}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;padding-bottom:20px;padding-top:6px}
+.dlg form .dlg-actions{padding-left:0;padding-right:0}
+.dlg-error{background:#fbeaea;color:#8a1f1f;border-radius:var(--radie);padding:8px 10px;font-size:14px;margin:0 0 10px}
+
+.history-list{max-height:52vh;overflow:auto;border:1px solid var(--linje);border-radius:var(--radie)}
+.hist-rad{display:flex;align-items:center;gap:12px;padding:9px 12px;border-bottom:1px solid var(--linje);font-size:14px}
+.hist-rad:last-child{border-bottom:none}
+.hist-text{flex:1;min-width:0}
+.hist-tid{color:var(--text-svag);font-size:12px}
+.hist-vem{font-weight:700;color:var(--bla)}
+
+/* ---------- Sidräknare för utskrift ---------- */
+.sidvarning{margin-top:14px;border-radius:var(--radie);padding:10px 14px;font-size:14px}
+.sidvarning.ok{background:#e8f6ec;color:#14622c;border:1px solid #b9e0c6}
+.sidvarning.varning{background:#fdf4d8;color:#7a5c00;border:1px solid #ecd9a0}
+
+/* ---------- Mobil ---------- */
+@media (max-width:640px){
+  .header-text h1{font-size:26px}
+  .logo{width:58px;height:58px}
+  .navbar a{padding:9px 12px;font-size:14px}
+  .topbar-inner{padding-top:6px;padding-bottom:6px}
+}
