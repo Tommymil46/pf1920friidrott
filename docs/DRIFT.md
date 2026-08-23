@@ -1,0 +1,85 @@
+# Drift – ledartjänsten på hallenskog
+
+## 1. GitHub-token
+
+Ledartjänsten behöver skriva i repot. Skapa en **fine-grained personal access
+token**:
+
+1. GitHub → Settings → Developer settings → **Personal access tokens →
+   Fine-grained tokens** → *Generate new token*.
+2. **Repository access:** Only select repositories → `Tommymil46/pf1920friidrott`.
+3. **Permissions:** Repository permissions → **Contents: Read and write**.
+   Inget mer behövs.
+4. Sätt en utgångstid (t.ex. 12 månader) och skriv upp när den går ut.
+
+Klistra in tokenen i `server/.env` som `GITHUB_TOKEN`. Den filen ligger i
+`.gitignore` och ska aldrig checkas in.
+
+## 2. Konfiguration
+
+```bash
+cp server/.env.example server/.env
+openssl rand -hex 32          # klistra in som JWT_SECRET
+```
+
+| Variabel | Vad den gör |
+|---|---|
+| `GITHUB_OWNER` / `GITHUB_REPO` / `GITHUB_BRANCH` | Var passet lagras |
+| `GITHUB_TOKEN` | Token enligt ovan |
+| `JWT_SECRET` | Signerar inloggningarna. Byts den loggas alla ut |
+| `TOKEN_TIMMAR` | Hur länge en inloggning gäller (standard 12) |
+| `ALLOWED_ORIGINS` | Webbadressen som får anropa API:t, t.ex. `https://tommymil46.github.io` |
+| `LEDARE` | Kommaseparerad lista med ledarnamn |
+| `MAX_FIL_MB` | Största tillåtna uppladdning (standard 10) |
+
+Nya namn i `LEDARE` läggs till automatiskt vid omstart, med kontonamnet som
+startlösenord. Befintliga konton rörs inte.
+
+## 3. Starta
+
+```bash
+docker compose -f server/docker-compose.yml up -d --build
+docker compose -f server/docker-compose.yml logs -f
+curl http://localhost:8080/api/status
+```
+
+Kontona sparas i dockervolymen `ledardata` (`/data/ledare.json`). Volymen
+måste finnas kvar mellan omstarter, annars nollställs lösenorden till
+startvärdena.
+
+## 4. Gör tjänsten nåbar utifrån
+
+Ledarna behöver nå tjänsten från sina telefoner. Två vägar:
+
+* **Enklast och säkrast:** WireGuard/Tailscale hem till hallenskog. Då kan
+  redigering bara ske hemifrån eller via VPN, medan alla kan läsa sidan
+  på GitHub Pages.
+* **Publikt:** en reverse proxy med HTTPS framför tjänsten, t.ex. Caddy:
+
+  ```
+  traningspass.dinadoman.se {
+      reverse_proxy localhost:8080
+  }
+  ```
+
+  Sätt då `ALLOWED_ORIGINS=https://tommymil46.github.io` och `apiBase` i
+  `web/js/config.js` till `https://traningspass.dinadoman.se/api`.
+
+Kör inte tjänsten publikt över ren HTTP – lösenorden skickas i klartext då.
+
+## 5. Säkerhetskopiering
+
+Innehållet ligger redan i GitHub med full historik. Det enda som bara finns
+på hallenskog är lösenordsfilen:
+
+```bash
+docker run --rm -v ledardata:/data -v "$PWD":/ut alpine \
+  tar czf /ut/ledardata-$(date +%F).tar.gz -C /data .
+```
+
+## 6. Uppdatera
+
+```bash
+git pull
+docker compose -f server/docker-compose.yml up -d --build
+```

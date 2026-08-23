@@ -1,0 +1,57 @@
+# ===========================================================
+# Publicerar webbappen på GitHub Pages vid varje ändring i
+# web/ eller content/. Varje ledarsparning triggar alltså en
+# ny publicering automatiskt.
+# ===========================================================
+name: Publicera till GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - "content/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  bygg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Sätt ihop sajten
+        run: |
+          mkdir -p _site
+          cp -r web/. _site/
+          mkdir -p _site/content
+          cp -r content/. _site/content/
+          touch _site/.nojekyll
+          echo "Byggd $(date -u +%FT%TZ) från ${GITHUB_SHA}" > _site/version.txt
+
+      - name: Kontrollera att passet är giltig JSON
+        run: python3 -c "import json;json.load(open('_site/content/pass.json'));print('pass.json OK')"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  publicera:
+    needs: bygg
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
