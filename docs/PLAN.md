@@ -29,38 +29,43 @@ rot-adressen skickar vidare till appen. Men för den snyggare adressen:
 Då publicerar arbetsflödet `web/` i roten och sidan ligger direkt på
 `https://tommymil46.github.io/pf1920friidrott/`.
 
-## Steg 11: skapa en GitHub-token (T)
+## Steg 11–14: Cloudflare Worker – klart ✅ (C), publicering kvar (T)
 
-Fine-grained token med **Contents: Read and write** enbart på det här repot.
-Steg för steg i [DRIFT.md](DRIFT.md). Tokenen ska **bara** in i
-`server/.env` på hallenskog – klistra aldrig in den i en chatt eller i repot.
+Du valde väg A. Ledartjänsten finns nu byggd som en Cloudflare Worker under
+[`worker/`](../worker) – funktionellt identisk med Docker-varianten
+(inloggning, redigering, uppladdning, historik, arkiv, samma spärrar), men
+utan bcrypt/express/multer/jsonwebtoken: bara webbstandarder (PBKDF2 via Web
+Crypto, en handrullad HS256-JWT, native FormData). 36 kontroller passerar,
+varav 4 mot en riktig `workerd`-runtime (inte bara simulerat i Node).
 
-## Steg 12: starta tjänsten (T)
+**Kvar för dig:**
 
-```bash
-git clone https://github.com/Tommymil46/pf1920friidrott.git
-cd pf1920friidrott
-cp server/.env.example server/.env      # fyll i token + JWT_SECRET
-docker compose -f server/docker-compose.yml up -d --build
-curl http://localhost:8080/api/status
-```
+1. Skapa ett gratis Cloudflare-konto och logga in: `npx wrangler login`
+2. Skapa en KV-namnrymd: `npx wrangler kv namespace create APP_KV` och
+   klistra in id:t i `worker/wrangler.toml`
+3. Sätt hemligheterna: `npx wrangler secret put JWT_SECRET` (kör
+   `openssl rand -hex 32` för värdet) och `npx wrangler secret put
+   GITHUB_TOKEN` (samma fine-grained token, **Contents: Read and write**,
+   som beskrivs i [DRIFT.md](DRIFT.md) avsnitt 1 – klistra aldrig in den
+   i en chatt eller i repot)
+4. `cd worker && npm install && npm run deploy`
 
-## Steg 13: gör tjänsten nåbar för ledarna (T, jag hjälper till)
+Fullständig steg-för-steg-guide: [worker/README.md](../worker/README.md).
 
-Välj VPN (WireGuard/Tailscale) eller en publik HTTPS-proxy – jämförelse i
-[DRIFT.md](DRIFT.md). Berätta vilket du väljer så skriver jag konfigurationen.
+Docker-varianten på hallenskog (`server/`) finns kvar i repot om ni någon
+gång skulle vilja byta – välj bara en av de två i produktion.
 
-## Steg 14: peka appen mot tjänsten (C)
+## Steg 15: peka appen mot Workern (C, när adressen finns)
 
-När adressen är klar sätter jag `apiBase` i `web/js/config.js` och
-`ALLOWED_ORIGINS` i `.env.example`.
+Så fort du har adressen från `npm run deploy` sätter jag `apiBase` i
+`web/js/config.js` till den, och `ALLOWED_ORIGINS` i `wrangler.toml`.
 
-## Steg 15: fyll passet med riktigt innehåll (T + ledarna)
+## Steg 16: fyll passet med riktigt innehåll (T + ledarna)
 
 Logga in, byt lösenord, skriv in nästa pass. Innehållet som ligger där nu är
 exempel som är tänkta att skrivas över.
 
-## Steg 16: provtryck (T)
+## Steg 17: provtryck (T)
 
 Skriv ut ett riktigt pass och se att tre sidor räcker i praktiken. Hör av dig
 om något ska vara tätare eller glesare.
@@ -76,21 +81,29 @@ om något ska vara tätare eller glesare.
 | Är hallenskog rätt plats? | **Kanske inte** – se nedan | Alternativ utrett, du väljer |
 | Arkiv över gamla pass? | **Ja** | Byggt och testat |
 
-### Om hallenskog: du har rätt i att fundera
+### Om hallenskog: löst genom att slippa den
 
-Att öppna hallenskog mot internet är den enda delen av lösningen som utsätter
-något av ditt eget för risk. Jag har härdat containern så långt det går – se
-[SAKERHET.md](SAKERHET.md) – men den bästa lösningen är att inte behöva öppna
-hallenskog alls. Tre vägar:
+Du valde **väg A**: ledartjänsten flyttar till Cloudflare Workers i stället
+för hallenskog. Hallenskog behöver alltså inte öppnas mot internet alls –
+`worker/` är byggd, testad (36 kontroller, varav 4 mot en riktig
+`workerd`-runtime) och redo att publiceras, se stegen ovan.
 
-| Väg | Vad som krävs | För- och nackdelar |
-|---|---|---|
-| **A. Ingen egen server** – ledartjänsten flyttar till Cloudflare Workers eller Deno Deploy | Jag skriver om `server/` till en Worker (samma API, samma frontend). Du klistrar in GitHub-tokenen som en hemlighet hos dem | Gratis, inget hemma som exponeras, HTTPS ingår, inget att uppdatera. **Min rekommendation** |
-| **B. Supabase för inloggningen** + en liten funktion som committar | Konto hos Supabase; ledarna får riktiga konton med lösenordsåterställning via mejl | Snyggare kontohantering, men två tjänster att hålla reda på i stället för en. Överdrivet för fem ledare |
-| **C. Hallenskog, men bara via VPN** | WireGuard eller Tailscale hem | Inget öppnas mot internet alls. Ledarna kan bara redigera hemifrån eller via VPN. Sidan är fortfarande öppen att läsa för alla |
+Docker-varianten på hallenskog finns kvar i repot om ni skulle vilja byta
+tillbaka eller köra båda parallellt under en övergång (välj ändå bara en i
+skarp drift – peka `web/js/config.js` mot den ni faktiskt använder).
 
-Väg A och C är båda bra. Säg vilken du vill ha, så bygger jag den – väg A tar
-mig ungefär en arbetsomgång, väg C är bara konfiguration.
+**Avvägningar värda att känna till**, utförligare i
+[worker/README.md](../worker/README.md#skillnader-mot-docker-varianten):
+
+* Lösenordshashning byter från bcrypt till PBKDF2 (20 000 iterationer) –
+  Workers gratisplan har ett tak på 10 ms CPU-tid per anrop, uppmätt tid är
+  ~5 ms per lösenordskontroll i en riktig `workerd`-runtime
+* Spärren mot lösenordsgissning och läscachen ligger i Workers KV/Cache API
+  i stället för processminne – KV:s gratisplan tillåter 1 000 skrivningar
+  per dygn, gott och väl för fem ledare
+* Workern serverar ingen egen kopia av sajten om GitHub Pages skulle ligga
+  nere (det gjorde hallenskog-varianten) – i praktiken sällan ett problem,
+  GitHub Pages har mycket hög upptid
 
 ## Sådant jag gärna bygger på – säg till vad du vill ha
 

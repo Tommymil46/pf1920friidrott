@@ -1,0 +1,28 @@
+# ===========================================================
+# Cloudflare Worker – ledartjänst för Aktuellt träningspass.
+# Deploy: se worker/README.md
+# ===========================================================
+name = "pf1920-ledartjanst"
+main = "src/index.mjs"
+compatibility_date = "2026-08-01"
+
+# KV-namnrymd för ledarkonton, lösenordsspärr och filcache.
+# Skapa med:  npx wrangler kv namespace create APP_KV
+# och klistra in det riktiga id:t här.
+[[kv_namespaces]]
+binding = "APP_KV"
+id = "KLISTRA_IN_KV_ID_HAR"
+preview_id = "lokal-test-kv"
+
+# Icke-hemliga inställningar. Hemligheter (JWT_SECRET, GITHUB_TOKEN)
+# sätts separat med `wrangler secret put`, inte här.
+[vars]
+GITHUB_OWNER = "Tommymil46"
+GITHUB_REPO = "pf1920friidrott"
+GITHUB_BRANCH = "main"
+LEDARE = "Anna,Eric,Johan,Ludvig,tommy"
+ALLOWED_ORIGINS = "https://tommymil46.github.io"
+KRAV_LOSENORDSBYTE = "0"
+TOKEN_TIMMAR = "12"
+MAX_FIL_MB = "10"
+LAS_CACHE_MS = "20000"

@@ -1,4 +1,9 @@
-# Drift – ledartjänsten på hallenskog
+# Drift – ledartjänsten som Docker-container (hallenskog)
+
+Den här guiden gäller `server/`, Docker-varianten av ledartjänsten. Kör ni
+i stället Cloudflare Worker-varianten (rekommenderat, inget hemma öppnas mot
+internet) – se [worker/README.md](../worker/README.md) i stället. Avsnitt 1
+nedan om GitHub-token gäller båda varianterna.
 
 ## 1. GitHub-token
 

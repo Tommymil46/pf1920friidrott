@@ -1,0 +1,4 @@
+# Kopiera till .dev.vars för lokal utveckling (den filen ska INTE in i git).
+JWT_SECRET=byt-ut-mot-en-egen-testhemlighet
+GITHUB_TOKEN=fejktoken
+GITHUB_API=http://127.0.0.1:9099

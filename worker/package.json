@@ -1,0 +1,14 @@
+{
+  "name": "pf1920-ledartjanst-worker",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ledartjänst för Aktuellt träningspass, som Cloudflare Worker (inget eget servrar behövs).",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

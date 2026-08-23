@@ -2,7 +2,16 @@
 
 Genomgång av vad som kan gå fel, vad som är åtgärdat och vad som återstår.
 Utgångspunkt: **sidan är öppen för alla att läsa**, bara redigering kräver
-inloggning, och tjänsten körs på hallenskog.
+inloggning.
+
+Genomgången nedan skrevs för Docker-varianten på hallenskog (`server/`).
+Rekommenderade valet är sedan **Cloudflare Worker-varianten** (`worker/`) –
+den bygger på samma logik (samma spärrar, samma innehållsgranskning, samma
+begränsade GitHub-token) men har inget hemma som kan tas över i första
+läget. Det som skiljer sig är beskrivet i
+[worker/README.md](../worker/README.md#skillnader-mot-docker-varianten):
+PBKDF2 i stället för bcrypt, och att spärren mot lösenordsgissning ligger i
+Workers KV i stället för i processminnet.
 
 ## Finns något känsligt i koden?
 
@@ -37,6 +46,15 @@ oprivilegierad användare, har alla Linux-privilegier bortdragna, filsystemet
 monterat skrivskyddat utom `/data` och `/tmp`, och `no-new-privileges` satt så
 att rättighetseskalering via setuid-program blockeras.
 
+### Samma fråga för Cloudflare Worker-varianten
+
+Det finns inget "hallenskog att ta över" i Worker-varianten – koden körs i
+Cloudflares isolerade miljö, inte på er egen utrustning. Kapas ändå ert
+Cloudflare-konto (t.ex. genom ett läckt lösenord) är skadans omfattning
+densamma som ovan: `GITHUB_TOKEN` och `JWT_SECRET` är de enda hemligheterna,
+och tokenen har fortfarande bara `Contents: Read and write` på det här
+repot. Lösenorden ligger PBKDF2-hashade i Workers KV, inte i klartext.
+
 ## Åtgärdat i den här genomgången
 
 | Risk | Åtgärd |
@@ -69,17 +87,20 @@ att rättighetseskalering via setuid-program blockeras.
 
 ## Kvar att göra – och det är du som gör det
 
-1. **Kör aldrig tjänsten över oskyddad HTTP.** Lösenorden skickas då i klartext.
-   Antingen VPN, eller en omvänd proxy med HTTPS.
+1. **Kör aldrig tjänsten över oskyddad HTTP.** Lösenorden skickas då i
+   klartext. Workern får HTTPS automatiskt av Cloudflare – inget att göra
+   där. Kör ni Docker-varianten i stället: antingen VPN, eller en omvänd
+   proxy med HTTPS.
 2. **Sätt `KRAV_LOSENORDSBYTE=1` innan sidan går i skarp drift** – alltså innan
    ni bjuder in fler än er själva att läsa den, eller lägger upp riktiga
-   uppgifter ni bryr er om. Fram tills dess loggar servern en varning vid
-   uppstart som en påminnelse, och konton kan redigera med kontonamnet som
-   lösenord (t.ex. `anna/anna`).
+   uppgifter ni bryr er om. Fram tills dess konton kan redigera med
+   kontonamnet som lösenord (t.ex. `anna/anna`).
 3. **Sätt `ALLOWED_ORIGINS`** till adressen där sidan publiceras. Lämnas den tom
    får vilken webbplats som helst anropa API:t.
 4. **Sätt en utgångstid på GitHub-tokenen** och skriv upp när den går ut.
-5. **Säkerhetskopiera `/data`** – det är det enda som inte finns i GitHub.
+5. **Säkerhetskopiera lösenordsdatan** – det enda som inte finns i GitHub.
+   Workern: `npx wrangler kv key get ledare --namespace-id <id>`. Docker:
+   `/data` i dockervolymen, se DRIFT.md.
 
 ## Medvetna avvägningar
 
