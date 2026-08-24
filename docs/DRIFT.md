@@ -1,4 +1,9 @@
-# Drift – ledartjänsten på hallenskog
+# Drift – ledartjänsten som Docker-container (hallenskog)
+
+Den här guiden gäller `server/`, Docker-varianten av ledartjänsten. Kör ni
+i stället Cloudflare Worker-varianten (rekommenderat, inget hemma öppnas mot
+internet) – se [worker/README.md](../worker/README.md) i stället. Avsnitt 1
+nedan om GitHub-token gäller båda varianterna.
 
 ## 1. GitHub-token
 
@@ -11,6 +16,10 @@ token**:
 3. **Permissions:** Repository permissions → **Contents: Read and write**.
    Inget mer behövs.
 4. Sätt en utgångstid (t.ex. 12 månader) och skriv upp när den går ut.
+
+Ge den **inte** `Workflows`-behörighet. Med enbart `Contents` kan tokenen inte
+ändra filer under `.github/workflows/`, och kan alltså inte användas för att
+köra egen kod i era GitHub Actions om servern skulle bli kapad.
 
 Klistra in tokenen i `server/.env` som `GITHUB_TOKEN`. Den filen ligger i
 `.gitignore` och ska aldrig checkas in.
@@ -28,8 +37,11 @@ openssl rand -hex 32          # klistra in som JWT_SECRET
 | `GITHUB_TOKEN` | Token enligt ovan |
 | `JWT_SECRET` | Signerar inloggningarna. Byts den loggas alla ut |
 | `TOKEN_TIMMAR` | Hur länge en inloggning gäller (standard 12) |
-| `ALLOWED_ORIGINS` | Webbadressen som får anropa API:t, t.ex. `https://tommymil46.github.io` |
+| `ALLOWED_ORIGINS` | Webbadressen som får anropa API:t, t.ex. `https://tommymil46.github.io`. Lämnas den tom får alla webbplatser anropa API:t |
+| `TRUST_PROXY` | `1` bara när tjänsten står bakom en omvänd proxy och porten är bunden till `127.0.0.1` |
+| `LAS_CACHE_MS` | Hur länge publika läsningar cachas (standard 20 000 ms) |
 | `LEDARE` | Kommaseparerad lista med ledarnamn |
+| `KRAV_LOSENORDSBYTE` | `0` (standard) under uppbyggnaden – ledarna kan redigera med kontonamnet som lösenord. Sätt till `1` innan skarp drift, se [SAKERHET.md](SAKERHET.md) |
 | `MAX_FIL_MB` | Största tillåtna uppladdning (standard 10) |
 
 Nya namn i `LEDARE` läggs till automatiskt vid omstart, med kontonamnet som
@@ -66,6 +78,18 @@ Ledarna behöver nå tjänsten från sina telefoner. Två vägar:
   `web/js/config.js` till `https://traningspass.dinadoman.se/api`.
 
 Kör inte tjänsten publikt över ren HTTP – lösenorden skickas i klartext då.
+
+## 4b. Så är containern begränsad
+
+`docker-compose.yml` kör tjänsten med:
+
+* porten bunden till `127.0.0.1` – inget släpps ut på nätverket direkt
+* egen oprivilegierad användare, inte root
+* `cap_drop: ALL` och `no-new-privileges:true` – ingen rättighetseskalering
+* skrivskyddat filsystem utom `/data` och ett litet `/tmp`
+* tak för minne, processer och loggstorlek
+
+Ändra inte de raderna utan att läsa [SAKERHET.md](SAKERHET.md) först.
 
 ## 5. Säkerhetskopiering
 

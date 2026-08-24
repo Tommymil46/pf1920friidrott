@@ -22,6 +22,12 @@ const DATA_DIR = process.env.DATA_DIR || "/data";
 const WEB_DIR = process.env.WEB_DIR || path.join(__dirname, "..", "web");
 const CONTENT_DIR = process.env.CONTENT_DIR || path.join(__dirname, "..", "content");
 const CACHE_DIR = path.join(DATA_DIR, "uploads");
+const ARKIV_DIR = process.env.ARKIV_PATH || "content/arkiv";
+
+/* Under uppbyggnaden kan ledarna jobba kvar med kontonamnet som lösenord
+   (t.ex. anna/anna). Sätt KRAV_LOSENORDSBYTE=1 i .env när ni är redo att
+   tvinga fram riktiga lösenord – se docs/SAKERHET.md. */
+const KRAV_LOSENORDSBYTE = process.env.KRAV_LOSENORDSBYTE === "1";
 
 if (!HEMLIGHET) {
   console.error("FEL: JWT_SECRET måste sättas. Skapa en med:  openssl rand -hex 32");
@@ -30,7 +36,18 @@ if (!HEMLIGHET) {
 fs.mkdirSync(CACHE_DIR, { recursive: true });
 
 const app = express();
-app.set("trust proxy", 1);
+/* Bara på när tjänsten står bakom en omvänd proxy OCH porten är bunden
+   till 127.0.0.1. Annars kan vem som helst förfalska X-Forwarded-For och
+   gå runt spärren mot lösenordsgissning. */
+app.set("trust proxy", process.env.TRUST_PROXY === "1" ? 1 : false);
+app.disable("x-powered-by");
+app.use((req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  next();
+});
 app.use(express.json({ limit: "2mb" }));
 
 /* ---------- CORS ---------- */
@@ -43,6 +60,16 @@ app.use(cors({
     cb(null, TILLATNA.includes(origin));
   }
 }));
+
+if (!TILLATNA.length) {
+  console.warn("VARNING: ALLOWED_ORIGINS är tomt – alla webbplatser får anropa API:t. " +
+               "Sätt den till adressen där sidan publiceras.");
+}
+if (!KRAV_LOSENORDSBYTE) {
+  console.warn("VARNING: KRAV_LOSENORDSBYTE är avstängt – ledarna kan logga in och " +
+               "ändra passet med kontonamnet som lösenord (t.ex. anna/anna). " +
+               "Sätt KRAV_LOSENORDSBYTE=1 i .env innan sidan är i skarp drift.");
+}
 
 /* ---------- Enkelt skydd mot lösenordsgissning ---------- */
 const forsok = new Map();
@@ -59,6 +86,13 @@ function raknaFel(nyckel) {
   const p = forsok.get(nyckel) || { antal: 0, tid: Date.now() };
   p.antal += 1; p.tid = Date.now();
   forsok.set(nyckel, p);
+  /* Rensa gamla poster så att registret inte kan användas för att
+     äta upp minnet med påhittade användarnamn. */
+  if (forsok.size > 5000) {
+    const grans = Date.now() - 15 * 60 * 1000;
+    for (const [k, v] of forsok) if (v.tid < grans) forsok.delete(k);
+    if (forsok.size > 5000) forsok.clear();
+  }
 }
 
 /* ---------- Auth ---------- */
@@ -70,6 +104,13 @@ function kravInloggad(req, res, next) {
     const p = jwt.verify(t, HEMLIGHET);
     const l = anv.hitta(p.sub);
     if (!l) return res.status(401).json({ fel: "Kontot finns inte längre.", kod: "session" });
+    /* Byter någon lösenord slutar alla äldre sessioner att gälla – annars
+       skulle en inkräktares token leva kvar i upp till TOKEN_TIMMAR. */
+    if (p.pv !== anv.losenordsversion(l)) {
+      return res.status(401).json({
+        fel: "Lösenordet har ändrats. Logga in igen.", kod: "session"
+      });
+    }
     req.ledare = l;
     next();
   } catch {
@@ -77,17 +118,50 @@ function kravInloggad(req, res, next) {
   }
 }
 
+/* Kort minnescache för publika läsningar. Utan den kan vem som helst
+   tömma GitHub-tokenens anropsbudget genom att ladda om sidan i loop. */
+const LAS_CACHE_MS = Number(process.env.LAS_CACHE_MS || 20000);
+const cache = new Map();
+async function cachat(nyckel, hamta) {
+  const t = cache.get(nyckel);
+  if (t && Date.now() - t.tid < LAS_CACHE_MS) return t.varde;
+  const varde = await hamta();
+  cache.set(nyckel, { tid: Date.now(), varde });
+  if (cache.size > 200) cache.clear();
+  return varde;
+}
+function rensaCache() { cache.clear(); }
+
+/* Konton som fortfarande har startlösenordet får bara byta lösenord.
+   Utan detta räcker det att gissa "anna/anna" för att kunna ändra
+   innehållet – och namnen står på den öppna sidan. */
+function kravRiktigtLosenord(req, res, next) {
+  if (KRAV_LOSENORDSBYTE && req.ledare && req.ledare.startlosenord) {
+    return res.status(403).json({
+      fel: "Byt ditt startlösenord innan du ändrar något.",
+      kod: "startlosenord"
+    });
+  }
+  next();
+}
+
 /* ===========================================================
    API
    =========================================================== */
 const api = express.Router();
 
+/* Publik status: säger bara att tjänsten lever och är konfigurerad.
+   Ledarnas användarnamn är inloggningsnamn och lämnas inte ut. */
 api.get("/status", (req, res) => {
+  res.json({ ok: true, konfigurerad: gh.konfig().konfigurerad, tid: new Date().toISOString() });
+});
+
+api.get("/status/detaljer", kravInloggad, (req, res) => {
   const k = gh.konfig();
   res.json({
     ok: true,
     github: { owner: k.owner, repo: k.repo, branch: k.branch, konfigurerad: k.konfigurerad },
-    ledare: anv.alla().map((l) => l.namn),
+    ledare: anv.alla(),
     tid: new Date().toISOString()
   });
 });
@@ -104,16 +178,25 @@ api.post("/login", (req, res) => {
     return res.status(401).json({ fel: "Fel användarnamn eller lösenord." });
   }
   forsok.delete(nyckel);
-  const token = jwt.sign({ sub: l.id, namn: l.namn }, HEMLIGHET,
-                         { expiresIn: Number(GILTIGHET) + "h" });
-  res.json({ token, namn: l.namn, maste_byta_losenord: !!l.startlosenord });
+  const token = jwt.sign({ sub: l.id, namn: l.namn, pv: anv.losenordsversion(l) },
+                         HEMLIGHET, { expiresIn: Number(GILTIGHET) + "h" });
+  res.json({
+    token, namn: l.namn,
+    maste_byta_losenord: !!l.startlosenord,
+    krav_losenordsbyte: KRAV_LOSENORDSBYTE
+  });
 });
 
 api.post("/losenord", kravInloggad, (req, res) => {
   const { gammalt, nytt } = req.body || {};
   try {
     anv.bytLosenord(req.ledare.id, gammalt, nytt);
-    res.json({ ok: true });
+    /* Bytet ogiltigförklarar alla tidigare sessioner. Den som just bytte
+       får en ny direkt, så hen slipper logga in på nytt. */
+    const l = anv.hitta(req.ledare.id);
+    const token = jwt.sign({ sub: l.id, namn: l.namn, pv: anv.losenordsversion(l) },
+                           HEMLIGHET, { expiresIn: Number(GILTIGHET) + "h" });
+    res.json({ ok: true, token });
   } catch (e) {
     res.status(e.status || 400).json({ fel: e.message });
   }
@@ -121,16 +204,64 @@ api.post("/losenord", kravInloggad, (req, res) => {
 
 api.get("/pass", async (req, res, next) => {
   try {
-    const d = await gh.hamtaPass();
-    res.json(d);
+    res.json(await cachat("pass", () => gh.hamtaPass()));
   } catch (e) { next(e); }
 });
 
-api.put("/pass", kravInloggad, async (req, res, next) => {
+/* Innehållsgranskning. Håller nere storleken och ser till att inga
+   konstiga adresser (javascript:, data:, andra värdar) kan sparas – även
+   om någon skulle komma åt ett ledarkonto. */
+const SAKER_URL = /^(https?:\/\/[^\s"'<>]{1,300}|content\/uploads\/[\w.-]{1,120})$/;
+
+function granskaPass(pass) {
+  const fel = [];
+  const strang = (v, max, namn) => {
+    if (v == null) return "";
+    if (typeof v !== "string") { fel.push(namn + " måste vara text"); return ""; }
+    if (v.length > max) fel.push(namn + " är för lång (max " + max + " tecken)");
+    return v;
+  };
+
+  strang(pass.titel, 200, "Rubriken");
+  strang(pass.plats, 200, "Platsen");
+  strang(pass.tid, 100, "Tiden");
+  if (pass.datum && !/^\d{4}-\d{2}-\d{2}$/.test(String(pass.datum))) {
+    fel.push("Datumet måste skrivas som ÅÅÅÅ-MM-DD");
+  }
+  if (pass.block.length > 40) fel.push("För många block (max 40)");
+
+  pass.block.forEach((b, i) => {
+    const namn = "Block " + (i + 1);
+    if (!b || typeof b !== "object") { fel.push(namn + " är trasigt"); return; }
+    strang(b.namn, 120, namn + ": namnet");
+    strang(b.text, 30000, namn + ": innehållet");
+    strang(b.syfte, 300, namn + ": syftet");
+    strang(b.ansvarig, 120, namn + ": ledaren");
+    strang(b.ikon, 16, namn + ": ikonen");
+
+    ["bilder", "filer"].forEach((falt) => {
+      if (b[falt] == null) return;
+      if (!Array.isArray(b[falt])) { fel.push(namn + ": " + falt + " är trasigt"); return; }
+      if (b[falt].length > 30) fel.push(namn + ": för många " + falt + " (max 30)");
+      b[falt] = b[falt].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
+      b[falt].forEach((x) => {
+        x.bildtext = strang(x.bildtext, 300, namn + ": bildtexten");
+        x.namn = strang(x.namn, 200, namn + ": filnamnet");
+      });
+    });
+  });
+  return fel;
+}
+
+api.put("/pass", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
     const { pass, meddelande, sha } = req.body || {};
-    if (!pass || !Array.isArray(pass.block)) {
+    if (!pass || typeof pass !== "object" || !Array.isArray(pass.block)) {
       return res.status(400).json({ fel: "Ogiltigt innehåll." });
+    }
+    const brister = granskaPass(pass);
+    if (brister.length) {
+      return res.status(400).json({ fel: brister.slice(0, 5).join(". ") + "." });
     }
     const nuvarande = await gh.hamtaPass();
     if (sha && sha !== nuvarande.sha) {
@@ -149,6 +280,7 @@ api.put("/pass", kravInloggad, async (req, res, next) => {
       nuvarande.sha,
       anv.commitForfattare(req.ledare)
     );
+    rensaCache();
     res.json({ ok: true, sha: r.sha, commit: r.commit, pass });
   } catch (e) { next(e); }
 });
@@ -176,7 +308,7 @@ function rentNamn(namn) {
     .slice(0, 60) || "fil";
 }
 
-api.post("/upload", kravInloggad, upload.single("fil"), async (req, res, next) => {
+api.post("/upload", kravInloggad, kravRiktigtLosenord, upload.single("fil"), async (req, res, next) => {
   try {
     if (!req.file) return res.status(400).json({ fel: "Ingen fil skickades." });
     const info = TILLATNA_TYPER[req.file.mimetype];
@@ -216,6 +348,81 @@ api.get("/filer/:namn", (req, res) => {
   res.sendFile(p);
 });
 
+/* --- Arkiv över genomförda pass --- */
+function arkivSlug(pass) {
+  const datum = (pass.datum && /^\d{4}-\d{2}-\d{2}$/.test(pass.datum))
+    ? pass.datum
+    : new Date().toISOString().slice(0, 10);
+  const namn = rentNamn(String(pass.titel || "traningspass").toLowerCase())
+    .replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase() || "traningspass";
+  return `${datum}-${namn}`;
+}
+
+async function hamtaArkivIndex() {
+  try {
+    return await gh.hamtaJson(`${ARKIV_DIR}/index.json`);
+  } catch (e) {
+    if (e.status === 404) return { data: { schemaVersion: 1, pass: [] }, sha: null };
+    throw e;
+  }
+}
+
+api.get("/arkiv", async (req, res, next) => {
+  try {
+    res.json(await cachat("arkiv", async () => (await hamtaArkivIndex()).data));
+  } catch (e) { next(e); }
+});
+
+api.get("/arkiv/:fil", async (req, res, next) => {
+  try {
+    const fil = path.basename(req.params.fil);
+    if (!/^[\w.-]+\.json$/.test(fil) || fil === "index.json") {
+      return res.status(400).json({ fel: "Ogiltigt filnamn." });
+    }
+    const data = await cachat("arkiv:" + fil,
+      async () => (await gh.hamtaJson(`${ARKIV_DIR}/${fil}`)).data);
+    res.json({ pass: data });
+  } catch (e) { next(e); }
+});
+
+api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
+  try {
+    const nuvarande = await gh.hamtaPass();
+    const pass = JSON.parse(JSON.stringify(nuvarande.pass));
+
+    const index = await hamtaArkivIndex();
+    let bas = arkivSlug(pass), fil = `${bas}.json`, n = 2;
+    while (index.data.pass.some((p) => p.fil === fil)) { fil = `${bas}-${n++}.json`; }
+
+    pass.arkiverad = new Date().toISOString();
+    pass.arkiveradAv = req.ledare.namn;
+
+    await gh.sparaJson(`${ARKIV_DIR}/${fil}`, pass,
+      `Arkiverade passet ${pass.titel || fil} (${req.ledare.namn})`, null,
+      anv.commitForfattare(req.ledare));
+
+    const post = {
+      fil,
+      titel: pass.titel || "Träningspass",
+      datum: pass.datum || "",
+      plats: pass.plats || "",
+      ledare: pass.ansvarigaLedare || [],
+      block: (pass.block || []).map((b) => b.namn),
+      arkiverad: pass.arkiverad,
+      arkiveradAv: pass.arkiveradAv
+    };
+    index.data.pass.unshift(post);
+    index.data.pass.sort((a, b) => String(b.datum).localeCompare(String(a.datum)));
+
+    await gh.sparaJson(`${ARKIV_DIR}/index.json`, index.data,
+      `Uppdaterade arkivlistan (${req.ledare.namn})`, index.sha,
+      anv.commitForfattare(req.ledare));
+
+    rensaCache();
+    res.json({ ok: true, post });
+  } catch (e) { next(e); }
+});
+
 /* --- Historik --- */
 api.get("/historik", kravInloggad, async (req, res, next) => {
   try { res.json(await gh.historik(Number(req.query.antal) || 40)); }
@@ -227,7 +434,7 @@ api.get("/historik/:sha", kravInloggad, async (req, res, next) => {
   catch (e) { next(e); }
 });
 
-api.post("/aterstall", kravInloggad, async (req, res, next) => {
+api.post("/aterstall", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
     const { sha } = req.body || {};
     if (!sha) return res.status(400).json({ fel: "Ingen version angiven." });
@@ -241,6 +448,7 @@ api.post("/aterstall", kravInloggad, async (req, res, next) => {
       nuvarande.sha,
       anv.commitForfattare(req.ledare)
     );
+    rensaCache();
     res.json({ ok: true, sha: r.sha, commit: r.commit, pass: gammalt });
   } catch (e) { next(e); }
 });
@@ -268,7 +476,7 @@ if (fs.existsSync(CONTENT_DIR)) {
   /* Läs alltid färskt pass från GitHub när det efterfrågas statiskt. */
   app.get("/content/pass.json", async (req, res) => {
     try {
-      const d = await gh.hamtaPass();
+      const d = await cachat("pass", () => gh.hamtaPass());
       res.json(d.pass);
     } catch {
       res.sendFile(path.join(CONTENT_DIR, "pass.json"));
@@ -283,8 +491,13 @@ app.use((err, req, res, next) => {                        // eslint-disable-line
   if (err && err.code === "LIMIT_FILE_SIZE") {
     return res.status(413).json({ fel: "Filen är för stor." });
   }
-  console.error("Fel:", err && err.message);
-  res.status(err.status || 500).json({ fel: err.message || "Okänt serverfel" });
+  const kod = err.status || 500;
+  console.error("Fel:", kod, err && err.message);
+  /* Interna fel kan innehålla detaljer om GitHub-anropet – dem behåller
+     vi i loggen i stället för att skicka ut dem. */
+  res.status(kod).json({
+    fel: kod >= 500 ? "Något gick fel i tjänsten. Se serverloggen." : (err.message || "Fel")
+  });
 });
 
 app.listen(PORT, () => {

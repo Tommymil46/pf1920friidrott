@@ -63,6 +63,12 @@
         return r;
       })
       .catch(function (e) {
+        if (e.status === 403) {
+          status("varning", "Du måste byta ditt startlösenord innan du kan spara. " +
+                            "Klicka \"Byt lösenord\".", true);
+          oppnaDialog("dlg-password");
+          throw e;
+        }
         if (e.status === 409) {
           status("varning", "Någon annan ledare hann spara före dig. Sidan laddas om – " +
                             "gör om din ändring. Inget har gått förlorat.", true);
@@ -71,6 +77,23 @@
         status("fel", "Kunde inte spara: " + e.message, true);
         throw e;
       });
+  }
+
+  /* ---------- Arkivera passet ---------- */
+  function arkivera() {
+    if (!kanRedigera()) { status("fel", "Du måste vara inloggad som ledare."); return; }
+    var p = state.pass || {};
+    if (!confirm("Arkivera \"" + (p.titel || "passet") + "\"" +
+                 (p.datum ? " (" + p.datum + ")" : "") + "?\n\n" +
+                 "En kopia sparas i arkivet precis som passet ser ut nu. " +
+                 "Det aktuella passet ligger kvar och kan redigeras vidare inför nästa gång.")) return;
+    status("info", "Arkiverar…", true);
+    window.API.arkivera().then(function (r) {
+      status("ok", "Passet är arkiverat som " + r.post.fil + ". Det finns nu under Arkiv.");
+      rita();
+    }).catch(function (e) {
+      status("fel", "Kunde inte arkivera: " + e.message, true);
+    });
   }
 
   /* ---------- Inloggning ---------- */
@@ -268,7 +291,8 @@
   function start() {
     window.Edit.init({
       pass: function () { return state.pass; },
-      spara: spara, rita: rita, laddaOm: laddaOm, status: status
+      spara: spara, rita: rita, laddaOm: laddaOm, status: status,
+      arkivera: arkivera
     });
 
     document.getElementById("btn-print").addEventListener("click", skrivUt);
@@ -293,9 +317,13 @@
         document.getElementById("form-login").reset();
         uppdateraInloggningsvy();
         return laddaOm().then(function () {
-          if (d.maste_byta_losenord) {
-            status("varning", "Du använder fortfarande startlösenordet. Byt det under " +
-                              "\"Byt lösenord\".", true);
+          if (d.maste_byta_losenord && d.krav_losenordsbyte) {
+            status("varning", "Du använder fortfarande startlösenordet. Du måste byta det " +
+                              "innan du kan ändra något – klicka \"Byt lösenord\".", true);
+            oppnaDialog("dlg-password");
+          } else if (d.maste_byta_losenord) {
+            status("info", "Välkommen " + d.namn + "! Du kan redigera passet. Kom ihåg att byta " +
+                           "bort startlösenordet innan sidan är i skarp drift.");
           } else {
             status("ok", "Välkommen " + d.namn + "! Du kan nu redigera passet.");
           }
@@ -329,7 +357,9 @@
       window.API.bytLosenord(document.getElementById("pw-old").value, n1).then(function () {
         document.getElementById("dlg-password").close();
         document.getElementById("form-password").reset();
-        status("ok", "Lösenordet är bytt.");
+        status("ok", "Lösenordet är bytt. Nu kan du redigera passet.");
+        uppdateraInloggningsvy();
+        return laddaOm();
       }).catch(function (err) {
         fel.textContent = err.message; fel.hidden = false;
       });

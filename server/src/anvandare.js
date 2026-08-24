@@ -5,6 +5,7 @@
 "use strict";
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
 
 const DATA_DIR = process.env.DATA_DIR || "/data";
@@ -21,7 +22,7 @@ function las() {
 }
 
 function skriv(db) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o700 });
   fs.writeFileSync(FIL, JSON.stringify(db, null, 2) + "\n", { mode: 0o600 });
 }
 
@@ -105,4 +106,11 @@ function alla() {
   }));
 }
 
-module.exports = { hitta, kontrollera, bytLosenord, commitForfattare, alla, FIL };
+/* Ändras lösenordet ändras hashen, och därmed den här strängen. Den läggs
+   i sessionens token så att gamla sessioner slutar gälla vid ett byte. */
+function losenordsversion(l) {
+  return crypto.createHash("sha256").update(l.hash).digest("hex").slice(0, 16);
+}
+
+module.exports = { hitta, kontrollera, bytLosenord, commitForfattare, alla,
+                   losenordsversion, FIL };

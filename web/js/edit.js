@@ -75,9 +75,12 @@
         info: info.input.value,
         avslutning: slut.input.value
       };
-      App.spara("Uppdaterade passinformationen");
+      App.spara("Uppdaterade passinformationen").catch(function () {});
     }));
     actions.appendChild(knapp("Avbryt", "btn-ghost", function () { App.rita(); }));
+    actions.appendChild(knapp("Arkivera passet", "btn-ghost", function () {
+      App.arkivera();
+    }));
     form.appendChild(actions);
 
     var v = document.getElementById("pass-head");
@@ -204,7 +207,7 @@
       block.ansvarig = ansvarig.input.value.trim();
       block.syfte = syfte.input.value.trim();
       block.text = text.input.value;
-      App.spara("Uppdaterade blocket " + block.namn);
+      App.spara("Uppdaterade blocket " + block.namn).catch(function () {});
     }));
     actions.appendChild(knapp("Avbryt", "btn-ghost", function () { App.laddaOm(); }));
     actions.appendChild(knapp("Ta bort blocket", "btn-fara", function () {
@@ -212,7 +215,7 @@
                    "Innehållet finns kvar i historiken i GitHub och kan återställas.")) return;
       pass.block = pass.block.filter(function (b) { return b.id !== blockId; });
       pass.block.forEach(function (b, i) { b.ordning = i + 1; });
-      App.spara("Tog bort blocket " + block.namn);
+      App.spara("Tog bort blocket " + block.namn).catch(function () {});
     }));
     form.appendChild(actions);
 
@@ -237,7 +240,9 @@
       id: id, namn: namn, ikon: "", ordning: pass.block.length + 1,
       ansvarig: "", syfte: "", text: "", bilder: [], filer: []
     });
-    App.spara("Lade till blocket " + namn).then(function () { redigeraBlock(id); });
+    App.spara("Lade till blocket " + namn)
+       .then(function () { redigeraBlock(id); })
+       .catch(function () {});
   }
 
   /* ---------- Flytta block ---------- */
@@ -250,7 +255,7 @@
     var tmp = lista[i]; lista[i] = lista[j]; lista[j] = tmp;
     lista.forEach(function (b, k) { b.ordning = k + 1; });
     pass.block = lista;
-    App.spara("Ändrade ordningen på blocken");
+    App.spara("Ändrade ordningen på blocken").catch(function () {});
   }
 
   window.Edit = {

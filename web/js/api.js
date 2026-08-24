@@ -59,19 +59,42 @@
   function loggaUt() { sattToken(""); }
 
   function bytLosenord(gammalt, nytt) {
-    return anrop("/losenord", { method: "POST", body: { gammalt: gammalt, nytt: nytt } });
+    return anrop("/losenord", { method: "POST", body: { gammalt: gammalt, nytt: nytt } })
+      .then(function (d) {
+        /* Bytet avslutar alla tidigare sessioner – ta emot den nya. */
+        if (d && d.token) sattToken(d.token);
+        return d;
+      });
   }
+
+  /* Hämtar en statisk fil. Publiceras sajten via GitHub Actions ligger
+     web/ i roten och innehållet under content/. Publiceras den i stället
+     direkt från grenen hamnar sidan under /web/ och innehållet en nivå
+     upp – då fungerar ../content/. Vi provar båda. */
+  var innehallsPrefix = null;
+
+  function hamtaStatisk(vag) {
+    var prova = function (prefix) {
+      return fetch(prefix + vag + "?t=" + Date.now(), { cache: "no-store" })
+        .then(function (r) {
+          if (!r.ok) throw new Error("Hittade inte " + prefix + vag);
+          innehallsPrefix = prefix;
+          return r.json();
+        });
+    };
+    if (innehallsPrefix !== null) return prova(innehallsPrefix);
+    return prova("").catch(function () { return prova("../"); });
+  }
+
+  /* Prefixet som visade sig fungera, för bilder och bilagor. */
+  function innehallsbas() { return innehallsPrefix || ""; }
 
   /* --- Innehåll --- */
   /* Läser i första hand live från API:t (färskast), annars den statiska
      filen som GitHub Pages publicerar. */
   function hamtaPass() {
     var statisk = function () {
-      return fetch(CFG.contentUrl + "?t=" + Date.now(), { cache: "no-store" })
-        .then(function (r) {
-          if (!r.ok) throw new Error("Kunde inte läsa " + CFG.contentUrl);
-          return r.json();
-        })
+      return hamtaStatisk(CFG.contentUrl)
         .then(function (p) { return { pass: p, kalla: "github" }; });
     };
     if (!harApi()) return statisk();
@@ -91,26 +114,52 @@
     return anrop("/upload", { method: "POST", body: fd });
   }
 
+  /* --- Arkiv --- */
+  function arkiv() {
+    var statisk = function () { return hamtaStatisk(CFG.arkivUrl); };
+    if (!harApi()) return statisk();
+    return anrop("/arkiv").catch(statisk);
+  }
+
+  function arkivPass(fil) {
+    var statisk = function () {
+      return hamtaStatisk(CFG.arkivBas + fil).then(function (p) { return { pass: p }; });
+    };
+    if (!harApi()) return statisk();
+    return anrop("/arkiv/" + encodeURIComponent(fil)).catch(statisk);
+  }
+
+  function arkivera() { return anrop("/arkivera", { method: "POST" }); }
+
   /* --- Historik --- */
   function historik() { return anrop("/historik"); }
   function historikVersion(sha) { return anrop("/historik/" + encodeURIComponent(sha)); }
   function aterstall(sha) { return anrop("/aterstall", { method: "POST", body: { sha: sha } }); }
   function status() { return anrop("/status"); }
 
-  /* --- Filadresser --- */
+  /* --- Filadresser ---
+     Adresserna kommer ur pass.json. Bara http(s) och vanliga relativa
+     sökvägar släpps igenom, så att t.ex. javascript:-länkar aldrig kan
+     hamna i ett href eller src. */
   function filUrl(rel) {
-    if (/^https?:\/\//.test(rel)) return rel;
-    return rel;                                   // relativ mot GitHub Pages
+    var v = String(rel == null ? "" : rel).trim();
+    if (/^https?:\/\//i.test(v)) return v;
+    if (v.slice(0, 2) === "//") return "";        // protokollrelativ = annan värd
+    if (/^[\w./-]+$/.test(v) && v.indexOf("..") === -1) return innehallsbas() + v;
+    return "";
   }
   function filUrlReserv(rel) {                    // om Pages inte hunnit publicera än
-    if (!harApi() || /^https?:\/\//.test(rel)) return "";
-    return BAS + "/filer/" + rel.split("/").pop();
+    var v = filUrl(rel);
+    if (!harApi() || !v || /^https?:\/\//i.test(v)) return "";
+    return BAS + "/filer/" + encodeURIComponent(v.split("/").pop());
   }
 
   window.API = {
     harApi: harApi, anvandare: anvandare, loggaIn: loggaIn, loggaUt: loggaUt,
     bytLosenord: bytLosenord, hamtaPass: hamtaPass, sparaPass: sparaPass,
     laddaUpp: laddaUpp, historik: historik, historikVersion: historikVersion,
+    arkiv: arkiv, arkivPass: arkivPass, arkivera: arkivera,
+    innehallsbas: innehallsbas,
     aterstall: aterstall, status: status, filUrl: filUrl, filUrlReserv: filUrlReserv
   };
 })();

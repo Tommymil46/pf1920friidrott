@@ -115,6 +115,25 @@ async function passVidCommit(sha) {
   return JSON.parse(b64dec(d.content));
 }
 
+/* --- Godtycklig JSON-fil i repot (används för arkivet) --- */
+async function hamtaJson(vag, ref) {
+  const q = "?ref=" + encodeURIComponent(ref || BRANCH);
+  const d = await gh(`/repos/${OWNER}/${REPO}/contents/${vag}${q}`);
+  return { data: JSON.parse(b64dec(d.content)), sha: d.sha };
+}
+
+async function sparaJson(vag, data, meddelande, sha, forfattare) {
+  const body = {
+    message: meddelande,
+    content: b64enc(JSON.stringify(data, null, 2) + "\n"),
+    branch: BRANCH,
+    ...(sha ? { sha } : {}),
+    ...(forfattare ? { author: forfattare, committer: forfattare } : {})
+  };
+  const d = await gh(`/repos/${OWNER}/${REPO}/contents/${vag}`, { method: "PUT", body });
+  return { sha: d.content.sha, commit: d.commit.sha };
+}
+
 function konfig() {
   return {
     owner: OWNER, repo: REPO, branch: BRANCH,
@@ -123,4 +142,5 @@ function konfig() {
   };
 }
 
-module.exports = { hamtaPass, sparaPass, sparaFil, historik, passVidCommit, konfig };
+module.exports = { hamtaPass, sparaPass, sparaFil, historik, passVidCommit,
+                   hamtaJson, sparaJson, konfig };

@@ -1,0 +1,11 @@
+# Byggkontexten är repots rot – håll hemligheter och skräp utanför imagen.
+.git
+.github
+node_modules
+**/node_modules
+server/.env
+.env
+*.log
+_site
+test
+docs
