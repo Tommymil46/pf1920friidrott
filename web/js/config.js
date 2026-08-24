@@ -5,7 +5,7 @@ window.PASS_CONFIG = {
   /* Adress till ledar-API:t (Docker-tjänsten på hallenskog).
      Lämna tomt ("") så fungerar sidan som ren läs-sida utan inloggning.
      Exempel: "https://hallenskog.dinadress.se/api"  */
-  apiBase: "",
+  apiBase: "https://pf1920-ledartjanst.pf1920-ledartjanst.workers.dev",
 
   /* Var det statiska innehållet ligger (publicerat via GitHub Pages). */
   contentUrl: "content/pass.json",
