@@ -11,7 +11,7 @@ compatibility_date = "2026-08-01"
 # och klistra in det riktiga id:t här.
 [[kv_namespaces]]
 binding = "APP_KV"
-id = "KLISTRA_IN_KV_ID_HAR"
+id = "292f41b0124248d0acb3fdba4cd62777"
 preview_id = "lokal-test-kv"
 
 # Icke-hemliga inställningar. Hemligheter (JWT_SECRET, GITHUB_TOKEN)
