@@ -2,70 +2,63 @@
   "schemaVersion": 1,
   "uppdaterad": "2026-08-23T12:00:00Z",
   "uppdateradAv": "system",
-  "titel": "Aktuellt träningspass",
+  "titel": "Höjd / Längd",
   "datum": "2026-08-26",
   "tid": "18:00–19:30",
   "plats": "Hagunda IP",
   "grupp": "Friidrott PF 19/20",
-  "ansvarigaLedare": ["Anna", "Tommy"],
+  "ansvarigaLedare": ["Tommy", "Ludvig", "Johan", "Anna"],
   "gemensamt": {
-    "uppvarmning": "Samling vid läktaren. Namnupprop. 2 varv lugn löpning + rörlighet 5 min.",
-    "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack. Kom ihåg att ta med vattenflaska nästa gång.",
-    "info": "Vi delar upp gruppen i 5 lag som roterar mellan stationerna. 12 minuter per station, 3 minuter byte."
+    "uppvarmning": "Sida-till-sida. (5 min, ansvarig Ludvig)",
+    "avslutning": "(5 min, ansvarig Tommy)",
+    "info": "**Samling:** upprop, regler och genomgång av dagens pass (5 min, Tommy).\n\nVi delar upp barnen i tre lag som roterar mellan tre stationer: höjdhopp, längdhopp och lek. Efter stationerna bygger vi tillsammans en hinderbana med höjd-/längdhoppsbana (15 min, Ludvig)."
   },
   "block": [
-    {
-      "id": "lopning",
-      "namn": "Löpning",
-      "ikon": "🏃",
-      "ordning": 1,
-      "ansvarig": "",
-      "syfte": "Snabbhet och löpteknik",
-      "text": "**Stationen:** löpskolning och korta spurter.\n\n- Höga knän 2×20 m\n- Hälkick 2×20 m\n- Kombination 2×20 m\n- Spurt 4×30 m med gående återgång\n\nTänk på: blicken framåt, avslappnade axlar, aktiv fot.",
-      "bilder": [],
-      "filer": []
-    },
-    {
-      "id": "rorelse",
-      "namn": "Rörelse",
-      "ikon": "🤸",
-      "ordning": 2,
-      "ansvarig": "",
-      "syfte": "Koordination, balans och styrka",
-      "text": "**Stationen:** rörelsebana med hinder.\n\n- Balansgång på bom\n- Hoppa häck – jämfota\n- Krypa under hinder\n- Kullerbytta på matta\n\nTvå varv lugnt, sedan två varv på tid.",
-      "bilder": [],
-      "filer": []
-    },
-    {
-      "id": "kast",
-      "namn": "Kast",
-      "ikon": "🎯",
-      "ordning": 3,
-      "ansvarig": "",
-      "syfte": "Kastteknik och kraftöverföring",
-      "text": "**Stationen:** boll- och spjutkast.\n\n- Kast med liten boll mot vägg/nät\n- Vändkast med medicinboll\n- Introduktion pluppspjut, kast från stående\n\nSäkerhet: alla kastar åt samma håll, hämta först på ledarens signal.",
-      "bilder": [],
-      "filer": []
-    },
     {
       "id": "hojd",
       "namn": "Höjd",
       "ikon": "⬆️",
-      "ordning": 4,
-      "ansvarig": "",
-      "syfte": "Höjdhoppsteknik – sats och avslut",
-      "text": "**Stationen:** höjdhopp med mjuk ribba.\n\n- Insteg 3 steg, jämfota landning på matta\n- Sax över låg ribba\n- Bågehopp för de som är redo\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
-      "bilder": [],
+      "ordning": 1,
+      "ansvarig": "Johan",
+      "syfte": "Station 1 · höjdhopp i tjockmatta",
+      "text": "**Stationen:** höjdhopp i tjockmatta med snöre.\n\n- Start: hoppa mellan rockringarna, sträck upp och klappa bommen\n- Jämfotahopp över låga häckar fram till mattan\n- Höjdhopp – prova gärna flera varianter: flopp (stå med ryggen mot tjockmattan och hoppa bakåt, landa på rygg), saxa över ribban, eller jämfotahopp\n- Efter hoppet: springer/grodhoppar man tillbaka till start (se skiss)\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
+      "bilder": [
+        { "url": "content/uploads/skiss-hojdhopp-station1.png", "bildtext": "Skiss över höjdhoppsstationen: rockringar → klappa bom → jämfotahopp över häckar → höjdhopp → grodhopp tillbaka till start" }
+      ],
       "filer": []
     },
     {
       "id": "langd",
       "namn": "Längd",
       "ikon": "↔️",
-      "ordning": 5,
-      "ansvarig": "",
-      "syfte": "Längdhopp – ansats och avstamp",
-      "text": "**Stationen:** längdhopp i grop.\n\n- Hopp från kort ansats (5 steg)\n- Fokus på avstamp med ett ben\n- Landning på båda fötterna, framåt\n\nKratta gropen mellan varje hoppare.",
+      "ordning": 2,
+      "ansvarig": "Tommy",
+      "syfte": "Station 2 · längdhopp i tjockmatta",
+      "text": "**Stationen:** längdhopp i tjockmatta.\n\n- Start: jämfotahopp över låga häckar fram till mattan\n- Längdhopp i tjockmatta – försök landa på rumpan (jämfotahopp funkar också som variant)\n- Efter hoppet: hoppbana tillbaka till start (se skiss)",
+      "bilder": [
+        { "url": "content/uploads/skiss-langdhopp-station2.png", "bildtext": "Skiss över längdhoppsstationen: jämfotahopp över häckar → längdhopp" }
+      ],
+      "filer": []
+    },
+    {
+      "id": "lek",
+      "namn": "Lek",
+      "ikon": "🏝️",
+      "ordning": 3,
+      "ansvarig": "Anna",
+      "syfte": "Station 3 · lekstation",
+      "text": "**Stationen:** lek med rörelse.\n\n- Land, Skepp och Hav\n- Härmapan (Pippi)\n\nUtrustning: tunn matta, koner, tjockmatta.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "🏁",
+      "ordning": 4,
+      "ansvarig": "Ludvig",
+      "syfte": "Höjd-/längdhoppsbana · byggs gemensamt (15 min)",
+      "text": "**Bygg hinderbanan** tillsammans innan start.\n\nHöjd/längdhoppsbana – kombinerar hoppmomenten från dagens stationer i en gemensam bana.",
       "bilder": [],
       "filer": []
     }
