@@ -14,7 +14,7 @@ for (const [namn, url] of [
   p.on('pageerror', e => fel.push(e.message));
   await p.goto(url, { waitUntil: 'networkidle' });
   await p.waitForTimeout(1500);
-  k(namn + ': passet laddas', await p.locator('.block').count() === 5);
+  k(namn + ': passet laddas', await p.locator('.block').count() === 4);
   k(namn + ': rubriken syns', (await p.locator('.pass-titel').textContent() || '').includes('träningspass'));
   k(namn + ': ingen felruta', await p.locator('#status.fel').count() === 0);
   k(namn + ': sidräknaren mäter', /A4-sid/.test(await p.locator('.sidvarning').textContent() || ''));

@@ -129,7 +129,7 @@
     return anrop("/arkiv/" + encodeURIComponent(fil)).catch(statisk);
   }
 
-  function arkivera() { return anrop("/arkivera", { method: "POST" }); }
+  function arkivera(passId) { return anrop("/arkivera", { method: "POST", body: { passId: passId } }); }
 
   /* --- Historik --- */
   function historik() { return anrop("/historik"); }

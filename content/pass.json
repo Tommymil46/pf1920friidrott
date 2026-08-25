@@ -1,73 +1,308 @@
 {
-  "schemaVersion": 1,
-  "uppdaterad": "2026-08-23T12:00:00Z",
+  "schemaVersion": 2,
+  "uppdaterad": "2026-08-25T12:00:00Z",
   "uppdateradAv": "system",
-  "titel": "Aktuellt träningspass",
-  "datum": "2026-08-26",
-  "tid": "18:00–19:30",
-  "plats": "Hagunda IP",
-  "grupp": "Friidrott PF 19/20",
-  "ansvarigaLedare": ["Anna", "Tommy"],
-  "gemensamt": {
-    "uppvarmning": "Samling vid läktaren. Namnupprop. 2 varv lugn löpning + rörlighet 5 min.",
-    "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack. Kom ihåg att ta med vattenflaska nästa gång.",
-    "info": "Vi delar upp gruppen i 5 lag som roterar mellan stationerna. 12 minuter per station, 3 minuter byte."
-  },
-  "block": [
+  "aktivt": "lopning",
+  "pass": [
     {
       "id": "lopning",
       "namn": "Löpning",
       "ikon": "🏃",
       "ordning": 1,
-      "ansvarig": "",
-      "syfte": "Snabbhet och löpteknik",
-      "text": "**Stationen:** löpskolning och korta spurter.\n\n- Höga knän 2×20 m\n- Hälkick 2×20 m\n- Kombination 2×20 m\n- Spurt 4×30 m med gående återgång\n\nTänk på: blicken framåt, avslappnade axlar, aktiv fot.",
-      "bilder": [],
-      "filer": []
+      "datum": "2026-08-26",
+      "tid": "18:00–19:30",
+      "plats": "Hagunda IP",
+      "grupp": "Friidrott PF 19/20",
+      "ansvarigaLedare": ["Anna", "Tommy"],
+      "samling": "Samling vid läktaren. Namnupprop.",
+      "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+      "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack. Kom ihåg att ta med vattenflaska nästa gång.",
+      "moment": [
+        {
+          "id": "hoga-knan",
+          "namn": "Höga knän",
+          "ikon": "🏃",
+          "ordning": 1,
+          "ansvarig": "",
+          "syfte": "Löpteknik – frekvens",
+          "text": "2×20 m.\n\nTänk på: blicken framåt, avslappnade axlar, aktiv fot.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "halkick",
+          "namn": "Hälkick",
+          "ikon": "🏃",
+          "ordning": 2,
+          "ansvarig": "",
+          "syfte": "Löpteknik – bakåtsving",
+          "text": "2×20 m.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "kombination",
+          "namn": "Kombination",
+          "ikon": "🏃",
+          "ordning": 3,
+          "ansvarig": "",
+          "syfte": "Löpteknik – sammansatt övning",
+          "text": "2×20 m. Kombinera höga knän och hälkick.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "spurt",
+          "namn": "Spurt",
+          "ikon": "🏃",
+          "ordning": 4,
+          "ansvarig": "",
+          "syfte": "Snabbhet",
+          "text": "4×30 m med gående återgång.",
+          "bilder": [],
+          "filer": []
+        }
+      ]
     },
     {
       "id": "rorelse",
       "namn": "Rörelse",
       "ikon": "🤸",
       "ordning": 2,
-      "ansvarig": "",
-      "syfte": "Koordination, balans och styrka",
-      "text": "**Stationen:** rörelsebana med hinder.\n\n- Balansgång på bom\n- Hoppa häck – jämfota\n- Krypa under hinder\n- Kullerbytta på matta\n\nTvå varv lugnt, sedan två varv på tid.",
-      "bilder": [],
-      "filer": []
+      "datum": "2026-08-26",
+      "tid": "18:00–19:30",
+      "plats": "Hagunda IP",
+      "grupp": "Friidrott PF 19/20",
+      "ansvarigaLedare": ["Anna", "Tommy"],
+      "samling": "Samling vid läktaren. Namnupprop.",
+      "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+      "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+      "moment": [
+        {
+          "id": "balansgang",
+          "namn": "Balansgång",
+          "ikon": "🤸",
+          "ordning": 1,
+          "ansvarig": "",
+          "syfte": "Balans",
+          "text": "Balansgång på bom, två varv lugnt.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "hack-jamfota",
+          "namn": "Hoppa häck – jämfota",
+          "ikon": "🤸",
+          "ordning": 2,
+          "ansvarig": "",
+          "syfte": "Koordination",
+          "text": "Jämfotahopp över låga häckar.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "krypa-hinder",
+          "namn": "Krypa under hinder",
+          "ikon": "🤸",
+          "ordning": 3,
+          "ansvarig": "",
+          "syfte": "Kroppskontroll",
+          "text": "Krypa under hinder i rörelsebanan.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "kullerbytta",
+          "namn": "Kullerbytta",
+          "ikon": "🤸",
+          "ordning": 4,
+          "ansvarig": "",
+          "syfte": "Rörlighet",
+          "text": "Kullerbytta på matta.\n\nTvå varv lugnt, sedan två varv på tid.",
+          "bilder": [],
+          "filer": []
+        }
+      ]
     },
     {
       "id": "kast",
       "namn": "Kast",
       "ikon": "🎯",
       "ordning": 3,
-      "ansvarig": "",
-      "syfte": "Kastteknik och kraftöverföring",
-      "text": "**Stationen:** boll- och spjutkast.\n\n- Kast med liten boll mot vägg/nät\n- Vändkast med medicinboll\n- Introduktion pluppspjut, kast från stående\n\nSäkerhet: alla kastar åt samma håll, hämta först på ledarens signal.",
-      "bilder": [],
-      "filer": []
+      "datum": "2026-08-26",
+      "tid": "18:00–19:30",
+      "plats": "Hagunda IP",
+      "grupp": "Friidrott PF 19/20",
+      "ansvarigaLedare": ["Anna", "Tommy"],
+      "samling": "Samling vid läktaren. Namnupprop.",
+      "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+      "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+      "moment": [
+        {
+          "id": "kast-vagg",
+          "namn": "Kast mot vägg/nät",
+          "ikon": "🎯",
+          "ordning": 1,
+          "ansvarig": "",
+          "syfte": "Kastteknik",
+          "text": "Kast med liten boll mot vägg/nät.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "vandkast-medicinboll",
+          "namn": "Vändkast med medicinboll",
+          "ikon": "🎯",
+          "ordning": 2,
+          "ansvarig": "",
+          "syfte": "Kraftöverföring",
+          "text": "Vändkast med medicinboll, två och två.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "pluppspjut",
+          "namn": "Introduktion pluppspjut",
+          "ikon": "🎯",
+          "ordning": 3,
+          "ansvarig": "",
+          "syfte": "Kastteknik – spjut",
+          "text": "Kast från stående.\n\nSäkerhet: alla kastar åt samma håll, hämta först på ledarens signal.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "kombinationskast",
+          "namn": "Kombinationskast",
+          "ikon": "🎯",
+          "ordning": 4,
+          "ansvarig": "",
+          "syfte": "Sammansatt kastövning",
+          "text": "Kombinera boll- och medicinbollskast i en stationsrunda.",
+          "bilder": [],
+          "filer": []
+        }
+      ]
     },
     {
       "id": "hojd",
       "namn": "Höjd",
       "ikon": "⬆️",
       "ordning": 4,
-      "ansvarig": "",
-      "syfte": "Höjdhoppsteknik – sats och avslut",
-      "text": "**Stationen:** höjdhopp med mjuk ribba.\n\n- Insteg 3 steg, jämfota landning på matta\n- Sax över låg ribba\n- Bågehopp för de som är redo\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
-      "bilder": [],
-      "filer": []
+      "datum": "2026-08-26",
+      "tid": "18:00–19:30",
+      "plats": "Hagunda IP",
+      "grupp": "Friidrott PF 19/20",
+      "ansvarigaLedare": ["Anna", "Tommy"],
+      "samling": "Samling vid läktaren. Namnupprop.",
+      "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+      "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+      "moment": [
+        {
+          "id": "uppvarmningshopp",
+          "namn": "Uppvärmningshopp",
+          "ikon": "⬆️",
+          "ordning": 1,
+          "ansvarig": "",
+          "syfte": "Avstampsträning",
+          "text": "Öva avstamp och landning utan ribba innan hoppen börjar.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "insteg",
+          "namn": "Insteg",
+          "ikon": "⬆️",
+          "ordning": 2,
+          "ansvarig": "",
+          "syfte": "Höjdhoppsteknik – sats",
+          "text": "3 steg, jämfota landning på matta.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "sax",
+          "namn": "Sax",
+          "ikon": "⬆️",
+          "ordning": 3,
+          "ansvarig": "",
+          "syfte": "Höjdhoppsteknik – avslut",
+          "text": "Sax över låg ribba.\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "bagehopp",
+          "namn": "Bågehopp",
+          "ikon": "⬆️",
+          "ordning": 4,
+          "ansvarig": "",
+          "syfte": "Höjdhoppsteknik – för de som är redo",
+          "text": "Bågehopp för de som är redo.",
+          "bilder": [],
+          "filer": []
+        }
+      ]
     },
     {
       "id": "langd",
       "namn": "Längd",
       "ikon": "↔️",
       "ordning": 5,
-      "ansvarig": "",
-      "syfte": "Längdhopp – ansats och avstamp",
-      "text": "**Stationen:** längdhopp i grop.\n\n- Hopp från kort ansats (5 steg)\n- Fokus på avstamp med ett ben\n- Landning på båda fötterna, framåt\n\nKratta gropen mellan varje hoppare.",
-      "bilder": [],
-      "filer": []
+      "datum": "2026-08-26",
+      "tid": "18:00–19:30",
+      "plats": "Hagunda IP",
+      "grupp": "Friidrott PF 19/20",
+      "ansvarigaLedare": ["Anna", "Tommy"],
+      "samling": "Samling vid läktaren. Namnupprop.",
+      "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+      "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+      "moment": [
+        {
+          "id": "ansatstraning",
+          "namn": "Ansatsträning",
+          "ikon": "↔️",
+          "ordning": 1,
+          "ansvarig": "",
+          "syfte": "Ansats",
+          "text": "Markera stegen fram till avstampsplattan utan hopp, öva rytmen.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "kort-ansats",
+          "namn": "Hopp från kort ansats",
+          "ikon": "↔️",
+          "ordning": 2,
+          "ansvarig": "",
+          "syfte": "Längdhopp – ansats",
+          "text": "Hopp från kort ansats (5 steg).",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "avstamp",
+          "namn": "Avstamp",
+          "ikon": "↔️",
+          "ordning": 3,
+          "ansvarig": "",
+          "syfte": "Längdhopp – avstamp",
+          "text": "Fokus på avstamp med ett ben.",
+          "bilder": [],
+          "filer": []
+        },
+        {
+          "id": "landning",
+          "namn": "Landning",
+          "ikon": "↔️",
+          "ordning": 4,
+          "ansvarig": "",
+          "syfte": "Längdhopp – landning",
+          "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
+          "bilder": [],
+          "filer": []
+        }
+      ]
     }
   ]
 }

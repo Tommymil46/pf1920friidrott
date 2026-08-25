@@ -50,9 +50,9 @@
       if (p.plats) rader.push(p.plats);
       if ((p.ledare || []).length) rader.push("Ledare: " + p.ledare.join(", "));
       if (rader.length) t.appendChild(el("p", "arkiv-meta", rader.join(" · ")));
-      if ((p.block || []).length) {
+      if ((p.moment || []).length) {
         var lista = el("div", "arkiv-block");
-        p.block.forEach(function (namn) { lista.appendChild(el("span", "arkiv-etikett", namn)); });
+        p.moment.forEach(function (namn) { lista.appendChild(el("span", "arkiv-etikett", namn)); });
         t.appendChild(lista);
       }
       a.appendChild(t);
@@ -66,10 +66,10 @@
       status(null);
       document.getElementById("arkivlista").hidden = true;
       document.getElementById("arkivpass").hidden = false;
-      window.Render.rita(d.pass, false);
+      window.Render.ritaEnstaka(d.pass, false);
 
       var post = poster.filter(function (p) { return p.fil === fil; })[0] || {};
-      document.getElementById("sidrubrik").textContent = "Arkiverat pass";
+      document.getElementById("sidrubrik").textContent = "Arkiverat pass: " + (d.pass.namn || post.titel || "");
       document.getElementById("group-name").textContent =
         window.Render.datumText(d.pass.datum || post.datum) || "";
 

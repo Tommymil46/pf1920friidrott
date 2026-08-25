@@ -47,22 +47,22 @@ await p.locator('#pass-head .form-actions button', { hasText: 'Arkivera passet' 
 await p.waitForTimeout(2000);
 const st = await p.locator('#status').textContent();
 k('arkivering bekräftad (' + st.trim() + ')', st.includes('arkiverat'));
-k('filnamn av datum + rubrik', /2026-08-26-aktuellt-traningspass\.json/.test(st));
+k('filnamn av datum + rubrik', /2026-08-26-lopning\.json/.test(st));
 
 // listan
 await p.goto(BAS + '/arkiv.html', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 k('ett kort i arkivet', await p.locator('.arkiv-kort').count() === 1);
 k('datum skrivs ut på svenska', (await p.locator('.arkiv-datum').textContent()).includes('onsdag 26 augusti 2026'));
-k('blocken listas som etiketter', await p.locator('.arkiv-etikett').count() === 5);
+k('momenten listas som etiketter', await p.locator('.arkiv-etikett').count() === 4);
 
 // öppna passet
 await p.locator('.arkiv-kort').click();
 await p.waitForTimeout(1500);
-k('passet visas', await p.locator('#arkivpass .block').count() === 5);
+k('passet visas', await p.locator('#arkivpass .block').count() === 4);
 k('inga redigeringsknappar i arkivet', await p.locator('button[data-action=redigera]').count() === 0);
 k('arkiveringsinfo i foten', (await p.locator('#meta-line').textContent()).includes('Arkiverat'));
-k('rubriken byts', (await p.locator('#sidrubrik').textContent()) === 'Arkiverat pass');
+k('rubriken byts', (await p.locator('#sidrubrik').textContent()).startsWith('Arkiverat pass'));
 
 // tillbaka
 await p.click('#btn-tillbaka');

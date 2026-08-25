@@ -212,8 +212,9 @@ api.get("/pass", async (req, res, next) => {
    konstiga adresser (javascript:, data:, andra värdar) kan sparas – även
    om någon skulle komma åt ett ledarkonto. */
 const SAKER_URL = /^(https?:\/\/[^\s"'<>]{1,300}|content\/uploads\/[\w.-]{1,120})$/;
+const MINST_MOMENT = 4;
 
-function granskaPass(pass) {
+function granskaContent(data) {
   const fel = [];
   const strang = (v, max, namn) => {
     if (v == null) return "";
@@ -222,44 +223,69 @@ function granskaPass(pass) {
     return v;
   };
 
-  strang(pass.titel, 200, "Rubriken");
-  strang(pass.plats, 200, "Platsen");
-  strang(pass.tid, 100, "Tiden");
-  if (pass.datum && !/^\d{4}-\d{2}-\d{2}$/.test(String(pass.datum))) {
-    fel.push("Datumet måste skrivas som ÅÅÅÅ-MM-DD");
-  }
-  if (pass.block.length > 40) fel.push("För många block (max 40)");
+  if (data.pass.length > 12) fel.push("För många träningspass (max 12)");
+  const anvandaId = new Set();
 
-  pass.block.forEach((b, i) => {
-    const namn = "Block " + (i + 1);
-    if (!b || typeof b !== "object") { fel.push(namn + " är trasigt"); return; }
-    strang(b.namn, 120, namn + ": namnet");
-    strang(b.text, 30000, namn + ": innehållet");
-    strang(b.syfte, 300, namn + ": syftet");
-    strang(b.ansvarig, 120, namn + ": ledaren");
-    strang(b.ikon, 16, namn + ": ikonen");
+  data.pass.forEach((p, i) => {
+    const namn = "Pass " + (i + 1);
+    if (!p || typeof p !== "object" || !Array.isArray(p.moment)) {
+      fel.push(namn + " är trasigt"); return;
+    }
+    strang(p.id, 60, namn + ": id");
+    strang(p.namn, 120, namn + ": namnet");
+    strang(p.ikon, 16, namn + ": ikonen");
+    strang(p.plats, 200, namn + ": platsen");
+    strang(p.tid, 100, namn + ": tiden");
+    strang(p.grupp, 200, namn + ": gruppen");
+    strang(p.samling, 5000, namn + ": samlingen");
+    strang(p.uppvarmning, 5000, namn + ": uppvärmningen");
+    strang(p.avslutning, 5000, namn + ": avslutningen");
+    if (p.datum && !/^\d{4}-\d{2}-\d{2}$/.test(String(p.datum))) {
+      fel.push(namn + ": datumet måste skrivas som ÅÅÅÅ-MM-DD");
+    }
+    if (anvandaId.has(p.id)) fel.push(namn + ": id:t måste vara unikt");
+    anvandaId.add(p.id);
 
-    ["bilder", "filer"].forEach((falt) => {
-      if (b[falt] == null) return;
-      if (!Array.isArray(b[falt])) { fel.push(namn + ": " + falt + " är trasigt"); return; }
-      if (b[falt].length > 30) fel.push(namn + ": för många " + falt + " (max 30)");
-      b[falt] = b[falt].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
-      b[falt].forEach((x) => {
-        x.bildtext = strang(x.bildtext, 300, namn + ": bildtexten");
-        x.namn = strang(x.namn, 200, namn + ": filnamnet");
+    if (p.moment.length > 40) fel.push(namn + ": för många moment (max 40)");
+    if (p.moment.length < MINST_MOMENT) {
+      fel.push(namn + ": behöver minst " + MINST_MOMENT + " friidrottsmoment");
+    }
+
+    p.moment.forEach((m, j) => {
+      const mNamn = namn + ", moment " + (j + 1);
+      if (!m || typeof m !== "object") { fel.push(mNamn + " är trasigt"); return; }
+      strang(m.namn, 120, mNamn + ": namnet");
+      strang(m.text, 30000, mNamn + ": innehållet");
+      strang(m.syfte, 300, mNamn + ": syftet");
+      strang(m.ansvarig, 120, mNamn + ": ledaren");
+      strang(m.ikon, 16, mNamn + ": ikonen");
+
+      ["bilder", "filer"].forEach((falt) => {
+        if (m[falt] == null) return;
+        if (!Array.isArray(m[falt])) { fel.push(mNamn + ": " + falt + " är trasigt"); return; }
+        if (m[falt].length > 30) fel.push(mNamn + ": för många " + falt + " (max 30)");
+        m[falt] = m[falt].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
+        m[falt].forEach((x) => {
+          x.bildtext = strang(x.bildtext, 300, mNamn + ": bildtexten");
+          x.namn = strang(x.namn, 200, mNamn + ": filnamnet");
+        });
       });
     });
   });
+
+  if (data.aktivt && !anvandaId.has(data.aktivt)) {
+    fel.push("Det aktuella passet (aktivt) pekar på ett pass som inte finns");
+  }
   return fel;
 }
 
 api.put("/pass", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
     const { pass, meddelande, sha } = req.body || {};
-    if (!pass || typeof pass !== "object" || !Array.isArray(pass.block)) {
+    if (!pass || typeof pass !== "object" || !Array.isArray(pass.pass)) {
       return res.status(400).json({ fel: "Ogiltigt innehåll." });
     }
-    const brister = granskaPass(pass);
+    const brister = granskaContent(pass);
     if (brister.length) {
       return res.status(400).json({ fel: brister.slice(0, 5).join(". ") + "." });
     }
@@ -273,7 +299,7 @@ api.put("/pass", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
     pass.uppdaterad = new Date().toISOString();
     pass.uppdateradAv = req.ledare.namn;
 
-    const text = (meddelande || "Uppdaterade träningspasset").replace(/\s+/g, " ").slice(0, 120);
+    const text = (meddelande || "Uppdaterade träningspassen").replace(/\s+/g, " ").slice(0, 120);
     const r = await gh.sparaPass(
       pass,
       `${text} (${req.ledare.namn})`,
@@ -353,7 +379,7 @@ function arkivSlug(pass) {
   const datum = (pass.datum && /^\d{4}-\d{2}-\d{2}$/.test(pass.datum))
     ? pass.datum
     : new Date().toISOString().slice(0, 10);
-  const namn = rentNamn(String(pass.titel || "traningspass").toLowerCase())
+  const namn = rentNamn(String(pass.namn || "traningspass").toLowerCase())
     .replace(/[^a-z0-9-]+/gi, "-").replace(/^-+|-+$/g, "").toLowerCase() || "traningspass";
   return `${datum}-${namn}`;
 }
@@ -387,27 +413,34 @@ api.get("/arkiv/:fil", async (req, res, next) => {
 
 api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
+    const { passId } = req.body || {};
     const nuvarande = await gh.hamtaPass();
-    const pass = JSON.parse(JSON.stringify(nuvarande.pass));
+    const helaInnehallet = nuvarande.pass;
+    const original = (helaInnehallet.pass || []).find((p) => p.id === passId);
+    if (!original) return res.status(400).json({ fel: "Okänt träningspass." });
+    const pass = JSON.parse(JSON.stringify(original));
 
     const index = await hamtaArkivIndex();
     let bas = arkivSlug(pass), fil = `${bas}.json`, n = 2;
     while (index.data.pass.some((p) => p.fil === fil)) { fil = `${bas}-${n++}.json`; }
 
+    pass.uppdaterad = helaInnehallet.uppdaterad || null;
+    pass.uppdateradAv = helaInnehallet.uppdateradAv || "";
     pass.arkiverad = new Date().toISOString();
     pass.arkiveradAv = req.ledare.namn;
 
     await gh.sparaJson(`${ARKIV_DIR}/${fil}`, pass,
-      `Arkiverade passet ${pass.titel || fil} (${req.ledare.namn})`, null,
+      `Arkiverade passet ${pass.namn || fil} (${req.ledare.namn})`, null,
       anv.commitForfattare(req.ledare));
 
     const post = {
       fil,
-      titel: pass.titel || "Träningspass",
+      passTyp: pass.id || "",
+      titel: pass.namn || "Träningspass",
       datum: pass.datum || "",
       plats: pass.plats || "",
       ledare: pass.ansvarigaLedare || [],
-      block: (pass.block || []).map((b) => b.namn),
+      moment: (pass.moment || []).map((m) => m.namn),
       arkiverad: pass.arkiverad,
       arkiveradAv: pass.arkiveradAv
     };

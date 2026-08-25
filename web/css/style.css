@@ -68,13 +68,18 @@ main .btn-ghost:hover{background:#eef0f8}
 
 /* ---------- Navbar ---------- */
 .navbar{background:var(--bla)}
+.navbar-pass{background:var(--bla-mork)}
 .navbar-inner{display:flex;flex-wrap:wrap;gap:2px}
-.navbar a{
+.navbar a,.navbar button{
   color:#fff;text-decoration:none;font-family:var(--rubrik);text-transform:uppercase;
   font-size:15px;letter-spacing:.03em;padding:11px 16px;display:block;
+  background:none;border:none;font-weight:600;cursor:pointer;
 }
-.navbar a:hover{background:var(--bla-mork)}
-.navbar a.aktiv,.navbar a:focus-visible{background:var(--gul);color:var(--bla-mork)}
+.navbar a:hover,.navbar button:hover{background:var(--bla-mork)}
+.navbar a.aktiv,.navbar a:focus-visible,
+.navbar button.aktiv,.navbar button:focus-visible{background:var(--gul);color:var(--bla-mork)}
+.pass-markering{color:var(--gul)}
+.navbar button.aktiv .pass-markering{color:var(--bla-mork)}
 
 /* ---------- Status ---------- */
 .status{padding:10px 16px;font-size:14px;border-bottom:1px solid var(--linje);text-align:center}
@@ -90,14 +95,20 @@ main{padding-bottom:48px}
   background:var(--kort);border:1px solid var(--linje);border-left:6px solid var(--bla);
   border-radius:var(--radie);box-shadow:var(--skugga);padding:16px 18px;
 }
-.pass-titel{font-size:26px;color:var(--bla);margin-bottom:6px}
+.pass-titel-rad{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.pass-titel{font-size:26px;color:var(--bla);margin-bottom:0}
+.pass-aktuell-etikett{
+  background:var(--gul);color:var(--bla-mork);font-size:12px;font-weight:700;
+  text-transform:uppercase;letter-spacing:.04em;padding:3px 10px;border-radius:999px;
+}
 .fakta-rad{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:15px;color:var(--text-svag)}
 .fakta-rad strong{color:var(--text);font-weight:600}
 
-.pass-common{
+.pass-common,.pass-avslutning{
   margin-top:14px;background:var(--kort);border:1px solid var(--linje);
   border-radius:var(--radie);box-shadow:var(--skugga);padding:14px 18px;
 }
+.pass-avslutning h3{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--bla);margin-bottom:2px}
 .gem-post{margin:0 0 10px}
 .gem-post:last-child{margin-bottom:0}
 .gem-post h3{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--bla);margin-bottom:2px}

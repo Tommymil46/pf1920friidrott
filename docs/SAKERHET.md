@@ -65,7 +65,7 @@ repot. Lösenorden ligger PBKDF2-hashade i Workers KV, inte i klartext.
 | Vem som helst kunde tömma GitHub-tokenens anropsbudget genom att ladda om sidan i loop | Publika läsningar cachas 20 sekunder i minnet (`LAS_CACHE_MS`) |
 | Registret över misslyckade inloggningar kunde växa obegränsat med påhittade användarnamn | Rensas automatiskt vid 5 000 poster |
 | Ett kapat ledarkonto kunde spara `javascript:`-adresser som sedan kördes hos besökarna | Adresser granskas både på servern (bara `https://…` och `content/uploads/…` sparas) och i webbläsaren innan de sätts som `href`/`src` |
-| Ett kapat konto kunde spara godtyckligt stort innehåll | Servern granskar längder och antal: max 40 block, 30 000 tecken per block, 30 bilagor per block |
+| Ett kapat konto kunde spara godtyckligt stort innehåll | Servern granskar längder och antal: max 12 träningspass, max 40 moment per pass, 30 000 tecken per moment, 30 bilagor per moment |
 | Serverfel skickade ut interna detaljer om GitHub-anropen | 5xx svarar generiskt utåt, detaljerna hamnar i loggen |
 | `X-Forwarded-For` kunde förfalskas för att gå runt spärren mot lösenordsgissning | `trust proxy` är avstängt som standard och slås på med `TRUST_PROXY=1` först när tjänsten står bakom en proxy |
 | Porten publicerades på alla nätverkskort | Compose binder till `127.0.0.1:8080` – tjänsten når man via den omvända proxyn, inte direkt |

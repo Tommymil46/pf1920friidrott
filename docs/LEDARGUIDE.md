@@ -11,10 +11,23 @@
    du kommer då inte åt att ändra något förrän du bytt. Nytt lösenord: minst
    8 tecken.
 
-## Ändra ett träningsblock
+## De fem träningspassen
 
-Klicka **Redigera** i blockets blå rubrikrad. Du kan ändra namn, ikon, vem som
-är ledare för blocket, syftet och själva innehållet. Klicka **Spara block**.
+Det finns fem träningspass: **Löpning, Rörelse, Kast, Höjd** och **Längd**.
+Klicka på flikarna högst upp för att bläddra mellan dem. Varje pass har
+samling, uppvärmning, minst fyra friidrottsmoment och en avslutning.
+
+## Sätta vilket pass som är aktuellt
+
+Flikens namn som har en ★ är det pass som visas först för alla besökare.
+Klicka på fliken för det pass som gäller nu, klicka **Redigera passinfo** och
+sedan **Sätt som aktuellt pass**.
+
+## Ändra ett friidrottsmoment
+
+Klicka **Redigera** i momentets blå rubrikrad. Du kan ändra namn, ikon, vem
+som är ledare för momentet, syftet och själva innehållet. Klicka
+**Spara moment**.
 
 Formatering i innehållstexten:
 
@@ -28,22 +41,24 @@ Formatering i innehållstexten:
 
 ## Bilder och PDF
 
-I redigeringsläget finns **Ladda upp bild eller PDF**. Bilder visas i blocket,
-PDF:er hamnar som en bilaga längst ned. Kom ihåg att klicka **Spara block**
-efteråt – uppladdningen räknas inte förrän blocket är sparat.
+I redigeringsläget finns **Ladda upp bild eller PDF**. Bilder visas i momentet,
+PDF:er hamnar som en bilaga längst ned. Kom ihåg att klicka **Spara moment**
+efteråt – uppladdningen räknas inte förrän momentet är sparat.
 
 **Sidan är öppen för alla att läsa.** Allt du lägger upp – text, bilder, PDF:er
 och hela ändringshistoriken – kan läsas av vem som helst. Lägg därför inte upp
 bilder på barn, personuppgifter eller något annat som inte tål det.
 
-## Passets rubrik, tid och plats
+## Passets namn, tid och plats
 
 Klicka **Redigera passinfo** i den blå rutan högst upp.
 
-## Nya block och ordningsföljd
+## Nya moment och ordningsföljd
 
-* **+ Lägg till träningsblock** längst ned skapar ett nytt block.
-* Pilarna **▲ ▼** i blockrubriken flyttar blocket upp eller ned.
+* **+ Lägg till friidrottsmoment** längst ned skapar ett nytt moment.
+* Pilarna **▲ ▼** i momentets rubrik flyttar momentet upp eller ned.
+* Varje pass behöver minst fyra moment – appen hindrar dig från att ta bort
+  det fjärde om det är det sista som är kvar.
 
 ## Om du råkar ta bort något
 
@@ -53,9 +68,10 @@ kvar i historiken.
 
 ## Arkivera ett genomfört pass
 
-Klicka **Redigera passinfo** och sedan **Arkivera passet**. En kopia sparas
-under **Arkiv** precis som passet ser ut just då. Det aktuella passet ligger
-kvar och kan redigeras vidare inför nästa gång.
+Klicka på fliken för det pass som genomförts, sedan **Redigera passinfo** och
+**Arkivera passet**. En kopia av det passet sparas under **Arkiv** precis som
+det såg ut just då. Passet ligger kvar bland de fem flikarna och kan
+redigeras vidare inför nästa gång.
 
 I arkivet kan du klicka på ett gammalt pass för att läsa eller skriva ut det.
 Arkivet är öppet för alla, precis som förstasidan.

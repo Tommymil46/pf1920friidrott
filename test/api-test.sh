@@ -8,7 +8,7 @@ TOK=$(curl -sS -X POST $B/login -H 'Content-Type: application/json' -d '{"anvand
 AUTH="Authorization: Bearer $TOK"
 
 # 0. Startlösenordet får inte räcka för att ändra något
-K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' -d '{"pass":{"block":[]},"meddelande":"x"}')
+K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' -d '{"pass":{"pass":[]},"meddelande":"x"}')
 [ "$K" = "403" ] && ok "startlösenord får inte spara" || fel "startlösenord gav $K"
 K=$(curl -sS -o /dev/null -w "%{http_code}" -X POST $B/arkivera -H "$AUTH")
 [ "$K" = "403" ] && ok "startlösenord får inte arkivera" || fel "arkivering med startlösenord gav $K"
@@ -36,12 +36,12 @@ PFIL=$(mktemp); curl -sS $B/pass > "$PFIL"
 python3 -c "
 import json
 d=json.load(open('$PFIL'))
-assert d['pass']['block'] and d['sha']
+assert d['pass']['pass'] and d['sha']
 " && ok "hämtar pass + sha" || fel "hämta pass"
 SHA=$(python3 -c "import json;print(json.load(open('$PFIL'))['sha'])")
 
 # 2. spara utan inloggning
-K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H 'Content-Type: application/json' -d '{"pass":{"block":[]}}')
+K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H 'Content-Type: application/json' -d '{"pass":{"pass":[]}}')
 [ "$K" = "401" ] && ok "sparning kräver inloggning" || fel "sparning utan inloggning gav $K"
 
 # 3. spara med inloggning
@@ -50,9 +50,8 @@ python3 - "$PFIL" "$SHA" "$NYFIL" <<'ANDRA'
 import json, sys
 kalla, sha, ut = sys.argv[1], sys.argv[2], sys.argv[3]
 p = json.load(open(kalla))['pass']
-p['titel'] = 'Pass 26 augusti'
-p['block'][0]['text'] = 'Loepskolning och spurter'
-json.dump({"pass": p, "meddelande": "Uppdaterade loepblocket", "sha": sha},
+p['pass'][0]['moment'][0]['text'] = 'Loepskolning och spurter (test)'
+json.dump({"pass": p, "meddelande": "Uppdaterade loepmomentet", "sha": sha},
           open(ut, 'w'), ensure_ascii=False)
 ANDRA
 R=$(curl -sS -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$NYFIL")
@@ -70,19 +69,19 @@ import sys,json
 h=json.load(sys.stdin)
 assert len(h)==2, h
 assert h[0]['vem']=='Ludvig', h[0]
-assert h[0]['meddelande'].startswith('Uppdaterade loepblocket'), h[0]
+assert h[0]['meddelande'].startswith('Uppdaterade loepmomentet'), h[0]
 " && ok "historiken visar vem och vad" || fel "historik"
 
 GAMMAL=$(echo "$H" | python3 -c "import sys,json;print(json.load(sys.stdin)[1]['sha'])")
 
 # 6. läsa gammal version
 curl -sS $B/historik/$GAMMAL -H "$AUTH" | python3 -c "
-import sys,json;assert json.load(sys.stdin)['pass']['titel']!='Pass 26 augusti'
+import sys,json;assert json.load(sys.stdin)['pass']['pass'][0]['moment'][0]['text']!='Loepskolning och spurter (test)'
 " && ok "kan läsa tidigare version" || fel "läsa version"
 
 # 7. återställa
 curl -sS -X POST $B/aterstall -H "$AUTH" -H 'Content-Type: application/json' -d "{\"sha\":\"$GAMMAL\"}" \
-  | python3 -c "import sys,json;d=json.load(sys.stdin);assert d['pass']['titel']!='Pass 26 augusti';assert d['pass']['uppdateradAv']=='Ludvig'" \
+  | python3 -c "import sys,json;d=json.load(sys.stdin);assert d['pass']['pass'][0]['moment'][0]['text']!='Loepskolning och spurter (test)';assert d['pass']['uppdateradAv']=='Ludvig'" \
   && ok "återställning till tidigare version" || fel "återställning"
 
 # 8. inget har försvunnit: historiken har växt, inte krympt
@@ -91,7 +90,7 @@ import sys,json
 h=json.load(sys.stdin)
 assert len(h)==3, len(h)
 assert 'Återställde' in h[0]['meddelande']
-assert h[1]['meddelande'].startswith('Uppdaterade loepblocket')
+assert h[1]['meddelande'].startswith('Uppdaterade loepmomentet')
 " && ok "inget försvinner – historiken växer" || fel "historikbevarande"
 
 # 9. uppladdning: bild
@@ -133,7 +132,7 @@ K=$(curl -sS -o /dev/null -w "%{http_code}" -X POST $B/login -H 'Content-Type: a
 [ "$K" = "429" ] && ok "spärr mot lösenordsgissning" || fel "spärr gav $K"
 
 # 15. arkivering
-curl -sS -X POST $B/arkivera -H "$AUTH" | python3 -c "
+curl -sS -X POST $B/arkivera -H "$AUTH" -H 'Content-Type: application/json' -d '{"passId":"lopning"}' | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
 assert d['ok'] and d['post']['fil'].endswith('.json'), d
@@ -148,7 +147,7 @@ assert d['pass'][0]['arkiveradAv']=='Ludvig', d
 
 ARKFIL=$(curl -sS $B/arkiv | python3 -c "import sys,json;print(json.load(sys.stdin)['pass'][0]['fil'])")
 curl -sS "$B/arkiv/$ARKFIL" | python3 -c "
-import sys,json;d=json.load(sys.stdin);assert d['pass']['block']
+import sys,json;d=json.load(sys.stdin);assert d['pass']['moment']
 " && ok "arkiverat pass går att läsa" || fel "läsa arkiverat pass"
 
 # 16. sökvägsflykt i arkivet
@@ -163,7 +162,7 @@ BADFIL=$(mktemp)
 python3 - "$PFIL" "$BADFIL" <<'GRANSKA'
 import json, sys
 p = json.load(open(sys.argv[1]))['pass']
-p['block'][0]['bilder'] = [
+p['pass'][0]['moment'][0]['bilder'] = [
     {"url": "javascript:alert(1)", "bildtext": "ond"},
     {"url": "https://exempel.se/ok.png", "bildtext": "ok"},
     {"url": "content/uploads/bra.png", "bildtext": "ok"},
@@ -174,7 +173,7 @@ curl -sS -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' --data-bi
   | python3 -c "
 import sys,json
 d=json.load(sys.stdin)
-urler=[b['url'] for b in d['pass']['block'][0]['bilder']]
+urler=[b['url'] for b in d['pass']['pass'][0]['moment'][0]['bilder']]
 assert 'javascript:alert(1)' not in urler, urler
 assert len(urler)==2, urler
 " && ok "javascript:-adress filtreras bort på servern" || fel "adressgranskning"
@@ -184,11 +183,11 @@ LONGFIL=$(mktemp)
 python3 - "$PFIL" "$LONGFIL" <<'LANGT'
 import json, sys
 p = json.load(open(sys.argv[1]))['pass']
-p['block'][0]['text'] = 'x' * 40000
+p['pass'][0]['moment'][0]['text'] = 'x' * 40000
 json.dump({"pass": p, "meddelande": "test"}, open(sys.argv[2], 'w'), ensure_ascii=False)
 LANGT
 K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$LONGFIL")
-[ "$K" = "400" ] && ok "för långt blockinnehåll avvisas" || fel "längdgräns gav $K"
+[ "$K" = "400" ] && ok "för långt momentinnehåll avvisas" || fel "längdgräns gav $K"
 
 # 19. lösenordsbyte ger ny session och dödar alla andra
 ANNANTOK=$(curl -sS -X POST $B/login -H 'Content-Type: application/json' \

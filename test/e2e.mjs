@@ -30,7 +30,7 @@ const k = (n, v) => kollar.push([n, !!v]);
 
 await p.goto('http://127.0.0.1:8096/', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
-k('läser passet från GitHub', (await p.locator('.pass-titel').textContent()).includes('Aktuellt'));
+k('läser passet från GitHub', (await p.locator('.pass-titel').textContent()).includes('Löpning'));
 
 await p.click('#btn-login');
 await p.fill('#login-user','Eric'); await p.fill('#login-pass','Eric');
@@ -43,9 +43,9 @@ k('lösenordsrutan öppnas direkt vid startlösenord',
 
 // startlösenordet ska inte räcka för att ändra något
 await stangDialoger(p);
-await p.locator('#block-lopning button[data-action=redigera]').click();
+await p.locator('#block-hoga-knan button[data-action=redigera]').click();
 await p.waitForTimeout(400);
-await p.locator('#block-lopning .form-actions button', { hasText: 'Spara block' }).click();
+await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1200);
 k('startlösenord blockeras vid sparning',
   (await p.locator('#status').textContent()).includes('byta ditt startlösenord'));
@@ -54,44 +54,44 @@ k('lösenordsbyte klart', (await p.locator('#status').textContent()).includes('b
 await p.reload({ waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 
-await p.locator('#block-lopning button[data-action=redigera]').click();
+await p.locator('#block-hoga-knan button[data-action=redigera]').click();
 await p.waitForTimeout(400);
-await p.locator('#block-lopning textarea').fill('**Nytt innehåll** från testet.\n\n- Punkt ett\n- Punkt två');
-await p.locator('#block-lopning input[type=text]').nth(2).fill('Eric');
-await p.locator('#block-lopning .form-actions button', { hasText: 'Spara block' }).click();
+await p.locator('#block-hoga-knan textarea').fill('**Nytt innehåll** från testet.\n\n- Punkt ett\n- Punkt två');
+await p.locator('#block-hoga-knan input[type=text]').nth(2).fill('Eric');
+await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1600);
 k('sparat till GitHub', (await p.locator('#status').textContent()).includes('incheckad'));
-k('nytt innehåll visas', (await p.locator('#block-lopning .block-text').textContent()).includes('Nytt innehåll'));
-k('fet stil renderas', await p.locator('#block-lopning .block-text strong').count() > 0);
-k('ansvarig visas', (await p.locator('#block-lopning .block-ansvarig').textContent()).includes('Eric'));
+k('nytt innehåll visas', (await p.locator('#block-hoga-knan .block-text').textContent()).includes('Nytt innehåll'));
+k('fet stil renderas', await p.locator('#block-hoga-knan .block-text strong').count() > 0);
+k('ansvarig visas', (await p.locator('#block-hoga-knan .block-ansvarig').textContent()).includes('Eric'));
 
-await p.locator('#block-lopning button[data-action=redigera]').click();
+await p.locator('#block-hoga-knan button[data-action=redigera]').click();
 await p.waitForTimeout(400);
 fs.writeFileSync(SP+'/uppladdning.png', Buffer.from('89504e470d0a1a0a0000000d49484452','hex'));
-await p.locator('#block-lopning input[type=file]').setInputFiles(SP+'/uppladdning.png');
+await p.locator('#block-hoga-knan input[type=file]').setInputFiles(SP+'/uppladdning.png');
 await p.waitForTimeout(1800);
 k('uppladdning bekräftad', (await p.locator('#status').textContent()).includes('Uppladdat'));
-k('bilagelistan visar bilden', await p.locator('#block-lopning .bilaga-rad').count() === 1);
-await p.locator('#block-lopning .form-actions button', { hasText: 'Spara block' }).click();
+k('bilagelistan visar bilden', await p.locator('#block-hoga-knan .bilaga-rad').count() === 1);
+await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1600);
-k('bilden med i sparat block', await p.locator('#block-lopning .bild-kort').count() === 1);
+k('bilden med i sparat block', await p.locator('#block-hoga-knan .bild-kort').count() === 1);
 
 await p.evaluate(() => { window.prompt = () => 'Häck'; });
 await p.click('#btn-add-block');
 await p.waitForTimeout(1800);
-k('nytt block skapat', await p.locator('.block').count() === 6);
-k('nytt block i navigeringen', (await p.locator('#block-nav').textContent()).includes('Häck'));
+k('nytt moment skapat', await p.locator('.block').count() === 5);
+k('nytt moment i navigeringen', (await p.locator('#block-nav').textContent()).includes('Häck'));
 
 await p.locator('#block-hack button[data-action=upp]').click();
 await p.waitForTimeout(1600);
 const ordning = await p.locator('.block h2').allTextContents();
-k('blocket flyttades upp (' + ordning.join(',') + ')', ordning[4] === 'Häck');
+k('momentet flyttades upp (' + ordning.join(',') + ')', ordning[3] === 'Häck');
 
 await p.locator('#block-hack button[data-action=redigera]').click();
 await p.waitForTimeout(400);
-await p.locator('#block-hack .form-actions button', { hasText: 'Ta bort blocket' }).click();
+await p.locator('#block-hack .form-actions button', { hasText: 'Ta bort momentet' }).click();
 await p.waitForTimeout(1800);
-k('blocket borttaget', await p.locator('.block').count() === 5);
+k('momentet borttaget', await p.locator('.block').count() === 4);
 
 await p.click('#btn-history');
 await p.waitForTimeout(1400);
@@ -101,7 +101,7 @@ k('historiken visar vem', (await p.locator('.hist-vem').first().textContent()) =
 
 await p.locator('.hist-rad').nth(rader - 1).locator('button').click();
 await p.waitForTimeout(2200);
-k('återställd text', !(await p.locator('#block-lopning .block-text').textContent()).includes('Nytt innehåll'));
+k('återställd text', !(await p.locator('#block-hoga-knan .block-text').textContent()).includes('Nytt innehåll'));
 k('återställningen bekräftad', (await p.locator('#status').textContent()).includes('Återställt'));
 
 console.log(kollar.map(([n,v]) => (v?'  OK   ':'  FEL  ')+n).join('\n'));

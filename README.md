@@ -3,10 +3,13 @@
 Webbapp där ledarna håller det aktuella träningspasset uppdaterat, och där
 passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 
-* **Förstasidan** visar det aktuella passet: tid, plats, gemensam uppvärmning
-  och de fem träningsblocken – löpning, rörelse, kast, höjd och längd.
+* **Fem träningspass** – Löpning, Rörelse, Kast, Höjd och Längd – visas som
+  flikar. Varje pass har samling, uppvärmning, minst fyra friidrottsmoment och
+  en avslutning. Förstasidan öppnar alltid det pass som är markerat som
+  **aktuellt just nu**.
 * **Ledare loggar in** med knappen högst upp och kan då redigera all text,
-  lägga till bilder och PDF:er, ändra ordning på blocken och lägga till nya.
+  lägga till bilder och PDF:er, ändra ordning på momenten, lägga till nya och
+  markera vilket av de fem passen som är aktuellt.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
   tidigare version med ett klick.
@@ -26,7 +29,8 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 ```
 
 * **web/** – själva webbappen. Ren HTML/CSS/JS, inget byggsteg.
-* **content/pass.json** – passets innehåll. Detta är "databasen".
+* **content/pass.json** – de fem träningspassens innehåll, plus vilket som är
+  aktuellt just nu (`aktivt`). Detta är "databasen".
 * **content/arkiv/** – genomförda pass, ett per fil, plus `index.json`.
 * **content/uploads/** – bilder och PDF:er som ledarna laddat upp.
 * **worker/** – ledartjänsten som Cloudflare Worker: inloggning, uppladdning

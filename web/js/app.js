@@ -4,7 +4,7 @@
    =========================================================== */
 (function () {
   var CFG = window.PASS_CONFIG || {};
-  var state = { pass: null, sha: null, kalla: null };
+  var state = { data: null, valtId: null, sha: null, kalla: null };
 
   /* ---------- Status ---------- */
   var statusTimer = null;
@@ -21,8 +21,16 @@
   /* ---------- Rendering ---------- */
   function kanRedigera() { return !!(window.API.harApi() && window.API.anvandare()); }
 
+  function valtPass() { return window.Render.hittaPass(state.data, state.valtId); }
+
+  function vaxlaPass(id) {
+    state.valtId = id;
+    rita();
+    window.scrollTo(0, 0);
+  }
+
   function rita() {
-    window.Render.rita(state.pass, kanRedigera());
+    window.Render.rita(state.data, state.valtId, kanRedigera(), vaxlaPass);
     document.body.classList.toggle("redigerar", kanRedigera());
     if (kanRedigera()) {
       var v = document.getElementById("pass-facts");
@@ -36,11 +44,11 @@
 
   function laddaOm() {
     return window.API.hamtaPass().then(function (d) {
-      state.pass = d.pass; state.sha = d.sha || null; state.kalla = d.kalla;
+      state.data = d.pass; state.valtId = state.data.aktivt; state.sha = d.sha || null; state.kalla = d.kalla;
       rita();
       return d;
     }).catch(function (e) {
-      status("fel", "Kunde inte hämta träningspasset: " + e.message, true);
+      status("fel", "Kunde inte hämta träningspassen: " + e.message, true);
     });
   }
 
@@ -51,12 +59,12 @@
       return Promise.reject(new Error("ej inloggad"));
     }
     status("info", "Sparar till GitHub…", true);
-    state.pass.uppdaterad = new Date().toISOString();
-    state.pass.uppdateradAv = (window.API.anvandare() || {}).namn || "";
-    return window.API.sparaPass(state.pass, meddelande, state.sha)
+    state.data.uppdaterad = new Date().toISOString();
+    state.data.uppdateradAv = (window.API.anvandare() || {}).namn || "";
+    return window.API.sparaPass(state.data, meddelande, state.sha)
       .then(function (r) {
         state.sha = r.sha || state.sha;
-        if (r.pass) state.pass = r.pass;
+        if (r.pass) state.data = r.pass;
         rita();
         status("ok", "Sparat. Ändringen är incheckad i GitHub" +
                      (r.commit ? " (" + String(r.commit).slice(0, 7) + ")" : "") + ".");
@@ -79,16 +87,25 @@
       });
   }
 
-  /* ---------- Arkivera passet ---------- */
+  /* ---------- Sätt det valda passet som aktuellt ---------- */
+  function sattAktivt() {
+    if (!kanRedigera()) { status("fel", "Du måste vara inloggad som ledare."); return; }
+    var p = valtPass();
+    if (!p || p.id === state.data.aktivt) return;
+    state.data.aktivt = p.id;
+    spara("Satte " + p.namn + " som aktuellt träningspass").catch(function () {});
+  }
+
+  /* ---------- Arkivera det valda passet ---------- */
   function arkivera() {
     if (!kanRedigera()) { status("fel", "Du måste vara inloggad som ledare."); return; }
-    var p = state.pass || {};
-    if (!confirm("Arkivera \"" + (p.titel || "passet") + "\"" +
+    var p = valtPass() || {};
+    if (!confirm("Arkivera \"" + (p.namn || "passet") + "\"" +
                  (p.datum ? " (" + p.datum + ")" : "") + "?\n\n" +
                  "En kopia sparas i arkivet precis som passet ser ut nu. " +
                  "Det aktuella passet ligger kvar och kan redigeras vidare inför nästa gång.")) return;
     status("info", "Arkiverar…", true);
-    window.API.arkivera().then(function (r) {
+    window.API.arkivera(p.id).then(function (r) {
       status("ok", "Passet är arkiverat som " + r.post.fil + ". Det finns nu under Arkiv.");
       rita();
     }).catch(function (e) {
@@ -179,6 +196,8 @@
       var blockNoder = Array.prototype.map.call(
         document.querySelectorAll("#blocks .block"),
         function (n) { return n.cloneNode(true); });
+      var avslutning = document.getElementById("pass-avslutning");
+      if (avslutning && !avslutning.hidden) blockNoder.push(avslutning.cloneNode(true));
       [huvud, topp].concat(blockNoder).forEach(function (n) {
         n.querySelectorAll(".no-print,.redigera-form").forEach(function (x) { x.remove(); });
       });
@@ -290,9 +309,11 @@
   /* ---------- Start ---------- */
   function start() {
     window.Edit.init({
-      pass: function () { return state.pass; },
+      pass: valtPass,
+      data: function () { return state.data; },
+      arAktivt: function () { var p = valtPass(); return !!p && p.id === state.data.aktivt; },
       spara: spara, rita: rita, laddaOm: laddaOm, status: status,
-      arkivera: arkivera
+      arkivera: arkivera, sattAktivt: sattAktivt
     });
 
     document.getElementById("btn-print").addEventListener("click", skrivUt);
@@ -370,15 +391,15 @@
       b.addEventListener("click", function () { b.closest("dialog").close(); });
     });
 
-    /* Blockverktyg */
+    /* Momentverktyg */
     document.getElementById("blocks").addEventListener("click", function (e) {
       var b = e.target.closest("button[data-action]");
       if (!b) return;
-      if (b.dataset.action === "redigera") window.Edit.redigeraBlock(b.dataset.blockId);
-      if (b.dataset.action === "upp") window.Edit.flytta(b.dataset.blockId, "upp");
-      if (b.dataset.action === "ned") window.Edit.flytta(b.dataset.blockId, "ned");
+      if (b.dataset.action === "redigera") window.Edit.redigeraMoment(b.dataset.blockId);
+      if (b.dataset.action === "upp") window.Edit.flyttaMoment(b.dataset.blockId, "upp");
+      if (b.dataset.action === "ned") window.Edit.flyttaMoment(b.dataset.blockId, "ned");
     });
-    document.getElementById("btn-add-block").addEventListener("click", window.Edit.nyttBlock);
+    document.getElementById("btn-add-block").addEventListener("click", window.Edit.nyttMoment);
 
     /* Markera aktiv blocklänk vid scroll */
     window.addEventListener("hashchange", function () {
@@ -391,7 +412,7 @@
     laddaOm().then(function () {
       if (!window.API.harApi()) return;
       if (!window.API.anvandare()) return;
-      status("info", "Inloggad som ledare – klicka Redigera i ett block för att ändra.");
+      status("info", "Inloggad som ledare – klicka Redigera i ett moment för att ändra.");
     });
   }
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Aktuellt träningspass – Friidrott PF 19/20</title>
-<meta name="description" content="Aktuellt träningspass för friidrottsgruppen PF 19/20, Hagunda IF.">
+<title>Träningspass – Friidrott PF 19/20</title>
+<meta name="description" content="Träningspass (Löpning, Rörelse, Kast, Höjd, Längd) för friidrottsgruppen PF 19/20, Hagunda IF.">
 <link rel="icon" href="img/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,11 +39,15 @@
   <div class="wrap header-inner">
     <img src="img/logo.svg" alt="Hagunda IF" class="logo">
     <div class="header-text">
-      <h1>Aktuellt träningspass</h1>
+      <h1>Träningspass</h1>
       <p class="subtitle" id="group-name">Friidrott PF 19/20</p>
     </div>
   </div>
 </header>
+
+<nav class="navbar navbar-pass no-print">
+  <div class="wrap navbar-inner" id="pass-tabs"><!-- fylls av js: löpning, rörelse, kast, höjd, längd --></div>
+</nav>
 
 <nav class="navbar no-print">
   <div class="wrap navbar-inner" id="block-nav"><!-- fylls av js --></div>
@@ -60,13 +64,16 @@
     <div class="pass-common" id="pass-common"></div>
   </section>
 
-  <!-- Blocken -->
+  <!-- Friidrottsmomenten -->
   <section id="blocks" class="blocks"></section>
 
-  <!-- Lägg till block (endast inloggad) -->
+  <!-- Lägg till moment (endast inloggad) -->
   <div class="add-block no-print" id="add-block-row" hidden>
-    <button id="btn-add-block" class="btn btn-primary" type="button">+ Lägg till träningsblock</button>
+    <button id="btn-add-block" class="btn btn-primary" type="button">+ Lägg till friidrottsmoment</button>
   </div>
+
+  <!-- Avslutning -->
+  <section class="pass-avslutning" id="pass-avslutning" hidden></section>
 
   <footer class="pass-footer">
     <p id="meta-line"></p>

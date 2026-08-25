@@ -15,8 +15,9 @@ const stangDialoger = async (p) => {
 
 const kollar = [];
 const k = (namn, v) => kollar.push([namn, v]);
-k('5 block', await p.locator('.block').count() === 5);
-k('navlänkar', await p.locator('#block-nav a').count() === 5);
+k('5 passflikar', await p.locator('#pass-tabs button').count() === 5);
+k('4 moment i löpning', await p.locator('.block').count() === 4);
+k('navlänkar', await p.locator('#block-nav a').count() === 4);
 k('utloggad: ingen redigera-knapp', await p.locator('button[data-action=redigera]').count() === 0);
 k('utloggad: user-box dold', !(await p.locator('#user-box').isVisible()));
 k('sidräknare visas', await p.locator('.sidvarning').isVisible());
@@ -27,7 +28,7 @@ await p.click('#form-login button[type=submit]');
 await p.waitForTimeout(1500);
 k('lösenordsrutan öppnas direkt', await p.locator('#dlg-password').evaluate(d => d.open));
 await stangDialoger(p);
-k('inloggad: 5 redigera-knappar', await p.locator('button[data-action=redigera]').count() === 5);
+k('inloggad: 4 redigera-knappar', await p.locator('button[data-action=redigera]').count() === 4);
 k('inloggad: passinfo-knapp', await p.locator('#pass-facts button').count() === 1);
 k('inloggad: lägg till block', await p.locator('#btn-add-block').isVisible());
 

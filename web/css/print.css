@@ -38,12 +38,13 @@ main{padding-bottom:0}
 .pass-titel{font-size:14pt;margin-bottom:2pt}
 .fakta-rad{font-size:9pt;gap:2pt 12pt;color:#000}
 
-.pass-common{
+.pass-common,.pass-avslutning{
   margin-top:5pt;box-shadow:none;border:0.6pt solid #bbb;border-radius:0;padding:5pt 8pt;
+  break-inside:avoid;page-break-inside:avoid;
 }
 .gem-post{margin-bottom:3pt}
-.gem-post h3{font-size:8.5pt;margin-bottom:0}
-.gem-post p{margin:0}
+.gem-post h3,.pass-avslutning h3{font-size:8.5pt;margin:0 0 2pt}
+.gem-post p,.pass-avslutning p{margin:0}
 
 /* ---- Block i två spalter ---- */
 /* En spalt: läsbart som underlag och ger förutsägbara sidbrytningar

@@ -23,7 +23,7 @@ python3 - "$PFIL" "$SHA" "$NYFIL" <<'PY'
 import json, sys
 kalla, sha, ut = sys.argv[1], sys.argv[2], sys.argv[3]
 p = json.load(open(kalla))['pass']
-p['titel'] = 'Ändrat utan lösenordsbyte'
+p['pass'][0]['samling'] = 'Ändrat utan lösenordsbyte'
 json.dump({"pass": p, "meddelande": "test", "sha": sha}, open(ut, 'w'), ensure_ascii=False)
 PY
 K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$NYFIL")
