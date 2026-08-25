@@ -10,9 +10,10 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 * **Ledare loggar in** med knappen högst upp och kan då redigera all text,
   lägga till bilder och PDF:er, ändra ordning på momenten, lägga till nya och
   markera vilket av de fem passen som är aktuellt.
-* **Lekar** är en fristående lekbank (namn, hur leken går till, bilder/PDF)
-  som inte är knuten till ett visst pass – ledarna kan använda lekarna som
-  inslag i vilket träningspass som helst.
+* **Lekar** är en sjätte flik, på samma nivå som de fem passen – en
+  fristående lekbank (namn, hur leken går till, bilder/PDF) som inte är
+  knuten till ett visst pass, utan kan användas som inslag i vilket
+  träningspass som helst.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
   tidigare version med ett klick.

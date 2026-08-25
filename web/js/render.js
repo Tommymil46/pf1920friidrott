@@ -6,6 +6,7 @@
    =========================================================== */
 (function () {
   var CFG = window.PASS_CONFIG || {};
+  var LEKAR_ID = "lekar";
 
   function el(tagg, klass, text) {
     var n = document.createElement(tagg);
@@ -36,24 +37,29 @@
     return lista.filter(function (p) { return p.id === id; })[0] || lista[0] || null;
   }
 
-  /* ---------- Flikar mellan de fem träningspassen ---------- */
+  /* ---------- Flikar: de fem träningspassen + lekbanken ---------- */
   function ritaPassTabs(data, valtId, vaxlaPass) {
     var nav = document.getElementById("pass-tabs");
     if (!nav) return;
     nav.innerHTML = "";
+
+    function lagg(id, namn, ikon, visaAktivtMarkering) {
+      var knapp = el("button");
+      knapp.type = "button";
+      knapp.className = id === valtId ? "aktiv" : "";
+      if (ikon) knapp.appendChild(el("span", "block-ikon", ikon + " "));
+      knapp.appendChild(document.createTextNode(namn));
+      if (visaAktivtMarkering) knapp.appendChild(el("span", "pass-markering", " ★"));
+      knapp.addEventListener("click", function () { vaxlaPass(id); });
+      nav.appendChild(knapp);
+    }
+
     (data.pass || [])
       .slice()
       .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
-      .forEach(function (p) {
-        var knapp = el("button");
-        knapp.type = "button";
-        knapp.className = p.id === valtId ? "aktiv" : "";
-        if (p.ikon) knapp.appendChild(el("span", "block-ikon", p.ikon + " "));
-        knapp.appendChild(document.createTextNode(p.namn || p.id));
-        if (p.id === data.aktivt) knapp.appendChild(el("span", "pass-markering", " ★"));
-        knapp.addEventListener("click", function () { vaxlaPass(p.id); });
-        nav.appendChild(knapp);
-      });
+      .forEach(function (p) { lagg(p.id, p.namn || p.id, p.ikon, p.id === data.aktivt); });
+
+    lagg(LEKAR_ID, "Lekar", "🎲", false);
   }
 
   /* ---------- Sidhuvud / fakta för det valda passet ---------- */
@@ -233,12 +239,62 @@
 
     ritaAvslutning(pass);
     ritaFotPass(fot || { uppdaterad: pass.uppdaterad, uppdateradAv: pass.uppdateradAv, grupp: pass.grupp });
-    document.getElementById("add-block-row").hidden = !kanRedigera;
+
+    var radKnapp = document.getElementById("add-block-row");
+    radKnapp.hidden = !kanRedigera;
+    document.getElementById("btn-add-block").textContent = "+ Lägg till friidrottsmoment";
   }
 
-  /* Förstasidan: alla fem passen som flikar, det valda passet visas. */
+  /* Lekbanken: samma nivå som ett träningspass i flikraden, men utan
+     fakta/samling/uppvärmning/avslutning – bara namngivna kort med
+     bilder/PDF, precis som friidrottsmomenten. */
+  function ritaLekarVy(lekar, kanRedigera) {
+    var fakta = document.getElementById("pass-facts");
+    fakta.innerHTML = "";
+    var rubrikRad = el("div", "pass-titel-rad");
+    rubrikRad.appendChild(el("h2", "pass-titel", "Lekar"));
+    fakta.appendChild(rubrikRad);
+    fakta.appendChild(el("p", "hjalp",
+      "En fristående lekbank – inte ett eget träningspass – att använda som inslag i vilket pass som helst."));
+
+    var common = document.getElementById("pass-common");
+    common.innerHTML = "";
+    common.hidden = true;
+
+    var nav = document.getElementById("block-nav");
+    nav.innerHTML = "";
+    (lekar || []).forEach(function (l) {
+      var a = el("a", null, l.namn);
+      a.href = "#block-" + l.id;
+      nav.appendChild(a);
+    });
+
+    var v = document.getElementById("blocks");
+    v.innerHTML = "";
+    (lekar || [])
+      .slice()
+      .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
+      .forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera)); });
+
+    var avslutning = document.getElementById("pass-avslutning");
+    if (avslutning) { avslutning.hidden = true; avslutning.innerHTML = ""; }
+
+    document.getElementById("group-name").textContent = "Lekbank";
+    document.title = "Lekar – Träningspass";
+    document.getElementById("meta-line").textContent = "Hagunda IF · Friidrott";
+
+    var radKnapp = document.getElementById("add-block-row");
+    radKnapp.hidden = !kanRedigera;
+    document.getElementById("btn-add-block").textContent = "+ Lägg till lek";
+  }
+
+  /* Förstasidan: fem träningspass + lekbanken som flikar. */
   function rita(data, valtId, kanRedigera, vaxlaPass) {
     ritaPassTabs(data, valtId, vaxlaPass);
+    if (valtId === LEKAR_ID) {
+      ritaLekarVy(data.lekar || [], kanRedigera);
+      return null;
+    }
     var pass = hittaPass(data, valtId);
     if (!pass) return null;
     ritaPassInnehall(pass, kanRedigera, pass.id === data.aktivt,
@@ -253,20 +309,8 @@
     ritaPassInnehall(pass, kanRedigera, false);
   }
 
-  /* Leksidan: lekbanken, korten återanvänder samma utseende som momenten. */
-  function ritaLekar(lekar, kanRedigera) {
-    var v = document.getElementById("blocks");
-    v.innerHTML = "";
-    (lekar || [])
-      .slice()
-      .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
-      .forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera)); });
-    var rad = document.getElementById("add-block-row");
-    if (rad) rad.hidden = !kanRedigera;
-  }
-
   window.Render = {
-    rita: rita, ritaEnstaka: ritaEnstaka, ritaLekar: ritaLekar, hittaPass: hittaPass,
+    rita: rita, ritaEnstaka: ritaEnstaka, hittaPass: hittaPass, LEKAR_ID: LEKAR_ID,
     el: el, datumText: datumText, tidText: tidText
   };
 })();

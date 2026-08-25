@@ -62,11 +62,13 @@ Klicka **Redigera passinfo** i den blå rutan högst upp.
 
 ## Lekbanken
 
-Klicka **Lekar** högst upp. Det är en fristående lista med lekar – inte ett
-eget träningspass – som ni kan använda som inslag i vilket pass som helst.
-Varje lek har bara ett namn, en beskrivning av hur den går till och möjlighet
-att bifoga bilder eller PDF, precis som ett friidrottsmoment. Redigering,
-uppladdning och historik fungerar likadant som för passen.
+**Lekar** är den sjätte fliken, längst till höger bland flikarna för
+Löpning, Rörelse, Kast, Höjd och Längd. Det är en fristående lista med
+lekar – inte ett eget träningspass – som ni kan använda som inslag i
+vilket pass som helst. Varje lek har bara ett namn, en beskrivning av hur
+den går till och möjlighet att bifoga bilder eller PDF, precis som ett
+friidrottsmoment. Redigering, uppladdning och historik fungerar likadant
+som för passen.
 
 ## Om du råkar ta bort något
 

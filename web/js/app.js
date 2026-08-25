@@ -21,7 +21,17 @@
   /* ---------- Rendering ---------- */
   function kanRedigera() { return !!(window.API.harApi() && window.API.anvandare()); }
 
-  function valtPass() { return window.Render.hittaPass(state.data, state.valtId); }
+  function visarLekar() { return state.valtId === window.Render.LEKAR_ID; }
+
+  function valtPass() {
+    if (visarLekar()) return null;
+    return window.Render.hittaPass(state.data, state.valtId);
+  }
+
+  function lekar() {
+    if (!state.data.lekar) state.data.lekar = [];
+    return state.data.lekar;
+  }
 
   function vaxlaPass(id) {
     state.valtId = id;
@@ -30,9 +40,9 @@
   }
 
   function rita() {
-    window.Render.rita(state.data, state.valtId, kanRedigera(), vaxlaPass);
+    var visadPass = window.Render.rita(state.data, state.valtId, kanRedigera(), vaxlaPass);
     document.body.classList.toggle("redigerar", kanRedigera());
-    if (kanRedigera()) {
+    if (kanRedigera() && visadPass) {
       var v = document.getElementById("pass-facts");
       var b = window.Edit.knapp("Redigera passinfo", "btn-ghost btn-liten no-print",
                                 window.Edit.redigeraPass);
@@ -310,6 +320,7 @@
   function start() {
     window.Edit.init({
       pass: valtPass,
+      lekar: lekar,
       data: function () { return state.data; },
       arAktivt: function () { var p = valtPass(); return !!p && p.id === state.data.aktivt; },
       spara: spara, rita: rita, laddaOm: laddaOm, status: status,
@@ -391,15 +402,20 @@
       b.addEventListener("click", function () { b.closest("dialog").close(); });
     });
 
-    /* Momentverktyg */
+    /* Moment- respektive lekverktyg (samma kort, olika data beroende på flik) */
     document.getElementById("blocks").addEventListener("click", function (e) {
       var b = e.target.closest("button[data-action]");
       if (!b) return;
-      if (b.dataset.action === "redigera") window.Edit.redigeraMoment(b.dataset.blockId);
-      if (b.dataset.action === "upp") window.Edit.flyttaMoment(b.dataset.blockId, "upp");
-      if (b.dataset.action === "ned") window.Edit.flyttaMoment(b.dataset.blockId, "ned");
+      var redigera = visarLekar() ? window.Edit.redigeraLek : window.Edit.redigeraMoment;
+      var flytta = visarLekar() ? window.Edit.flyttaLek : window.Edit.flyttaMoment;
+      if (b.dataset.action === "redigera") redigera(b.dataset.blockId);
+      if (b.dataset.action === "upp") flytta(b.dataset.blockId, "upp");
+      if (b.dataset.action === "ned") flytta(b.dataset.blockId, "ned");
     });
-    document.getElementById("btn-add-block").addEventListener("click", window.Edit.nyttMoment);
+    document.getElementById("btn-add-block").addEventListener("click", function () {
+      if (visarLekar()) window.Edit.nyLek();
+      else window.Edit.nyttMoment();
+    });
 
     /* Markera aktiv blocklänk vid scroll */
     window.addEventListener("hashchange", function () {
@@ -410,6 +426,11 @@
 
     uppdateraInloggningsvy();
     laddaOm().then(function () {
+      /* Djuplänk från t.ex. Arkiv-sidan: index.html?visa=lekar öppnar
+         direkt på lekbanksfliken i stället för det aktuella passet. */
+      if (new URLSearchParams(location.search).get("visa") === "lekar") {
+        vaxlaPass(window.Render.LEKAR_ID);
+      }
       if (!window.API.harApi()) return;
       if (!window.API.anvandare()) return;
       status("info", "Inloggad som ledare – klicka Redigera i ett moment för att ändra.");
