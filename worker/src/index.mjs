@@ -166,6 +166,28 @@ function granskaContent(data) {
     return v;
   };
 
+  /* Delas av friidrottsmoment (inom ett pass) och lekar (den fristående
+     lekbanken) – båda har samma form: namn, ikon, text, bilder, filer. */
+  function granskaKort(m, mNamn) {
+    if (!m || typeof m !== "object") { felLista.push(mNamn + " är trasigt"); return; }
+    strang(m.namn, 120, mNamn + ": namnet");
+    strang(m.text, 30000, mNamn + ": innehållet");
+    strang(m.syfte, 300, mNamn + ": syftet");
+    strang(m.ansvarig, 120, mNamn + ": ledaren");
+    strang(m.ikon, 16, mNamn + ": ikonen");
+
+    ["bilder", "filer"].forEach((faltNamn) => {
+      if (m[faltNamn] == null) return;
+      if (!Array.isArray(m[faltNamn])) { felLista.push(mNamn + ": " + faltNamn + " är trasigt"); return; }
+      if (m[faltNamn].length > 30) felLista.push(mNamn + ": för många " + faltNamn + " (max 30)");
+      m[faltNamn] = m[faltNamn].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
+      m[faltNamn].forEach((x) => {
+        x.bildtext = strang(x.bildtext, 300, mNamn + ": bildtexten");
+        x.namn = strang(x.namn, 200, mNamn + ": filnamnet");
+      });
+    });
+  }
+
   if (data.pass.length > 12) felLista.push("För många träningspass (max 12)");
   const anvandaId = new Set();
 
@@ -194,31 +216,22 @@ function granskaContent(data) {
       felLista.push(namn + ": behöver minst " + MINST_MOMENT + " friidrottsmoment");
     }
 
-    p.moment.forEach((m, j) => {
-      const mNamn = namn + ", moment " + (j + 1);
-      if (!m || typeof m !== "object") { felLista.push(mNamn + " är trasigt"); return; }
-      strang(m.namn, 120, mNamn + ": namnet");
-      strang(m.text, 30000, mNamn + ": innehållet");
-      strang(m.syfte, 300, mNamn + ": syftet");
-      strang(m.ansvarig, 120, mNamn + ": ledaren");
-      strang(m.ikon, 16, mNamn + ": ikonen");
-
-      ["bilder", "filer"].forEach((faltNamn) => {
-        if (m[faltNamn] == null) return;
-        if (!Array.isArray(m[faltNamn])) { felLista.push(mNamn + ": " + faltNamn + " är trasigt"); return; }
-        if (m[faltNamn].length > 30) felLista.push(mNamn + ": för många " + faltNamn + " (max 30)");
-        m[faltNamn] = m[faltNamn].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
-        m[faltNamn].forEach((x) => {
-          x.bildtext = strang(x.bildtext, 300, mNamn + ": bildtexten");
-          x.namn = strang(x.namn, 200, mNamn + ": filnamnet");
-        });
-      });
-    });
+    p.moment.forEach((m, j) => granskaKort(m, namn + ", moment " + (j + 1)));
   });
 
   if (data.aktivt && !anvandaId.has(data.aktivt)) {
     felLista.push("Det aktuella passet (aktivt) pekar på ett pass som inte finns");
   }
+
+  if (data.lekar != null) {
+    if (!Array.isArray(data.lekar)) {
+      felLista.push("Lekbanken är trasig");
+    } else {
+      if (data.lekar.length > 60) felLista.push("För många lekar (max 60)");
+      data.lekar.forEach((l, i) => granskaKort(l, "Lek " + (i + 1)));
+    }
+  }
+
   return felLista;
 }
 

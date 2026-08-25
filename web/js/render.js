@@ -253,8 +253,20 @@
     ritaPassInnehall(pass, kanRedigera, false);
   }
 
+  /* Leksidan: lekbanken, korten återanvänder samma utseende som momenten. */
+  function ritaLekar(lekar, kanRedigera) {
+    var v = document.getElementById("blocks");
+    v.innerHTML = "";
+    (lekar || [])
+      .slice()
+      .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
+      .forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera)); });
+    var rad = document.getElementById("add-block-row");
+    if (rad) rad.hidden = !kanRedigera;
+  }
+
   window.Render = {
-    rita: rita, ritaEnstaka: ritaEnstaka, hittaPass: hittaPass,
+    rita: rita, ritaEnstaka: ritaEnstaka, ritaLekar: ritaLekar, hittaPass: hittaPass,
     el: el, datumText: datumText, tidText: tidText
   };
 })();

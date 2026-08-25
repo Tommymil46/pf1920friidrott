@@ -102,7 +102,7 @@
     var box = el("div");
 
     if ((moment.bilder || []).length) {
-      box.appendChild(el("p", "hjalp", "Bilder i momentet:"));
+      box.appendChild(el("p", "hjalp", "Bilder:"));
       var lb = el("ul", "bilaga-lista");
       moment.bilder.forEach(function (b, i) {
         var li = el("li", "bilaga-rad");
@@ -149,7 +149,7 @@
     fil.multiple = true;
     uppLabel.appendChild(fil);
     uppLabel.appendChild(el("p", "hjalp",
-      "Bilder visas i momentet, PDF/dokument läggs som bilaga. Filerna sparas i GitHub tillsammans med passet."));
+      "Bilder visas i kortet, PDF/dokument läggs som bilaga. Filerna sparas i GitHub tillsammans med innehållet."));
     fil.addEventListener("change", function () {
       var filer = Array.prototype.slice.call(fil.files || []);
       if (!filer.length) return;
@@ -169,7 +169,7 @@
         });
       });
       kedja.then(function () {
-        App.status("ok", "Uppladdat. Kom ihåg att spara momentet.");
+        App.status("ok", "Uppladdat. Kom ihåg att spara.");
         ritaOm();
       }).catch(function (e) {
         App.status("fel", "Uppladdning misslyckades: " + e.message);
@@ -270,12 +270,95 @@
     App.spara("Ändrade ordningen på momenten i " + pass.namn).catch(function () {});
   }
 
+  /* ---------- Redigera en lek (lekbanken – delas mellan alla pass) ---------- */
+  function redigeraLek(lekId) {
+    var lekar = App.lekar();
+    var lek = lekar.filter(function (l) { return l.id === lekId; })[0];
+    if (!lek) return;
+
+    var kort = document.getElementById("block-" + lekId);
+    if (!kort) return;
+    var gammal = kort.querySelector(".redigera-form");
+    if (gammal) { gammal.remove(); return; }
+
+    var form = el("div", "redigera-form no-print");
+    var namn = faltText("Lekens namn", lek.namn);
+    var ikon = faltText("Ikon (emoji)", lek.ikon, "T.ex. 🏝️ 🐒 🏃");
+    var text = faltTextarea("Hur leken går till", lek.text,
+      "Enkel formatering: **fet**, *kursiv*, - punktlista, 1. numrerad lista, [text](länk).");
+
+    var rad = el("div", "form-rad");
+    rad.appendChild(namn.label); rad.appendChild(ikon.label);
+    form.appendChild(rad);
+    form.appendChild(text.label);
+
+    function ritaOm() { App.rita(); redigeraLek(lekId); }
+    form.appendChild(bilagePanel(lek, ritaOm));
+
+    var actions = el("div", "form-actions");
+    actions.appendChild(knapp("Spara lek", "btn-primary", function () {
+      lek.namn = namn.input.value.trim() || lek.namn;
+      lek.ikon = ikon.input.value.trim();
+      lek.text = text.input.value;
+      App.spara("Uppdaterade leken " + lek.namn).catch(function () {});
+    }));
+    actions.appendChild(knapp("Avbryt", "btn-ghost", function () { App.laddaOm(); }));
+    actions.appendChild(knapp("Ta bort leken", "btn-fara", function () {
+      if (!confirm("Ta bort leken \"" + lek.namn + "\" från lekbanken?\n\n" +
+                   "Innehållet finns kvar i historiken i GitHub och kan återställas.")) return;
+      var idx = lekar.findIndex(function (l) { return l.id === lekId; });
+      if (idx > -1) lekar.splice(idx, 1);
+      lekar.forEach(function (l, i) { l.ordning = i + 1; });
+      App.spara("Tog bort leken " + lek.namn).catch(function () {});
+    }));
+    form.appendChild(actions);
+
+    kort.appendChild(form);
+    namn.input.focus();
+  }
+
+  /* ---------- Ny lek ---------- */
+  function nyLek() {
+    var lekar = App.lekar();
+    var namn = prompt("Vad ska leken heta?", "Ny lek");
+    if (namn === null) return;
+    namn = namn.trim(); if (!namn) return;
+
+    var bas = namn.toLowerCase()
+      .replace(/å|ä/g, "a").replace(/ö/g, "o")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "lek";
+    var id = bas, n = 2;
+    while (lekar.some(function (l) { return l.id === id; })) { id = bas + "-" + (n++); }
+
+    lekar.push({ id: id, namn: namn, ikon: "", ordning: lekar.length + 1, text: "", bilder: [], filer: [] });
+    App.spara("Lade till leken " + namn)
+       .then(function () { redigeraLek(id); })
+       .catch(function () {});
+  }
+
+  /* ---------- Flytta en lek ---------- */
+  function flyttaLek(lekId, riktning) {
+    var lekar = App.lekar();
+    var lista = lekar.slice().sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); });
+    var i = lista.findIndex(function (l) { return l.id === lekId; });
+    var j = i + (riktning === "upp" ? -1 : 1);
+    if (i < 0 || j < 0 || j >= lista.length) return;
+    var tmp = lista[i]; lista[i] = lista[j]; lista[j] = tmp;
+    lista.forEach(function (l, k) { l.ordning = k + 1; });
+    lekar.length = 0;
+    lista.forEach(function (l) { lekar.push(l); });
+    App.spara("Ändrade ordningen på lekarna").catch(function () {});
+  }
+
   window.Edit = {
     init: init,
     redigeraPass: redigeraPass,
     redigeraMoment: redigeraMoment,
     nyttMoment: nyttMoment,
     flyttaMoment: flyttaMoment,
+    redigeraLek: redigeraLek,
+    nyLek: nyLek,
+    flyttaLek: flyttaLek,
     knapp: knapp
   };
 })();

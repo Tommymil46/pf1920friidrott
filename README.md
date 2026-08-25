@@ -10,6 +10,9 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 * **Ledare loggar in** med knappen högst upp och kan då redigera all text,
   lägga till bilder och PDF:er, ändra ordning på momenten, lägga till nya och
   markera vilket av de fem passen som är aktuellt.
+* **Lekar** är en fristående lekbank (namn, hur leken går till, bilder/PDF)
+  som inte är knuten till ett visst pass – ledarna kan använda lekarna som
+  inslag i vilket träningspass som helst.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
   tidigare version med ett klick.
@@ -29,8 +32,9 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 ```
 
 * **web/** – själva webbappen. Ren HTML/CSS/JS, inget byggsteg.
-* **content/pass.json** – de fem träningspassens innehåll, plus vilket som är
-  aktuellt just nu (`aktivt`). Detta är "databasen".
+* **content/pass.json** – de fem träningspassens innehåll, vilket som är
+  aktuellt just nu (`aktivt`), samt den fristående lekbanken (`lekar`).
+  Detta är "databasen".
 * **content/arkiv/** – genomförda pass, ett per fil, plus `index.json`.
 * **content/uploads/** – bilder och PDF:er som ledarna laddat upp.
 * **worker/** – ledartjänsten som Cloudflare Worker: inloggning, uppladdning

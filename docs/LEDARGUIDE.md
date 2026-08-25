@@ -60,6 +60,14 @@ Klicka **Redigera passinfo** i den blå rutan högst upp.
 * Varje pass behöver minst fyra moment – appen hindrar dig från att ta bort
   det fjärde om det är det sista som är kvar.
 
+## Lekbanken
+
+Klicka **Lekar** högst upp. Det är en fristående lista med lekar – inte ett
+eget träningspass – som ni kan använda som inslag i vilket pass som helst.
+Varje lek har bara ett namn, en beskrivning av hur den går till och möjlighet
+att bifoga bilder eller PDF, precis som ett friidrottsmoment. Redigering,
+uppladdning och historik fungerar likadant som för passen.
+
 ## Om du råkar ta bort något
 
 Ingen fara – ingenting försvinner. Klicka **Historik**, leta upp versionen du

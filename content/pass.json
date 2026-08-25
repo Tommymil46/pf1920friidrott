@@ -304,5 +304,34 @@
         }
       ]
     }
+  ],
+  "lekar": [
+    {
+      "id": "land-skepp-hav",
+      "namn": "Land, Skepp och Hav",
+      "ikon": "🏝️",
+      "ordning": 1,
+      "text": "Märk ut tre zoner på marken: Land, Skepp och Hav. Ledaren ropar en av zonerna och alla springer dit. Sista in eller den som springer fel får en utmaning.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "harmapan",
+      "namn": "Härmapan",
+      "ikon": "🐒",
+      "ordning": 2,
+      "text": "En ledare (\"Pippi\") gör rörelser eller hopp som alla andra ska härma. Byt vem som är Pippi med jämna mellanrum.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kull",
+      "namn": "Kull",
+      "ikon": "🏃",
+      "ordning": 3,
+      "text": "Klassisk kull. Den som blir tagen fryser till is och kan befrias genom att en kompis kryper mellan benen.",
+      "bilder": [],
+      "filer": []
+    }
   ]
 }
