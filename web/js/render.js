@@ -149,7 +149,7 @@
     return fig;
   }
 
-  function ritaBlock(moment, kanRedigera) {
+  function ritaBlock(moment, kanRedigera, visaFlytta) {
     var kort = el("article", "block");
     kort.id = "block-" + moment.id;
     kort.dataset.blockId = moment.id;
@@ -161,15 +161,18 @@
 
     if (kanRedigera) {
       var verktyg = el("div", "block-verktyg no-print");
+      if (visaFlytta !== false) {
+        var upp = el("button", "btn btn-liten", "▲");
+        upp.type = "button"; upp.title = "Flytta upp";
+        upp.dataset.action = "upp"; upp.dataset.blockId = moment.id;
+        var ned = el("button", "btn btn-liten", "▼");
+        ned.type = "button"; ned.title = "Flytta ned";
+        ned.dataset.action = "ned"; ned.dataset.blockId = moment.id;
+        verktyg.appendChild(upp); verktyg.appendChild(ned);
+      }
       var red = el("button", "btn btn-liten", "Redigera");
       red.type = "button"; red.dataset.action = "redigera"; red.dataset.blockId = moment.id;
-      var upp = el("button", "btn btn-liten", "▲");
-      upp.type = "button"; upp.title = "Flytta upp";
-      upp.dataset.action = "upp"; upp.dataset.blockId = moment.id;
-      var ned = el("button", "btn btn-liten", "▼");
-      ned.type = "button"; ned.title = "Flytta ned";
-      ned.dataset.action = "ned"; ned.dataset.blockId = moment.id;
-      verktyg.appendChild(upp); verktyg.appendChild(ned); verktyg.appendChild(red);
+      verktyg.appendChild(red);
       huvud.appendChild(verktyg);
     }
     kort.appendChild(huvud);
@@ -248,6 +251,12 @@
   /* Lekbanken: samma nivå som ett träningspass i flikraden, men utan
      fakta/samling/uppvärmning/avslutning – bara namngivna kort med
      bilder/PDF, precis som friidrottsmomenten. */
+  function sorteradLekar(lekar) {
+    return (lekar || [])
+      .slice()
+      .sort(function (a, b) { return (a.namn || "").localeCompare(b.namn || "", "sv"); });
+  }
+
   function ritaLekarVy(lekar, kanRedigera) {
     var fakta = document.getElementById("pass-facts");
     fakta.innerHTML = "";
@@ -255,15 +264,18 @@
     rubrikRad.appendChild(el("h2", "pass-titel", "Lekar"));
     fakta.appendChild(rubrikRad);
     fakta.appendChild(el("p", "hjalp",
-      "En fristående lekbank – inte ett eget träningspass – att använda som inslag i vilket pass som helst."));
+      "En fristående lekbank – inte ett eget träningspass – att använda som inslag i vilket pass som helst. " +
+      "Lekarna sorteras alltid i bokstavsordning."));
 
     var common = document.getElementById("pass-common");
     common.innerHTML = "";
     common.hidden = true;
 
+    var sorterade = sorteradLekar(lekar);
+
     var nav = document.getElementById("block-nav");
     nav.innerHTML = "";
-    (lekar || []).forEach(function (l) {
+    sorterade.forEach(function (l) {
       var a = el("a", null, l.namn);
       a.href = "#block-" + l.id;
       nav.appendChild(a);
@@ -271,10 +283,7 @@
 
     var v = document.getElementById("blocks");
     v.innerHTML = "";
-    (lekar || [])
-      .slice()
-      .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
-      .forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera)); });
+    sorterade.forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera, false)); });
 
     var avslutning = document.getElementById("pass-avslutning");
     if (avslutning) { avslutning.hidden = true; avslutning.innerHTML = ""; }

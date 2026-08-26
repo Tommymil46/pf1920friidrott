@@ -308,7 +308,6 @@
                    "Innehållet finns kvar i historiken i GitHub och kan återställas.")) return;
       var idx = lekar.findIndex(function (l) { return l.id === lekId; });
       if (idx > -1) lekar.splice(idx, 1);
-      lekar.forEach(function (l, i) { l.ordning = i + 1; });
       App.spara("Tog bort leken " + lek.namn).catch(function () {});
     }));
     form.appendChild(actions);
@@ -330,24 +329,10 @@
     var id = bas, n = 2;
     while (lekar.some(function (l) { return l.id === id; })) { id = bas + "-" + (n++); }
 
-    lekar.push({ id: id, namn: namn, ikon: "", ordning: lekar.length + 1, text: "", bilder: [], filer: [] });
+    lekar.push({ id: id, namn: namn, ikon: "", text: "", bilder: [], filer: [] });
     App.spara("Lade till leken " + namn)
        .then(function () { redigeraLek(id); })
        .catch(function () {});
-  }
-
-  /* ---------- Flytta en lek ---------- */
-  function flyttaLek(lekId, riktning) {
-    var lekar = App.lekar();
-    var lista = lekar.slice().sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); });
-    var i = lista.findIndex(function (l) { return l.id === lekId; });
-    var j = i + (riktning === "upp" ? -1 : 1);
-    if (i < 0 || j < 0 || j >= lista.length) return;
-    var tmp = lista[i]; lista[i] = lista[j]; lista[j] = tmp;
-    lista.forEach(function (l, k) { l.ordning = k + 1; });
-    lekar.length = 0;
-    lista.forEach(function (l) { lekar.push(l); });
-    App.spara("Ändrade ordningen på lekarna").catch(function () {});
   }
 
   window.Edit = {
@@ -358,7 +343,6 @@
     flyttaMoment: flyttaMoment,
     redigeraLek: redigeraLek,
     nyLek: nyLek,
-    flyttaLek: flyttaLek,
     knapp: knapp
   };
 })();

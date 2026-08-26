@@ -402,15 +402,18 @@
       b.addEventListener("click", function () { b.closest("dialog").close(); });
     });
 
-    /* Moment- respektive lekverktyg (samma kort, olika data beroende på flik) */
+    /* Moment- respektive lekverktyg (samma kort, olika data beroende på flik).
+       Lekarna sorteras alltid alfabetiskt, så de har ingen ▲▼-flytt. */
     document.getElementById("blocks").addEventListener("click", function (e) {
       var b = e.target.closest("button[data-action]");
       if (!b) return;
-      var redigera = visarLekar() ? window.Edit.redigeraLek : window.Edit.redigeraMoment;
-      var flytta = visarLekar() ? window.Edit.flyttaLek : window.Edit.flyttaMoment;
-      if (b.dataset.action === "redigera") redigera(b.dataset.blockId);
-      if (b.dataset.action === "upp") flytta(b.dataset.blockId, "upp");
-      if (b.dataset.action === "ned") flytta(b.dataset.blockId, "ned");
+      if (visarLekar()) {
+        if (b.dataset.action === "redigera") window.Edit.redigeraLek(b.dataset.blockId);
+        return;
+      }
+      if (b.dataset.action === "redigera") window.Edit.redigeraMoment(b.dataset.blockId);
+      if (b.dataset.action === "upp") window.Edit.flyttaMoment(b.dataset.blockId, "upp");
+      if (b.dataset.action === "ned") window.Edit.flyttaMoment(b.dataset.blockId, "ned");
     });
     document.getElementById("btn-add-block").addEventListener("click", function () {
       if (visarLekar()) window.Edit.nyLek();

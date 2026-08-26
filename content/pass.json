@@ -307,11 +307,66 @@
   ],
   "lekar": [
     {
-      "id": "land-skepp-hav",
-      "namn": "Land, Skepp och Hav",
-      "ikon": "🏝️",
-      "ordning": 1,
-      "text": "Märk ut tre zoner på marken: Land, Skepp och Hav. Ledaren ropar en av zonerna och alla springer dit. Sista in eller den som springer fel får en utmaning.",
+      "id": "akta-din-svans",
+      "namn": "Akta din svans",
+      "ikon": "🎗️",
+      "text": "Alla tilldelas en svans i form av ett band som man fäster i byxlinningen. Man ska sedan ta de andras svansar. Den som blir av med sin svans får en ny av ledaren, efter att hen gjort ett uppdrag eller en styrkeövning.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "alla-som",
+      "namn": "Alla som",
+      "ikon": "🗣️",
+      "text": "Alla barnen sitter i en ring. Ledaren ropar upp ett påstående, t.ex. \"alla som har svarta byxor\". De barn som påståendet stämmer in på får springa ett varv runt ringen.\n\nFler exempel: alla som har grön tröja, alla som bor i Vänge, alla som börjar på E eller H, alla som har långt eller kort hår, alla som går på friidrott.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "armkrokskull",
+      "namn": "Armkrokskull",
+      "ikon": "🤼",
+      "text": "Barnen paras ihop två och två i armkrok och sprider ut sig inom ett område med fyra konor i hörnen. Ledaren delar på ett av paren – en blir tagare och den andra blir jagad. Den som blir jagad kan kroka fast sig i ett par för att undvika att bli tagen; då blir i stället den andra i paret jagad. När den jagade blir tagen byter man roll.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "banankull",
+      "namn": "Banankull",
+      "ikon": "🍌",
+      "text": "En person är tagare. Den som blir tagen blir en banan och ställer sig med händerna upp mot taket. För att befrias kommer en kompis och \"skalar bananen\" genom att föra händerna nedåt på varsin sida.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "blackfisken-i-havet",
+      "namn": "Bläckfisken i havet",
+      "ikon": "🐙",
+      "text": "En av deltagarna utses till \"bläckfisk\" och är den som ska jaga och försöka kulla de andra. \"Bläckfisken\" ställer sig mitt i området och de andra, som benämns \"fiskar\", ställer sig på den ena kortsidan. På bläckfiskens kommando springer alla \"fiskar\" och försöker ta sig till motsatta sidan. Bläckfisken försöker kulla så många den kan.\n\nNär man blir kullad stannar man där man blev tagen och får inte flytta på sig – man benämns nu som \"sjögräs\". \"Sjögräset\" hjälper bläckfisken att kulla \"fiskarna\", men får inte springa efter utan står still och rör bara på armarna och kullar \"fiskarna\" om de kommer för nära. Den som blir kullad av \"sjögräset\" blir också \"sjögräs\".\n\nLeken pågår tills det bara återstår en \"fisk\". Blir leken för utdragen kan någon eller några \"sjögräs\" omvandlas till \"bläckfisk\" och få springa efter \"fiskarna\".",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "byt-bo",
+      "namn": "Byt bo",
+      "ikon": "🪺",
+      "text": "Alla barn har ett eget bo någonstans i gymnastiksalen (t.ex. en rockring eller en ärtpåse). Lekledaren ropar \"byt bo\", varpå alla ska byta bo. Samtidigt knycker lekledaren snabbt åt sig någons bo, så att ett barn blir utan bo. Det barnet får i sin tur ropa \"byt bo\" och gå med i leken igen.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "den-liggande-namnleken",
+      "namn": "Den liggande namnleken",
+      "ikon": "🛌",
+      "text": "Alla sitter i en ring och lägger sig sedan ner med fötterna inåt. En person börjar med att sätta sig upp och säga \"Hej, jag heter ...\". Då sätter sig alla upp och säger \"Hej ...!\" och lägger sig sedan ner igen. Då är det nästa persons tur att sätta sig upp.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderlopnings-stafett-i-cirkel",
+      "namn": "Hinderlöpnings-stafett i cirkel",
+      "ikon": "🔄",
+      "text": "Två eller flera lag med minst 5–6 deltagare. Varje lag bildar en cirkel och lägger sig på mage med huvudet in mot mitten. Ett barn utses till förste man.\n\nPå en given signal reser sig startaren och springer över alla lagkamraterna motsols och tillbaka till sin egen plats igen. Då barnet ligger ner får nästa barn starta. Stafetten är slut då alla har sprungit.",
       "bilder": [],
       "filer": []
     },
@@ -319,8 +374,63 @@
       "id": "harmapan",
       "namn": "Härmapan",
       "ikon": "🐒",
-      "ordning": 2,
       "text": "En ledare (\"Pippi\") gör rörelser eller hopp som alla andra ska härma. Byt vem som är Pippi med jämna mellanrum.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kasta-artpasar-lek",
+      "namn": "Kasta ärtpåsar – lek",
+      "ikon": "🎯",
+      "text": "Barnen delas i två grupper. De ska i tur och ordning springa fram till en kona, plocka upp en ärtpåse och kasta den i en rockring, sen springa tillbaka och ställa sig sist.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kasta-artpasar-lek-2",
+      "namn": "Kasta ärtpåsar – lek 2",
+      "ikon": "🎯",
+      "text": "En grupp kastar ärtpåsar från en tjockmatta, medan de andra ska hämta ärtpåsarna utan att bli träffade.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kinesiska-muren",
+      "namn": "Kinesiska muren",
+      "ikon": "🧱",
+      "text": "Leken går ut på att deltagare från olika lag försöker korsa en \"mur\" (oftast gjord av gymnastikmattor eller bänkar) för att hämta en \"skatt\" och sedan ta sig tillbaka över muren utan att bli \"kullade\" av vakterna som står på muren. De som blir kullade får lämna tillbaka skatten och gå tillbaka till sitt lag.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kom-alla-mina-skogsdjur",
+      "namn": "Kom alla mina skogsdjur",
+      "ikon": "🦌",
+      "text": "Barnen står på ena kortsidan och ledaren på den andra. Ledaren ropar \"Kom alla mina skogsdjur!\". Barnen svarar \"Vilka då?\". Ledaren ropar t.ex. \"Kom alla harar!\", och barnen tar sig då över till andra sidan genom att härma djuret (t.ex. hoppa som harar).\n\nFler exempel: grodor, fåglar, hästar, lejon, kaniner, kycklingar, älgar, sniglar, ormar.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kramkull",
+      "namn": "Kramkull",
+      "ikon": "🤗",
+      "text": "Den som blir kullad ställer sig med armarna ut åt sidorna. För att befrias kommer en kompis och ger en kram.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kroppsdelsspring",
+      "namn": "Kroppsdelsspring",
+      "ikon": "🖐️",
+      "text": "Barnen springer runt i salen. När ledaren blåser i pipan eller klappar händerna säger ledaren en kroppsdel, som barnen då ska placera mot en linje i en särskild färg på golvet.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "kryptunnel-stafett",
+      "namn": "Kryptunnel-stafett",
+      "ikon": "🕳️",
+      "text": "Dela in deltagarna i två eller flera lag. Varje lag ställer sig på led med benen brett isär, alla vända åt samma håll. Siste man kryper genom allas ben och ställer sig först, och klappar sedan följande person på axeln som en signal för att nästa ska starta. Klappen går vidare genom hela kön tills alla har krupit igenom – då är stafetten slut.",
       "bilder": [],
       "filer": []
     },
@@ -328,8 +438,135 @@
       "id": "kull",
       "namn": "Kull",
       "ikon": "🏃",
-      "ordning": 3,
       "text": "Klassisk kull. Den som blir tagen fryser till is och kan befrias genom att en kompis kryper mellan benen.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "land-skepp-hav",
+      "namn": "Land, Skepp och Hav",
+      "ikon": "🏝️",
+      "text": "Märk ut tre zoner på marken: Land, Skepp och Hav. Ledaren ropar en av zonerna och alla springer dit. Sista in eller den som springer fel får en utmaning.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "musiklek-med-konor",
+      "namn": "Musiklek med konor",
+      "ikon": "🎵",
+      "text": "**Förberedelse:** Sprid ut konor i olika färger på golvet i ett öppet område.\n\n**Musikstart:** Starta musiken och låt deltagarna dansa eller röra sig fritt runt konorna utan att röra dem.\n\n**Stopp:** När musiken pausas ska alla barn hitta en kona.\n\n**Variation:** När musiken pausas ropar ledaren ut en färg, och då ska alla snabbt hitta en kona i den färgen.\n\nBestäm gärna i förväg hur många barn som får stå vid varje kona, om en begränsning ska finnas.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "musiklek-med-stationer",
+      "namn": "Musiklek med stationer",
+      "ikon": "🎶",
+      "text": "Gör en bana med sex stationer, med en rörelsebild på varje. När musiken stannar ska barnen göra rörelsen som de står närmast.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "namn-och-vinka",
+      "namn": "Namn och vinka",
+      "ikon": "👋",
+      "text": "Man går ringen runt. Var och en säger sitt namn samtidigt som hen gör en rörelse, t.ex. vinkar, sträcker tummen upp, klappar händerna eller snurrar ett varv. Alla andra i ringen gör därefter samma rörelse och säger \"Hej [namnet]!\".\n\nBra att säga till barnen i förväg att man alltid kan vinka om man inte kommer på någon annan rörelse.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "skicka-runt-en-boll",
+      "namn": "Skicka runt en boll",
+      "ikon": "⚽",
+      "text": "Skicka runt en boll i ringen. Den som har bollen säger sitt namn.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "slalomstafett",
+      "namn": "Slalomstafett",
+      "ikon": "〰️",
+      "text": "Deltagarna delas upp i lag och springer en sicksack-bana mellan konor. Fokus ligger på att hålla sig nära markeringarna och göra smidiga vändningar.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "spring-till-musik",
+      "namn": "Spring till musik",
+      "ikon": "🎼",
+      "text": "Barnen springer eller rör sig fritt till musik. När musiken tystnar ropar ledaren ut vad alla ska göra, t.ex.:\n\n- Stanna som förstenad\n- Sitta ner\n- Ligga på rygg\n- Ligga på mage\n- Inte röra golvet\n- Ställa sig bredvid varandra\n- Ställa sig bakom varandra\n- Ställa sig mittemot varandra\n- Ställa sig i en ring\n- Ställa sig tre och tre",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "stadare-och-stokare",
+      "namn": "Städare och stökare",
+      "ikon": "",
+      "text": "",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "svansleken",
+      "namn": "Svansleken",
+      "ikon": "🎗️",
+      "text": "Alla deltagare får en svans som de fäster genom att sticka in den bak i byxlinningen. På ett givet kommando ska alla försöka fånga så många svansar som möjligt, samtidigt som man måste akta sin egen. Man får inte ta någon svans om personen just håller på att fästa den. Den som har flest svansar när leken är slut har vunnit.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "svans-och-oronleken",
+      "namn": "Svans- och öronleken",
+      "ikon": "👂",
+      "text": "Dela in barnen i två grupper: den ena är svansar (med händerna bakom rumpan) och den andra är öron (med händerna vid öronen). Alla svansar försöker kulla öronen och alla öron försöker kulla svansarna. När man kullar släpper man en hand från huvudet eller rumpan, som snabbt sätts på plats igen. Blir någon kullad byter hen grupp – öra blir svans och tvärtom. Leken slutar när alla är antingen bara svansar eller bara öron.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "tunnelkull",
+      "namn": "Tunnelkull",
+      "ikon": "🕳️",
+      "text": "En eller flera fasta kullare. Den som blir kullad ställer sig bredbent och blir fri igen om någon som inte är kullad kryper mellan benen.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "under-hokens-vingar-kom",
+      "namn": "Under hökens vingar kom",
+      "ikon": "🦅",
+      "text": "En av deltagarna är hök och de övriga är ungar. Höken ställer sig i mitten, resten ställer sig bakom en linje i ena änden av salen eller planen. I andra änden finns en linje som hökens ungar ska försöka springa över utan att bli fasttagna.\n\nHöken ropar \"Under hökens vingar kom\". Alla de övriga svarar \"Vilken färg?\". Höken ropar ut en färg – de som har den färgen på något klädesplagg får gå över planen utan att bli fasttagna. Därefter springer resten över planen medan höken försöker ta fast så många som möjligt. De som blir fasttagna blir också hökar. Leken slutar när alla är fasttagna.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "vad-ar-klockan-fru-herr-lejon",
+      "namn": "Vad är klockan Fru/Herr Lejon?",
+      "ikon": "🦁",
+      "text": "Herr Lejon står några meter ifrån de övriga deltagarna med ryggen mot dem. Deltagarna frågar \"Hur mycket är klockan, herr Lejon?\". Om herr Lejon t.ex. svarar att klockan är \"tre elefantsteg\" går man tre stora steg närmare honom, svarar han \"fem myrsteg\" tar man fem små steg. Så fortsätter herr Lejon tills han tycker att alla är tillräckligt nära.\n\nDå, i stället för att ge ett klockslag, vänder sig herr Lejon om och ropar \"LUNCHDAGS!\" och försöker kulla sina kamrater som rusar tillbaka till utgångspunkten. Alla som blir tagna blir också lejon. Leken fortsätter tills alla blivit lejon.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "odlorna-pa-marken",
+      "namn": "Ödlorna på marken",
+      "ikon": "🦎",
+      "text": "Deltagarna och ledaren lägger sig ner som ödlor på marken/golvet. Man får bara röra sig genom att åla. Ledaren eller någon av deltagarna räknar till tio och börjar sedan fånga de övriga. När man blivit nuddad blir man en sten, sittande på golvet. Rör en deltagare vid en sten blir den också en sten. Leken slutar när alla deltagarna blivit stenar.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "ovning-a-att-testa-olika-hopp-med-hopprep",
+      "namn": "Övning A – Att testa olika hopp med hopprep",
+      "ikon": "🪢",
+      "text": "Deltagarna får prova på olika typer av hopp i ett lång-hopprep som vevas av två personer. De som vevar kan bestämma hastighet och om deltagaren ska hoppa ut eller fortsätta hoppa. Kan flera deltagare hoppa samtidigt?\n\nSå här instruerar du deltagarna: stå med ansiktet mot en av dem som vevar repet, hoppa rakt upp i luften.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "ovning-c-frekvenslopning-att-sakerstalla-en-effektiv-stafettvaxling",
+      "namn": "Övning C – Frekvenslöpning – att säkerställa en effektiv stafettväxling",
+      "ikon": "🏃",
+      "text": "Två deltagare ställer upp mitt emot varandra med ett avstånd på cirka tio meter. De passerar varandra springande och lämnar över en stafettpinne utan att sakta ned hastigheten.\n\nSå här instruerar du deltagarna: anpassa vilken sida ni ska springa på för att inte krocka. Bestäm sidan utifrån vilken hand mottagaren ska ta pinnen i.",
       "bilder": [],
       "filer": []
     }
