@@ -26,7 +26,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Stafett – hinderbana",
           "text": "Hinderbana stafett enligt skiss. Två lag. Använd stafettpinne.",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-lopning-stationer.png", "bildtext": "Skiss: station 1 (hinderbana stafett) och station 2 (löpning/häcklöpning)" }
+          ],
           "filer": []
         },
         {
@@ -37,7 +39,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Löpteknik och uthållighet",
           "text": "Löpning runt halva salen (runt koner) under 2 minuter. Räkna allas varv och försök slå antalet varv i följande omgångar.\n\nStationen varieras mellan omgångarna:\n\n1. Omgång 1: Löpning\n2. Omgång 2: Häcklöpning\n3. Omgång 3: Stafett, ett barn i taget. Använd stafettpinne.",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-lopning-stationer.png", "bildtext": "Skiss: station 1 (hinderbana stafett) och station 2 (löpning/häcklöpning)" }
+          ],
           "filer": []
         },
         {
@@ -86,7 +90,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Rörlighet – kullerbytta och rullning",
           "text": "**Köttbullen**\n\nBarnen sitter på huk och rullar fram och tillbaka som en liten köttbulle.\n\n- Använd ej händerna\n- Träna på att hålla in hakan mot bröstet och titta på magen\n- Försök att få till en rundad rygg\n\n**Rullande kulle**\n\nMatta över plint på lägsta nivå (lutande plan). Barnen startar från toppen och rullar ner. Ledare/förälder hjälper till under kullerbyttan.",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-rorlighet-stationer.png", "bildtext": "Skiss: station 1 (kullerbyttor) och station 2 (rörelsebana)" }
+          ],
           "filer": []
         },
         {
@@ -97,7 +103,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Koordination och kroppskontroll",
           "text": "Rörelsebana enligt skiss:\n\n- Åla under madrasser\n- Dra sig fram på mage över bänkar\n- Slalom runt innebandymål\n- Krypa mellan bommar\n- Under häckar, över plintar",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-rorlighet-stationer.png", "bildtext": "Skiss: station 1 (kullerbyttor) och station 2 (rörelsebana)" }
+          ],
           "filer": []
         },
         {
@@ -146,7 +154,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Kastprecision",
           "text": "Ställ barnen i varsin rockring. Låt barnen kasta ärtpåsar i upp- och nedvända plintar – det behöver inte vara en plint per barn. Räkna hur många ärtpåsar barnen tillsammans lyckas kasta i plintarna.\n\nVariationer:\n\n- Låt barnen kasta på ledaren i stället för plintarna\n- Kasta med \"fel\" hand",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-kast-stationer.png", "bildtext": "Skiss: station 1 (kast precision) och station 2 (kast över bom)" }
+          ],
           "filer": []
         },
         {
@@ -157,7 +167,9 @@
           "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
           "syfte": "Kastteknik – båge",
           "text": "Sänk ned en bom (cirka 1,5 m över marken). Låt barnen kasta ärtpåsar över bommen. Räkna hur många ärtpåsar barnen tillsammans lyckas kasta över bommen.\n\nVariationer:\n\n- Sänk bommen ytterligare lite till och låt barnen kasta sittande från bänkar för att isolera kaströrelsen\n- Kasta med \"fel\" hand",
-          "bilder": [],
+          "bilder": [
+            { "url": "content/uploads/skiss-kast-stationer.png", "bildtext": "Skiss: station 1 (kast precision) och station 2 (kast över bom)" }
+          ],
           "filer": []
         },
         {
