@@ -627,7 +627,7 @@ if (fs.existsSync(CONTENT_DIR)) {
       const d = await cachat("statisk:" + relativVag, () => gh.hamtaJson(fullVag));
       res.json(d.data);
     } catch {
-      res.sendFile(path.join(CONTENT_DIR, relativVag));
+      res.sendFile(path.resolve(CONTENT_DIR, relativVag));
     }
   });
   app.use("/content", express.static(CONTENT_DIR));

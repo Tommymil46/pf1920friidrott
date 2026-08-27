@@ -7,7 +7,39 @@
   /* Indexet (vilket pass som är aktuellt + i vilken ordning flikarna
      ligger), varje pass och lekbanken lagras var för sig – var och en
      med sin egen sha, historik och återställning. */
-  var state = { index: null, indexSha: null, pass: {}, lekar: null, lekarSha: null, valtId: null, kalla: null };
+  var state = { index: null, indexSha: null, pass: {}, lekar: null, lekarSha: null,
+                schema: null, valtId: null, kalla: null };
+
+  /* ---------- Schemastyrt aktuellt pass ----------
+     Vilket pass som visas som "aktuellt" styrs i första hand av
+     terminsschemat: det senaste tillfället t.o.m. idag som varken är
+     inställt eller saknar pass. Håller ett höstlov utan att byta pass –
+     det senast hållna passet räknas som aktuellt tills nästa tillfälle.
+     Saknar schemat en träff (t.ex. innan/efter terminen) faller vi
+     tillbaka på det manuellt satta "aktivt" i index.json. Inget sparas
+     här – det är bara vad som visas vid sidladdning. */
+  function idagISO() {
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") +
+           "-" + String(d.getDate()).padStart(2, "0");
+  }
+
+  function schemaAktivtId() {
+    var t = state.schema && state.schema.tillfallen;
+    if (!Array.isArray(t)) return null;
+    var idag = idagISO();
+    var val = null;
+    t.forEach(function (r) {
+      if (r && r.pass && !r.installt && r.datum && r.datum <= idag) {
+        if (!val || r.datum > val.datum) val = r;
+      }
+    });
+    return val ? val.pass : null;
+  }
+
+  function effektivtAktivt() {
+    return schemaAktivtId() || (state.index ? state.index.aktivt : null);
+  }
 
   /* ---------- Status ---------- */
   var statusTimer = null;
@@ -42,7 +74,7 @@
      – den byggs ihop här från de separata filerna inför varje ritning. */
   function samladVy() {
     return {
-      aktivt: state.index ? state.index.aktivt : null,
+      aktivt: effektivtAktivt(),
       pass: ((state.index && state.index.pass) || []).map(function (id) {
         var p = state.pass[id];
         return p ? p.data : null;
@@ -81,10 +113,13 @@
       }).concat([
         window.API.hamtaLekar().then(function (l) {
           state.lekar = l.data; state.lekarSha = l.sha || null;
-        })
+        }),
+        window.API.hamtaSchema().then(function (s) {
+          state.schema = s.data;
+        }).catch(function () { state.schema = null; })
       ]));
     }).then(function () {
-      state.valtId = state.index.aktivt;
+      state.valtId = effektivtAktivt();
       rita();
     }).catch(function (e) {
       status("fel", "Kunde inte hämta träningspassen: " + e.message, true);
@@ -412,7 +447,7 @@
     window.Edit.init({
       pass: valtPass,
       lekar: lekar,
-      arAktivt: function () { var p = valtPass(); return !!p && p.id === state.index.aktivt; },
+      arAktivt: function () { var p = valtPass(); return !!p && p.id === effektivtAktivt(); },
       spara: spara, rita: rita, laddaOm: laddaOm, status: status,
       arkivera: arkivera, sattAktivt: sattAktivt
     });
