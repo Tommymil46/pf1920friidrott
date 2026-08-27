@@ -13,10 +13,19 @@ function put(path, contentB64, message, author) {
   commits.unshift(c);
   return { content: { sha: s }, commit: { sha: c.sha } };
 }
-/* Utgå från repots riktiga startinnehåll, så testerna speglar verkligheten. */
+/* Utgå från repots riktiga startinnehåll, så testerna speglar verkligheten.
+   Innehållet ligger som flera filer: index.json, ett pass per fil under
+   pass/, och lekar.json – varje fil får sin egen sha och historik. */
 import fs from 'node:fs';
-const startPass = fs.readFileSync(new URL('../content/pass.json', import.meta.url), 'utf8');
-put('content/pass.json', Buffer.from(startPass).toString('base64'), 'Startinnehåll', { name: 'system' });
+const contentDir = new URL('../content/', import.meta.url);
+function b64Fil(relativVag) {
+  return Buffer.from(fs.readFileSync(new URL(relativVag, contentDir), 'utf8')).toString('base64');
+}
+put('content/index.json', b64Fil('index.json'), 'Startinnehåll', { name: 'system' });
+put('content/lekar.json', b64Fil('lekar.json'), 'Startinnehåll', { name: 'system' });
+for (const namn of fs.readdirSync(new URL('pass/', contentDir))) {
+  put('content/pass/' + namn, b64Fil('pass/' + namn), 'Startinnehåll', { name: 'system' });
+}
 
 const srv = http.createServer((req, res) => {
   let kropp = '';

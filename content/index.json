@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdateradAv": "system",
+  "aktivt": "lopning",
+  "pass": [
+    "lopning",
+    "rorelse",
+    "kast",
+    "hojd",
+    "langd"
+  ]
+}

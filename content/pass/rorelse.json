@@ -1,0 +1,78 @@
+{
+  "id": "rorelse",
+  "namn": "Rörelse",
+  "ikon": "🤸",
+  "datum": "2026-09-06",
+  "tid": "15:00–16:00",
+  "plats": "Hagunda IP",
+  "grupp": "Friidrott PF 19/20",
+  "ansvarigaLedare": [
+    "Tommy",
+    "Ludvig",
+    "Johan",
+    "Anna",
+    "Eric",
+    "Jossan"
+  ],
+  "samling": "Upprop, regler och genomgång av dagens pass. (5 min, Tommy)\n\nDela upp barnen i tre grupper, bygg de tre stationerna och börja preppa hinderbanan så mycket som möjligt. Stationerna roterar sedan i grupperna under cirka 30 minuter, följt av gemensam hinderbana i 15 minuter.",
+  "uppvarmning": "Sida-till-sida. (5 min, Ludvig)",
+  "avslutning": "Gemensam avslutning. (5 min, Tommy)",
+  "moment": [
+    {
+      "id": "station1-kullerbyttor",
+      "namn": "Station 1 – Kullerbyttor",
+      "ikon": "🤸",
+      "ordning": 1,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Rörlighet – kullerbytta och rullning",
+      "text": "**Köttbullen**\n\nBarnen sitter på huk och rullar fram och tillbaka som en liten köttbulle.\n\n- Använd ej händerna\n- Träna på att hålla in hakan mot bröstet och titta på magen\n- Försök att få till en rundad rygg\n\n**Rullande kulle**\n\nMatta över plint på lägsta nivå (lutande plan). Barnen startar från toppen och rullar ner. Ledare/förälder hjälper till under kullerbyttan.",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-rorlighet-stationer.png",
+          "bildtext": "Skiss: station 1 (kullerbyttor) och station 2 (rörelsebana)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station2-rorelsebana",
+      "namn": "Station 2 – Rörelsebana",
+      "ikon": "🤸",
+      "ordning": 2,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Koordination och kroppskontroll",
+      "text": "Rörelsebana enligt skiss:\n\n- Åla under madrasser\n- Dra sig fram på mage över bänkar\n- Slalom runt innebandymål\n- Krypa mellan bommar\n- Under häckar, över plintar",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-rorlighet-stationer.png",
+          "bildtext": "Skiss: station 1 (kullerbyttor) och station 2 (rörelsebana)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station3-lek",
+      "namn": "Station 3 – Lek",
+      "ikon": "🤸",
+      "ordning": 3,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Lekstation",
+      "text": "Lekar: Under hökens vingar kom, Kinesiska muren.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "🤸",
+      "ordning": 4,
+      "ansvarig": "Ludvig",
+      "syfte": "Gemensam hinderbana",
+      "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
+      "bilder": [],
+      "filer": []
+    }
+  ],
+  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdateradAv": "system"
+}

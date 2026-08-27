@@ -89,22 +89,37 @@
   /* Prefixet som visade sig fungera, för bilder och bilagor. */
   function innehallsbas() { return innehallsPrefix || ""; }
 
-  /* --- Innehåll --- */
-  /* Läser i första hand live från API:t (färskast), annars den statiska
+  /* --- Innehåll ---
+     Passen, lekbanken och indexet (vilket pass som är aktuellt, och i
+     vilken ordning flikarna ligger) lagras i var sin fil, så att varje
+     del har sin egen historik och kan återställas oberoende av de andra.
+     Läser i första hand live från API:t (färskast), annars den statiska
      filen som GitHub Pages publicerar. */
-  function hamtaPass() {
+  function hamtaContent(malTyp, id) {
+    var apiVag = malTyp === "pass" ? "/pass/" + encodeURIComponent(id) : "/" + malTyp;
+    var statiskVag = malTyp === "pass" ? "content/pass/" + id + ".json" : "content/" + malTyp + ".json";
     var statisk = function () {
-      return hamtaStatisk(CFG.contentUrl)
-        .then(function (p) { return { pass: p, kalla: "github" }; });
+      return hamtaStatisk(statiskVag).then(function (d) { return { data: d, kalla: "github" }; });
     };
     if (!harApi()) return statisk();
-    return anrop("/pass")
-      .then(function (d) { return { pass: d.pass, sha: d.sha, kalla: "api" }; })
-      .catch(function () { return statisk(); });
+    return anrop(apiVag)
+      .then(function (d) { return { data: d.data, sha: d.sha, kalla: "api" }; })
+      .catch(statisk);
   }
 
-  function sparaPass(pass, meddelande, sha) {
-    return anrop("/pass", { method: "PUT", body: { pass: pass, meddelande: meddelande, sha: sha } });
+  function hamtaIndex() { return hamtaContent("index"); }
+  function hamtaPassFil(id) { return hamtaContent("pass", id); }
+  function hamtaLekar() { return hamtaContent("lekar"); }
+
+  function sparaIndex(data, meddelande, sha) {
+    return anrop("/index", { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
+  }
+  function sparaPassFil(id, data, meddelande, sha) {
+    return anrop("/pass/" + encodeURIComponent(id),
+      { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
+  }
+  function sparaLekar(data, meddelande, sha) {
+    return anrop("/lekar", { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
   }
 
   function laddaUpp(fil, blockId) {
@@ -131,10 +146,13 @@
 
   function arkivera(passId) { return anrop("/arkivera", { method: "POST", body: { passId: passId } }); }
 
-  /* --- Historik --- */
-  function historik() { return anrop("/historik"); }
-  function historikVersion(sha) { return anrop("/historik/" + encodeURIComponent(sha)); }
-  function aterstall(sha) { return anrop("/aterstall", { method: "POST", body: { sha: sha } }); }
+  /* --- Historik ---
+     target: "index" | "lekar" | "pass/<id>" – varje fil har sin egen
+     historik, så en återställning rör bara den filen. */
+  function historik(target) { return anrop("/historik/" + target); }
+  function aterstall(target, sha) {
+    return anrop("/aterstall", { method: "POST", body: { target: target, sha: sha } });
+  }
   function status() { return anrop("/status"); }
 
   /* --- Filadresser ---
@@ -156,8 +174,10 @@
 
   window.API = {
     harApi: harApi, anvandare: anvandare, loggaIn: loggaIn, loggaUt: loggaUt,
-    bytLosenord: bytLosenord, hamtaPass: hamtaPass, sparaPass: sparaPass,
-    laddaUpp: laddaUpp, historik: historik, historikVersion: historikVersion,
+    bytLosenord: bytLosenord,
+    hamtaIndex: hamtaIndex, hamtaPassFil: hamtaPassFil, hamtaLekar: hamtaLekar,
+    sparaIndex: sparaIndex, sparaPassFil: sparaPassFil, sparaLekar: sparaLekar,
+    laddaUpp: laddaUpp, historik: historik,
     arkiv: arkiv, arkivPass: arkivPass, arkivera: arkivera,
     innehallsbas: innehallsbas,
     aterstall: aterstall, status: status, filUrl: filUrl, filUrlReserv: filUrlReserv

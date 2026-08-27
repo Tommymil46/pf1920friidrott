@@ -245,7 +245,8 @@
 
     var radKnapp = document.getElementById("add-block-row");
     radKnapp.hidden = !kanRedigera;
-    document.getElementById("btn-add-block").textContent = "+ Lägg till friidrottsmoment";
+    var laggTillKnapp = document.getElementById("btn-add-block");
+    if (laggTillKnapp) laggTillKnapp.textContent = "+ Lägg till friidrottsmoment";
   }
 
   /* Lekbanken: samma nivå som ett träningspass i flikraden, men utan
@@ -294,7 +295,8 @@
 
     var radKnapp = document.getElementById("add-block-row");
     radKnapp.hidden = !kanRedigera;
-    document.getElementById("btn-add-block").textContent = "+ Lägg till lek";
+    var laggTillKnapp = document.getElementById("btn-add-block");
+    if (laggTillKnapp) laggTillKnapp.textContent = "+ Lägg till lek";
   }
 
   /* Förstasidan: fem träningspass + lekbanken som flikar. */
@@ -306,8 +308,7 @@
     }
     var pass = hittaPass(data, valtId);
     if (!pass) return null;
-    ritaPassInnehall(pass, kanRedigera, pass.id === data.aktivt,
-      { uppdaterad: data.uppdaterad, uppdateradAv: data.uppdateradAv, grupp: pass.grupp });
+    ritaPassInnehall(pass, kanRedigera, pass.id === data.aktivt);
     return pass;
   }
 

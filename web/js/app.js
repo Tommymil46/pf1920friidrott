@@ -4,7 +4,10 @@
    =========================================================== */
 (function () {
   var CFG = window.PASS_CONFIG || {};
-  var state = { data: null, valtId: null, sha: null, kalla: null };
+  /* Indexet (vilket pass som är aktuellt + i vilken ordning flikarna
+     ligger), varje pass och lekbanken lagras var för sig – var och en
+     med sin egen sha, historik och återställning. */
+  var state = { index: null, indexSha: null, pass: {}, lekar: null, lekarSha: null, valtId: null, kalla: null };
 
   /* ---------- Status ---------- */
   var statusTimer = null;
@@ -25,12 +28,27 @@
 
   function valtPass() {
     if (visarLekar()) return null;
-    return window.Render.hittaPass(state.data, state.valtId);
+    var p = state.pass[state.valtId];
+    return p ? p.data : null;
   }
 
   function lekar() {
-    if (!state.data.lekar) state.data.lekar = [];
-    return state.data.lekar;
+    if (!state.lekar) state.lekar = { lekar: [] };
+    if (!state.lekar.lekar) state.lekar.lekar = [];
+    return state.lekar.lekar;
+  }
+
+  /* Render.rita förväntar sig en samlad vy {aktivt, pass:[...], lekar:[...]}
+     – den byggs ihop här från de separata filerna inför varje ritning. */
+  function samladVy() {
+    return {
+      aktivt: state.index ? state.index.aktivt : null,
+      pass: ((state.index && state.index.pass) || []).map(function (id) {
+        var p = state.pass[id];
+        return p ? p.data : null;
+      }).filter(Boolean),
+      lekar: state.lekar ? state.lekar.lekar : []
+    };
   }
 
   function vaxlaPass(id) {
@@ -40,7 +58,7 @@
   }
 
   function rita() {
-    var visadPass = window.Render.rita(state.data, state.valtId, kanRedigera(), vaxlaPass);
+    var visadPass = window.Render.rita(samladVy(), state.valtId, kanRedigera(), vaxlaPass);
     document.body.classList.toggle("redigerar", kanRedigera());
     if (kanRedigera() && visadPass) {
       var v = document.getElementById("pass-facts");
@@ -53,57 +71,105 @@
   }
 
   function laddaOm() {
-    return window.API.hamtaPass().then(function (d) {
-      state.data = d.pass; state.valtId = state.data.aktivt; state.sha = d.sha || null; state.kalla = d.kalla;
+    return window.API.hamtaIndex().then(function (idx) {
+      state.index = idx.data; state.indexSha = idx.sha || null; state.kalla = idx.kalla;
+      var id_er = state.index.pass || [];
+      return Promise.all(id_er.map(function (id) {
+        return window.API.hamtaPassFil(id).then(function (p) {
+          state.pass[id] = { data: p.data, sha: p.sha || null };
+        });
+      }).concat([
+        window.API.hamtaLekar().then(function (l) {
+          state.lekar = l.data; state.lekarSha = l.sha || null;
+        })
+      ]));
+    }).then(function () {
+      state.valtId = state.index.aktivt;
       rita();
-      return d;
     }).catch(function (e) {
       status("fel", "Kunde inte hämta träningspassen: " + e.message, true);
     });
   }
 
   /* ---------- Spara ---------- */
-  function spara(meddelande) {
-    if (!kanRedigera()) {
-      status("fel", "Du måste vara inloggad som ledare för att spara.");
-      return Promise.reject(new Error("ej inloggad"));
+  /* Returnerar alltid ett förkastat löfte (aldrig ett synkront kast), så
+     att både spara() och sattAktivt() kan hantera det på samma sätt. */
+  function hanteraSparaFel(e) {
+    if (e.status === 403) {
+      status("varning", "Du måste byta ditt startlösenord innan du kan spara. " +
+                        "Klicka \"Byt lösenord\".", true);
+      oppnaDialog("dlg-password");
+      return Promise.reject(e);
     }
+    if (e.status === 409) {
+      status("varning", "Någon annan ledare hann spara före dig. Sidan laddas om – " +
+                        "gör om din ändring. Inget har gått förlorat.", true);
+      return laddaOm().then(function () { return Promise.reject(e); });
+    }
+    status("fel", "Kunde inte spara: " + e.message, true);
+    return Promise.reject(e);
+  }
+
+  function sparaPassAktuell(meddelande) {
+    var id = state.valtId;
+    var post = state.pass[id];
     status("info", "Sparar till GitHub…", true);
-    state.data.uppdaterad = new Date().toISOString();
-    state.data.uppdateradAv = (window.API.anvandare() || {}).namn || "";
-    return window.API.sparaPass(state.data, meddelande, state.sha)
+    post.data.uppdaterad = new Date().toISOString();
+    post.data.uppdateradAv = (window.API.anvandare() || {}).namn || "";
+    return window.API.sparaPassFil(id, post.data, meddelande, post.sha)
       .then(function (r) {
-        state.sha = r.sha || state.sha;
-        if (r.pass) state.data = r.pass;
+        post.sha = r.sha || post.sha;
+        if (r.data) post.data = r.data;
         rita();
         status("ok", "Sparat. Ändringen är incheckad i GitHub" +
                      (r.commit ? " (" + String(r.commit).slice(0, 7) + ")" : "") + ".");
         return r;
       })
-      .catch(function (e) {
-        if (e.status === 403) {
-          status("varning", "Du måste byta ditt startlösenord innan du kan spara. " +
-                            "Klicka \"Byt lösenord\".", true);
-          oppnaDialog("dlg-password");
-          throw e;
-        }
-        if (e.status === 409) {
-          status("varning", "Någon annan ledare hann spara före dig. Sidan laddas om – " +
-                            "gör om din ändring. Inget har gått förlorat.", true);
-          return laddaOm().then(function () { throw e; });
-        }
-        status("fel", "Kunde inte spara: " + e.message, true);
-        throw e;
-      });
+      .catch(hanteraSparaFel);
+  }
+
+  function sparaLekarAktuell(meddelande) {
+    status("info", "Sparar till GitHub…", true);
+    state.lekar.uppdaterad = new Date().toISOString();
+    state.lekar.uppdateradAv = (window.API.anvandare() || {}).namn || "";
+    return window.API.sparaLekar(state.lekar, meddelande, state.lekarSha)
+      .then(function (r) {
+        state.lekarSha = r.sha || state.lekarSha;
+        if (r.data) state.lekar = r.data;
+        rita();
+        status("ok", "Sparat. Ändringen är incheckad i GitHub" +
+                     (r.commit ? " (" + String(r.commit).slice(0, 7) + ")" : "") + ".");
+        return r;
+      })
+      .catch(hanteraSparaFel);
+  }
+
+  function spara(meddelande) {
+    if (!kanRedigera()) {
+      status("fel", "Du måste vara inloggad som ledare för att spara.");
+      return Promise.reject(new Error("ej inloggad"));
+    }
+    return visarLekar() ? sparaLekarAktuell(meddelande) : sparaPassAktuell(meddelande);
   }
 
   /* ---------- Sätt det valda passet som aktuellt ---------- */
   function sattAktivt() {
     if (!kanRedigera()) { status("fel", "Du måste vara inloggad som ledare."); return; }
     var p = valtPass();
-    if (!p || p.id === state.data.aktivt) return;
-    state.data.aktivt = p.id;
-    spara("Satte " + p.namn + " som aktuellt träningspass").catch(function () {});
+    if (!p || p.id === state.index.aktivt) return;
+    state.index.aktivt = p.id;
+    status("info", "Sparar till GitHub…", true);
+    state.index.uppdaterad = new Date().toISOString();
+    state.index.uppdateradAv = (window.API.anvandare() || {}).namn || "";
+    window.API.sparaIndex(state.index, "Satte " + p.namn + " som aktuellt träningspass", state.indexSha)
+      .then(function (r) {
+        state.indexSha = r.sha || state.indexSha;
+        if (r.data) state.index = r.data;
+        rita();
+        status("ok", "Sparat. " + p.namn + " är nu aktuellt pass" +
+                     (r.commit ? " (" + String(r.commit).slice(0, 7) + ")" : "") + ".");
+      })
+      .catch(function (e) { hanteraSparaFel(e).catch(function () {}); });
   }
 
   /* ---------- Arkivera det valda passet ---------- */
@@ -144,12 +210,24 @@
     d.showModal();
   }
 
-  /* ---------- Historik ---------- */
+  /* ---------- Historik ---------- Varje pass och lekbanken har sin egen
+     historik – dialogen visar historiken för den flik som är öppen just nu,
+     och Återställ rör bara den filen. */
+  function malForHistorik() {
+    if (visarLekar()) return { target: "lekar", namn: "Lekar" };
+    var p = valtPass();
+    return p ? { target: "pass/" + p.id, namn: p.namn } : null;
+  }
+
   function visaHistorik() {
+    var mal = malForHistorik();
+    if (!mal) return;
     var lista = document.getElementById("history-list");
     lista.textContent = "Laddar…";
+    var rubrik = document.querySelector("#dlg-history h2");
+    if (rubrik) rubrik.textContent = "Ändringshistorik – " + mal.namn;
     oppnaDialog("dlg-history");
-    window.API.historik().then(function (poster) {
+    window.API.historik(mal.target).then(function (poster) {
       lista.innerHTML = "";
       if (!poster.length) { lista.textContent = "Ingen historik ännu."; return; }
       poster.forEach(function (p, i) {
@@ -164,9 +242,9 @@
         rad.appendChild(txt);
         if (i > 0) {
           rad.appendChild(window.Edit.knapp("Återställ", "btn-ghost btn-liten", function () {
-            if (!confirm("Återställa passet till den här versionen?\n\n" +
+            if (!confirm("Återställa " + mal.namn + " till den här versionen?\n\n" +
                          "Den nuvarande versionen finns kvar i historiken.")) return;
-            window.API.aterstall(p.sha).then(function () {
+            window.API.aterstall(mal.target, p.sha).then(function () {
               document.getElementById("dlg-history").close();
               return laddaOm();
             }).then(function () {
@@ -321,8 +399,7 @@
     window.Edit.init({
       pass: valtPass,
       lekar: lekar,
-      data: function () { return state.data; },
-      arAktivt: function () { var p = valtPass(); return !!p && p.id === state.data.aktivt; },
+      arAktivt: function () { var p = valtPass(); return !!p && p.id === state.index.aktivt; },
       spara: spara, rita: rita, laddaOm: laddaOm, status: status,
       arkivera: arkivera, sattAktivt: sattAktivt
     });

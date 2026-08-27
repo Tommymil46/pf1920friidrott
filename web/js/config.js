@@ -7,8 +7,9 @@ window.PASS_CONFIG = {
      Exempel: "https://hallenskog.dinadress.se/api"  */
   apiBase: "https://pf1920-ledartjanst.pf1920-ledartjanst.workers.dev",
 
-  /* Var det statiska innehållet ligger (publicerat via GitHub Pages). */
-  contentUrl: "content/pass.json",
+  /* Träningspassen (content/index.json + content/pass/<id>.json) och
+     lekbanken (content/lekar.json) ligger på fasta sökvägar under
+     content/, ingen egen konfiguration behövs för dem. */
 
   /* Arkivet med genomförda pass. */
   arkivUrl: "content/arkiv/index.json",

@@ -43,9 +43,9 @@ k('lösenordsrutan öppnas direkt vid startlösenord',
 
 // startlösenordet ska inte räcka för att ändra något
 await stangDialoger(p);
-await p.locator('#block-hoga-knan button[data-action=redigera]').click();
+await p.locator('#block-station1-hinderbana-stafett button[data-action=redigera]').click();
 await p.waitForTimeout(400);
-await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
+await p.locator('#block-station1-hinderbana-stafett .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1200);
 k('startlösenord blockeras vid sparning',
   (await p.locator('#status').textContent()).includes('byta ditt startlösenord'));
@@ -54,27 +54,29 @@ k('lösenordsbyte klart', (await p.locator('#status').textContent()).includes('b
 await p.reload({ waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 
-await p.locator('#block-hoga-knan button[data-action=redigera]').click();
+await p.locator('#block-station1-hinderbana-stafett button[data-action=redigera]').click();
 await p.waitForTimeout(400);
-await p.locator('#block-hoga-knan textarea').fill('**Nytt innehåll** från testet.\n\n- Punkt ett\n- Punkt två');
-await p.locator('#block-hoga-knan input[type=text]').nth(2).fill('Eric');
-await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
+await p.locator('#block-station1-hinderbana-stafett textarea').fill('**Nytt innehåll** från testet.\n\n- Punkt ett\n- Punkt två');
+await p.locator('#block-station1-hinderbana-stafett input[type=text]').nth(2).fill('Eric');
+await p.locator('#block-station1-hinderbana-stafett .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1600);
 k('sparat till GitHub', (await p.locator('#status').textContent()).includes('incheckad'));
-k('nytt innehåll visas', (await p.locator('#block-hoga-knan .block-text').textContent()).includes('Nytt innehåll'));
-k('fet stil renderas', await p.locator('#block-hoga-knan .block-text strong').count() > 0);
-k('ansvarig visas', (await p.locator('#block-hoga-knan .block-ansvarig').textContent()).includes('Eric'));
+k('nytt innehåll visas', (await p.locator('#block-station1-hinderbana-stafett .block-text').textContent()).includes('Nytt innehåll'));
+k('fet stil renderas', await p.locator('#block-station1-hinderbana-stafett .block-text strong').count() > 0);
+k('ansvarig visas', (await p.locator('#block-station1-hinderbana-stafett .block-ansvarig').textContent()).includes('Eric'));
 
-await p.locator('#block-hoga-knan button[data-action=redigera]').click();
+await p.locator('#block-station1-hinderbana-stafett button[data-action=redigera]').click();
 await p.waitForTimeout(400);
 fs.writeFileSync(SP+'/uppladdning.png', Buffer.from('89504e470d0a1a0a0000000d49484452','hex'));
-await p.locator('#block-hoga-knan input[type=file]').setInputFiles(SP+'/uppladdning.png');
+await p.locator('#block-station1-hinderbana-stafett input[type=file]').setInputFiles(SP+'/uppladdning.png');
 await p.waitForTimeout(1800);
 k('uppladdning bekräftad', (await p.locator('#status').textContent()).includes('Uppladdat'));
-k('bilagelistan visar bilden', await p.locator('#block-hoga-knan .bilaga-rad').count() === 1);
-await p.locator('#block-hoga-knan .form-actions button', { hasText: 'Spara moment' }).click();
+/* Momentet har redan en stationsskiss från underlaget, så en lyckad
+   uppladdning ger två bilder totalt – den befintliga plus den nya. */
+k('bilagelistan visar bilden', await p.locator('#block-station1-hinderbana-stafett .bilaga-rad').count() === 2);
+await p.locator('#block-station1-hinderbana-stafett .form-actions button', { hasText: 'Spara moment' }).click();
 await p.waitForTimeout(1600);
-k('bilden med i sparat block', await p.locator('#block-hoga-knan .bild-kort').count() === 1);
+k('bilden med i sparat block', await p.locator('#block-station1-hinderbana-stafett .bild-kort').count() === 2);
 
 await p.evaluate(() => { window.prompt = () => 'Häck'; });
 await p.click('#btn-add-block');
@@ -101,7 +103,7 @@ k('historiken visar vem', (await p.locator('.hist-vem').first().textContent()) =
 
 await p.locator('.hist-rad').nth(rader - 1).locator('button').click();
 await p.waitForTimeout(2200);
-k('återställd text', !(await p.locator('#block-hoga-knan .block-text').textContent()).includes('Nytt innehåll'));
+k('återställd text', !(await p.locator('#block-station1-hinderbana-stafett .block-text').textContent()).includes('Nytt innehåll'));
 k('återställningen bekräftad', (await p.locator('#status').textContent()).includes('Återställt'));
 
 console.log(kollar.map(([n,v]) => (v?'  OK   ':'  FEL  ')+n).join('\n'));

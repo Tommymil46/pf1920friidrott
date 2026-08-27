@@ -118,7 +118,7 @@ apiBase: "https://pf1920-ledartjanst.ditt-konto.workers.dev",
 
 ```bash
 cd worker
-node test/worker-api-test.mjs          # 32 kontroller, workern anropas direkt (ingen wrangler behövs)
+node test/worker-api-test.mjs          # 39 kontroller, workern anropas direkt (ingen wrangler behövs)
 ```
 
 Mot en riktig `workerd`-runtime (fångar det Node inte kan simulera):

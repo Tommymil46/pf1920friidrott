@@ -16,7 +16,9 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
   träningspass som helst.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
-  tidigare version med ett klick.
+  tidigare version med ett klick – historiken och återställningen gäller
+  bara det pass (eller lekbanken) man just då tittar på, inte alla passen
+  på en gång.
 * **Arkiv.** Genomförda pass arkiveras och finns kvar under *Arkiv*, där de
   kan läsas och skrivas ut precis som de såg ut den dagen.
 
@@ -33,9 +35,13 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 ```
 
 * **web/** – själva webbappen. Ren HTML/CSS/JS, inget byggsteg.
-* **content/pass.json** – de fem träningspassens innehåll, vilket som är
-  aktuellt just nu (`aktivt`), samt den fristående lekbanken (`lekar`).
-  Detta är "databasen".
+* **content/** – "databasen", uppdelad i flera filer så att varje del har
+  sin egen historik och kan återställas var för sig:
+  * **content/index.json** – vilket pass som är aktuellt just nu (`aktivt`)
+    och i vilken ordning flikarna ligger.
+  * **content/pass/lopning.json** (m.fl., ett per pass) – det enskilda
+    passets innehåll.
+  * **content/lekar.json** – den fristående lekbanken.
 * **content/arkiv/** – genomförda pass, ett per fil, plus `index.json`.
 * **content/uploads/** – bilder och PDF:er som ledarna laddat upp.
 * **worker/** – ledartjänsten som Cloudflare Worker: inloggning, uppladdning
@@ -113,8 +119,8 @@ Blir det fler än tre sidor erbjuder appen ett kompakt läge utan bilder.
 npm install                 # Playwright
 cd server && npm install && cd ..
 node test/fejk-github.mjs & # låtsas-GitHub, se test/README.md
-bash test/api-test.sh       # 27 kontroller av API och behörigheter
-npm run test:webb           # 15 kontroller av inloggning i webbläsare
+bash test/api-test.sh       # 37 kontroller av API och behörigheter
+npm run test:webb           # 16 kontroller av inloggning i webbläsare
 npm run test:e2e            # 20 kontroller av hela redigeringsflödet
 node test/arkiv-test.mjs    # 11 kontroller av arkivet
 node test/pages-test.mjs    # 12 kontroller av båda publiceringslägena
@@ -127,7 +133,7 @@ mot samma `DATA_DIR` misslyckas annars. Se [test/README.md](test/README.md).
 
 ```bash
 cd worker && npm install
-node test/worker-api-test.mjs   # 32 kontroller, workern anropas direkt
+node test/worker-api-test.mjs   # 39 kontroller, workern anropas direkt
 ```
 
 Se [worker/README.md](worker/README.md#test) för hur man även testar mot en

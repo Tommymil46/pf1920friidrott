@@ -47,13 +47,13 @@ await p.locator('#pass-head .form-actions button', { hasText: 'Arkivera passet' 
 await p.waitForTimeout(2000);
 const st = await p.locator('#status').textContent();
 k('arkivering bekräftad (' + st.trim() + ')', st.includes('arkiverat'));
-k('filnamn av datum + rubrik', /2026-08-26-lopning\.json/.test(st));
+k('filnamn av datum + rubrik', /2026-09-06-lopning\.json/.test(st));
 
 // listan
 await p.goto(BAS + '/arkiv.html', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 k('ett kort i arkivet', await p.locator('.arkiv-kort').count() === 1);
-k('datum skrivs ut på svenska', (await p.locator('.arkiv-datum').textContent()).includes('onsdag 26 augusti 2026'));
+k('datum skrivs ut på svenska', (await p.locator('.arkiv-datum').textContent()).includes('söndag 6 september 2026'));
 k('momenten listas som etiketter', await p.locator('.arkiv-etikett').count() === 4);
 
 // öppna passet

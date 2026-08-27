@@ -38,8 +38,16 @@ jobs:
           touch _site/.nojekyll
           echo "Byggd $(date -u +%FT%TZ) från ${GITHUB_SHA}" > _site/version.txt
 
-      - name: Kontrollera att passet är giltig JSON
-        run: python3 -c "import json;json.load(open('_site/content/pass.json'));print('pass.json OK')"
+      - name: Kontrollera att innehållet är giltig JSON
+        run: |
+          python3 -c "
+          import json, glob
+          filer = ['_site/content/index.json', '_site/content/lekar.json'] + sorted(glob.glob('_site/content/pass/*.json'))
+          assert filer, 'Hittade inga innehållsfiler'
+          for f in filer:
+              json.load(open(f))
+              print(f, 'OK')
+          "
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

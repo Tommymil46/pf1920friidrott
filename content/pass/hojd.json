@@ -1,0 +1,64 @@
+{
+  "id": "hojd",
+  "namn": "Höjd",
+  "ikon": "⬆️",
+  "datum": "2026-09-06",
+  "tid": "15:00–16:00",
+  "plats": "Hagunda IP",
+  "grupp": "Friidrott PF 19/20",
+  "ansvarigaLedare": [
+    "Anna",
+    "Tommy"
+  ],
+  "samling": "Samling vid läktaren. Namnupprop.",
+  "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
+  "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+  "moment": [
+    {
+      "id": "uppvarmningshopp",
+      "namn": "Uppvärmningshopp",
+      "ikon": "⬆️",
+      "ordning": 1,
+      "ansvarig": "",
+      "syfte": "Avstampsträning",
+      "text": "Öva avstamp och landning utan ribba innan hoppen börjar.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "insteg",
+      "namn": "Insteg",
+      "ikon": "⬆️",
+      "ordning": 2,
+      "ansvarig": "",
+      "syfte": "Höjdhoppsteknik – sats",
+      "text": "3 steg, jämfota landning på matta.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "sax",
+      "namn": "Sax",
+      "ikon": "⬆️",
+      "ordning": 3,
+      "ansvarig": "",
+      "syfte": "Höjdhoppsteknik – avslut",
+      "text": "Sax över låg ribba.\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "bagehopp",
+      "namn": "Bågehopp",
+      "ikon": "⬆️",
+      "ordning": 4,
+      "ansvarig": "",
+      "syfte": "Höjdhoppsteknik – för de som är redo",
+      "text": "Bågehopp för de som är redo.",
+      "bilder": [],
+      "filer": []
+    }
+  ],
+  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdateradAv": "system"
+}

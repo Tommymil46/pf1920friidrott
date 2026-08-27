@@ -202,19 +202,14 @@ api.post("/losenord", kravInloggad, (req, res) => {
   }
 });
 
-api.get("/pass", async (req, res, next) => {
-  try {
-    res.json(await cachat("pass", () => gh.hamtaPass()));
-  } catch (e) { next(e); }
-});
-
 /* Innehållsgranskning. Håller nere storleken och ser till att inga
    konstiga adresser (javascript:, data:, andra värdar) kan sparas – även
    om någon skulle komma åt ett ledarkonto. */
 const SAKER_URL = /^(https?:\/\/[^\s"'<>]{1,300}|content\/uploads\/[\w.-]{1,120})$/;
 const MINST_MOMENT = 4;
+const ID_MONSTER = /^[a-z0-9-]{1,60}$/;
 
-function granskaContent(data) {
+function nyGranskare() {
   const fel = [];
   const strang = (v, max, namn) => {
     if (v == null) return "";
@@ -222,7 +217,6 @@ function granskaContent(data) {
     if (v.length > max) fel.push(namn + " är för lång (max " + max + " tecken)");
     return v;
   };
-
   /* Delas av friidrottsmoment (inom ett pass) och lekar (den fristående
      lekbanken) – båda har samma form: namn, ikon, text, bilder, filer. */
   function granskaKort(m, mNamn) {
@@ -232,7 +226,6 @@ function granskaContent(data) {
     strang(m.syfte, 300, mNamn + ": syftet");
     strang(m.ansvarig, 120, mNamn + ": ledaren");
     strang(m.ikon, 16, mNamn + ": ikonen");
-
     ["bilder", "filer"].forEach((falt) => {
       if (m[falt] == null) return;
       if (!Array.isArray(m[falt])) { fel.push(mNamn + ": " + falt + " är trasigt"); return; }
@@ -244,83 +237,114 @@ function granskaContent(data) {
       });
     });
   }
+  return { fel, strang, granskaKort };
+}
 
-  if (data.pass.length > 12) fel.push("För många träningspass (max 12)");
-  const anvandaId = new Set();
-
-  data.pass.forEach((p, i) => {
-    const namn = "Pass " + (i + 1);
-    if (!p || typeof p !== "object" || !Array.isArray(p.moment)) {
-      fel.push(namn + " är trasigt"); return;
-    }
-    strang(p.id, 60, namn + ": id");
-    strang(p.namn, 120, namn + ": namnet");
-    strang(p.ikon, 16, namn + ": ikonen");
-    strang(p.plats, 200, namn + ": platsen");
-    strang(p.tid, 100, namn + ": tiden");
-    strang(p.grupp, 200, namn + ": gruppen");
-    strang(p.samling, 5000, namn + ": samlingen");
-    strang(p.uppvarmning, 5000, namn + ": uppvärmningen");
-    strang(p.avslutning, 5000, namn + ": avslutningen");
-    if (p.datum && !/^\d{4}-\d{2}-\d{2}$/.test(String(p.datum))) {
-      fel.push(namn + ": datumet måste skrivas som ÅÅÅÅ-MM-DD");
-    }
-    if (anvandaId.has(p.id)) fel.push(namn + ": id:t måste vara unikt");
-    anvandaId.add(p.id);
-
-    if (p.moment.length > 40) fel.push(namn + ": för många moment (max 40)");
-    if (p.moment.length < MINST_MOMENT) {
-      fel.push(namn + ": behöver minst " + MINST_MOMENT + " friidrottsmoment");
-    }
-
-    p.moment.forEach((m, j) => granskaKort(m, namn + ", moment " + (j + 1)));
-  });
-
-  if (data.aktivt && !anvandaId.has(data.aktivt)) {
-    fel.push("Det aktuella passet (aktivt) pekar på ett pass som inte finns");
+function granskaPassObjekt(p, forvantatId) {
+  if (!p || typeof p !== "object" || !Array.isArray(p.moment)) return ["Passet är trasigt."];
+  const { fel, strang, granskaKort } = nyGranskare();
+  if (p.id !== forvantatId) fel.push("Passets id stämmer inte med adressen");
+  strang(p.namn, 120, "Namnet");
+  strang(p.ikon, 16, "Ikonen");
+  strang(p.plats, 200, "Platsen");
+  strang(p.tid, 100, "Tiden");
+  strang(p.grupp, 200, "Gruppen");
+  strang(p.samling, 5000, "Samlingen");
+  strang(p.uppvarmning, 5000, "Uppvärmningen");
+  strang(p.avslutning, 5000, "Avslutningen");
+  if (p.datum && !/^\d{4}-\d{2}-\d{2}$/.test(String(p.datum))) {
+    fel.push("Datumet måste skrivas som ÅÅÅÅ-MM-DD");
   }
-
-  if (data.lekar != null) {
-    if (!Array.isArray(data.lekar)) {
-      fel.push("Lekbanken är trasig");
-    } else {
-      if (data.lekar.length > 60) fel.push("För många lekar (max 60)");
-      data.lekar.forEach((l, i) => granskaKort(l, "Lek " + (i + 1)));
-    }
-  }
-
+  if (p.moment.length > 40) fel.push("För många moment (max 40)");
+  if (p.moment.length < MINST_MOMENT) fel.push("Passet behöver minst " + MINST_MOMENT + " friidrottsmoment");
+  p.moment.forEach((m, j) => granskaKort(m, "Moment " + (j + 1)));
   return fel;
 }
 
-api.put("/pass", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
-  try {
-    const { pass, meddelande, sha } = req.body || {};
-    if (!pass || typeof pass !== "object" || !Array.isArray(pass.pass)) {
-      return res.status(400).json({ fel: "Ogiltigt innehåll." });
-    }
-    const brister = granskaContent(pass);
-    if (brister.length) {
-      return res.status(400).json({ fel: brister.slice(0, 5).join(". ") + "." });
-    }
-    const nuvarande = await gh.hamtaPass();
-    if (sha && sha !== nuvarande.sha) {
-      return res.status(409).json({
-        fel: "Någon annan har hunnit spara. Ladda om och gör om ändringen.",
-        sha: nuvarande.sha
-      });
-    }
-    pass.uppdaterad = new Date().toISOString();
-    pass.uppdateradAv = req.ledare.namn;
+function granskaLekar(data) {
+  if (!data || !Array.isArray(data.lekar)) return ["Lekbanken är trasig."];
+  const { fel, granskaKort } = nyGranskare();
+  if (data.lekar.length > 60) fel.push("För många lekar (max 60)");
+  data.lekar.forEach((l, i) => granskaKort(l, "Lek " + (i + 1)));
+  return fel;
+}
 
-    const text = (meddelande || "Uppdaterade träningspassen").replace(/\s+/g, " ").slice(0, 120);
-    const r = await gh.sparaPass(
-      pass,
-      `${text} (${req.ledare.namn})`,
-      nuvarande.sha,
-      anv.commitForfattare(req.ledare)
-    );
-    rensaCache();
-    res.json({ ok: true, sha: r.sha, commit: r.commit, pass });
+function granskaIndex(data) {
+  if (!data || typeof data !== "object" || !Array.isArray(data.pass)) return ["Indexet är trasigt."];
+  const { fel, strang } = nyGranskare();
+  if (data.pass.length < 1 || data.pass.length > 12) fel.push("Antalet pass måste vara 1–12");
+  data.pass.forEach((id, i) => {
+    if (typeof id !== "string" || !ID_MONSTER.test(id)) fel.push("Pass-id " + (i + 1) + " är ogiltigt");
+  });
+  strang(data.aktivt, 60, "Aktivt");
+  if (data.aktivt && !data.pass.includes(data.aktivt)) {
+    fel.push("Det aktuella passet (aktivt) pekar på ett pass som inte finns i listan");
+  }
+  return fel;
+}
+
+/* --- Läsa/spara en enskild innehållsfil (index, ett pass eller lekbanken) ---
+   Varje fil har sin egen sha, historik och återställning – det är hela
+   poängen med att dela upp innehållet i flera filer i stället för en. */
+async function sparaContent(vag, cacheNyckel, data, granska, meddelandeStandard, req, res) {
+  const brister = granska(data);
+  if (brister.length) return res.status(400).json({ fel: brister.slice(0, 5).join(". ") + "." });
+
+  const nuvarande = await gh.hamtaJson(vag);
+  const { sha } = req.body || {};
+  if (sha && sha !== nuvarande.sha) {
+    return res.status(409).json({
+      fel: "Någon annan har hunnit spara. Ladda om och gör om ändringen.",
+      sha: nuvarande.sha
+    });
+  }
+  data.uppdaterad = new Date().toISOString();
+  data.uppdateradAv = req.ledare.namn;
+  const text = (req.body.meddelande || meddelandeStandard).replace(/\s+/g, " ").slice(0, 120);
+  const r = await gh.sparaJson(vag, data, `${text} (${req.ledare.namn})`, nuvarande.sha,
+    anv.commitForfattare(req.ledare));
+  cache.delete(cacheNyckel);
+  res.json({ ok: true, sha: r.sha, commit: r.commit, data });
+}
+
+api.get("/index", async (req, res, next) => {
+  try { res.json(await cachat("index", () => gh.hamtaJson(gh.INDEX_PATH))); }
+  catch (e) { next(e); }
+});
+
+api.put("/index", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
+  try {
+    const { data } = req.body || {};
+    await sparaContent(gh.INDEX_PATH, "index", data, granskaIndex, "Uppdaterade indexet", req, res);
+  } catch (e) { next(e); }
+});
+
+api.get("/pass/:id", async (req, res, next) => {
+  try {
+    if (!ID_MONSTER.test(req.params.id)) return res.status(400).json({ fel: "Ogiltigt pass-id." });
+    res.json(await cachat("pass:" + req.params.id, () => gh.hamtaJson(gh.passPath(req.params.id))));
+  } catch (e) { next(e); }
+});
+
+api.put("/pass/:id", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
+  try {
+    const id = req.params.id;
+    if (!ID_MONSTER.test(id)) return res.status(400).json({ fel: "Ogiltigt pass-id." });
+    const { data } = req.body || {};
+    await sparaContent(gh.passPath(id), "pass:" + id, data,
+      (d) => granskaPassObjekt(d, id), `Uppdaterade passet ${id}`, req, res);
+  } catch (e) { next(e); }
+});
+
+api.get("/lekar", async (req, res, next) => {
+  try { res.json(await cachat("lekar", () => gh.hamtaJson(gh.LEKAR_PATH))); }
+  catch (e) { next(e); }
+});
+
+api.put("/lekar", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
+  try {
+    const { data } = req.body || {};
+    await sparaContent(gh.LEKAR_PATH, "lekar", data, granskaLekar, "Uppdaterade lekbanken", req, res);
   } catch (e) { next(e); }
 });
 
@@ -427,18 +451,20 @@ api.get("/arkiv/:fil", async (req, res, next) => {
 api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
     const { passId } = req.body || {};
-    const nuvarande = await gh.hamtaPass();
-    const helaInnehallet = nuvarande.pass;
-    const original = (helaInnehallet.pass || []).find((p) => p.id === passId);
-    if (!original) return res.status(400).json({ fel: "Okänt träningspass." });
+    if (!passId || !ID_MONSTER.test(passId)) return res.status(400).json({ fel: "Okänt träningspass." });
+    let original;
+    try {
+      original = (await gh.hamtaJson(gh.passPath(passId))).data;
+    } catch (e) {
+      if (e.status === 404) return res.status(400).json({ fel: "Okänt träningspass." });
+      throw e;
+    }
     const pass = JSON.parse(JSON.stringify(original));
 
     const index = await hamtaArkivIndex();
     let bas = arkivSlug(pass), fil = `${bas}.json`, n = 2;
     while (index.data.pass.some((p) => p.fil === fil)) { fil = `${bas}-${n++}.json`; }
 
-    pass.uppdaterad = helaInnehallet.uppdaterad || null;
-    pass.uppdateradAv = helaInnehallet.uppdateradAv || "";
     pass.arkiverad = new Date().toISOString();
     pass.arkiveradAv = req.ledare.namn;
 
@@ -469,33 +495,53 @@ api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) 
   } catch (e) { next(e); }
 });
 
-/* --- Historik --- */
-api.get("/historik", kravInloggad, async (req, res, next) => {
-  try { res.json(await gh.historik(Number(req.query.antal) || 40)); }
+/* --- Historik och återställning, en fil i taget ---
+   Varje pass, index och lekbanken har sin egen historik, så en
+   återställning av t.ex. Höjd rör inte de andra passen. */
+function malVag(target) {
+  if (target === "index") return gh.INDEX_PATH;
+  if (target === "lekar") return gh.LEKAR_PATH;
+  if (target && target.startsWith("pass/")) {
+    const id = target.slice(5);
+    return ID_MONSTER.test(id) ? gh.passPath(id) : null;
+  }
+  return null;
+}
+
+api.get("/historik/index", kravInloggad, async (req, res, next) => {
+  try { res.json(await gh.historikForVag(gh.INDEX_PATH, Number(req.query.antal) || 40)); }
   catch (e) { next(e); }
 });
-
-api.get("/historik/:sha", kravInloggad, async (req, res, next) => {
-  try { res.json({ pass: await gh.passVidCommit(req.params.sha) }); }
+api.get("/historik/lekar", kravInloggad, async (req, res, next) => {
+  try { res.json(await gh.historikForVag(gh.LEKAR_PATH, Number(req.query.antal) || 40)); }
   catch (e) { next(e); }
+});
+api.get("/historik/pass/:id", kravInloggad, async (req, res, next) => {
+  try {
+    if (!ID_MONSTER.test(req.params.id)) return res.status(400).json({ fel: "Ogiltigt pass-id." });
+    res.json(await gh.historikForVag(gh.passPath(req.params.id), Number(req.query.antal) || 40));
+  } catch (e) { next(e); }
 });
 
 api.post("/aterstall", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
-    const { sha } = req.body || {};
+    const { target, sha } = req.body || {};
     if (!sha) return res.status(400).json({ fel: "Ingen version angiven." });
-    const gammalt = await gh.passVidCommit(sha);
-    const nuvarande = await gh.hamtaPass();
+    const vag = malVag(target);
+    if (!vag) return res.status(400).json({ fel: "Okänt mål för återställning." });
+
+    const gammalt = await gh.jsonVidCommit(vag, sha);
+    const nuvarande = await gh.hamtaJson(vag);
     gammalt.uppdaterad = new Date().toISOString();
     gammalt.uppdateradAv = req.ledare.namn;
-    const r = await gh.sparaPass(
-      gammalt,
-      `Återställde passet till version ${String(sha).slice(0, 7)} (${req.ledare.namn})`,
+    const r = await gh.sparaJson(
+      vag, gammalt,
+      `Återställde ${target} till version ${String(sha).slice(0, 7)} (${req.ledare.namn})`,
       nuvarande.sha,
       anv.commitForfattare(req.ledare)
     );
-    rensaCache();
-    res.json({ ok: true, sha: r.sha, commit: r.commit, pass: gammalt });
+    cache.delete(target === "index" ? "index" : target === "lekar" ? "lekar" : "pass:" + target.slice(5));
+    res.json({ ok: true, sha: r.sha, commit: r.commit, data: gammalt });
   } catch (e) { next(e); }
 });
 
@@ -511,7 +557,6 @@ if (fs.existsSync(WEB_DIR)) {
     res.type("application/javascript").send(
       "window.PASS_CONFIG = " + JSON.stringify({
         apiBase: "/api",
-        contentUrl: "content/pass.json",
         maxSidor: Number(process.env.MAX_SIDOR || 3),
         klubb: process.env.KLUBB || "Hagunda IF · Friidrott"
       }, null, 2) + ";\n");
@@ -519,13 +564,22 @@ if (fs.existsSync(WEB_DIR)) {
   app.use(express.static(WEB_DIR, { extensions: ["html"] }));
 }
 if (fs.existsSync(CONTENT_DIR)) {
-  /* Läs alltid färskt pass från GitHub när det efterfrågas statiskt. */
-  app.get("/content/pass.json", async (req, res) => {
+  /* Läs alltid färskt innehåll från GitHub när filerna efterfrågas statiskt
+     (t.ex. index.json, pass/lopning.json, lekar.json) – annars faller vi
+     tillbaka på den lokala kopian på disk. */
+  app.get(/^\/content\/(index\.json|pass\/[\w-]+\.json|lekar\.json)$/, async (req, res) => {
+    const relativVag = req.path.replace(/^\/content\//, "");
+    const passMatch = relativVag.match(/^pass\/([\w-]+)\.json$/);
+    const fullVag = relativVag === "index.json" ? gh.INDEX_PATH
+      : relativVag === "lekar.json" ? gh.LEKAR_PATH
+      : passMatch ? gh.passPath(passMatch[1])
+      : null;
     try {
-      const d = await cachat("pass", () => gh.hamtaPass());
-      res.json(d.pass);
+      if (!fullVag) throw new Error("okänd sökväg");
+      const d = await cachat("statisk:" + relativVag, () => gh.hamtaJson(fullVag));
+      res.json(d.data);
     } catch {
-      res.sendFile(path.join(CONTENT_DIR, "pass.json"));
+      res.sendFile(path.join(CONTENT_DIR, relativVag));
     }
   });
   app.use("/content", express.static(CONTENT_DIR));

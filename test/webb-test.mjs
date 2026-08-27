@@ -15,7 +15,7 @@ const stangDialoger = async (p) => {
 
 const kollar = [];
 const k = (namn, v) => kollar.push([namn, v]);
-k('5 passflikar', await p.locator('#pass-tabs button').count() === 5);
+k('6 passflikar (5 pass + Lekar)', await p.locator('#pass-tabs button').count() === 6);
 k('4 moment i löpning', await p.locator('.block').count() === 4);
 k('navlänkar', await p.locator('#block-nav a').count() === 4);
 k('utloggad: ingen redigera-knapp', await p.locator('button[data-action=redigera]').count() === 0);

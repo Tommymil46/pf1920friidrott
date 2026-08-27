@@ -1,0 +1,78 @@
+{
+  "id": "kast",
+  "namn": "Kast",
+  "ikon": "🎯",
+  "datum": "2026-09-06",
+  "tid": "15:00–16:00",
+  "plats": "Hagunda IP",
+  "grupp": "Friidrott PF 19/20",
+  "ansvarigaLedare": [
+    "Tommy",
+    "Ludvig",
+    "Johan",
+    "Anna",
+    "Eric",
+    "Jossan"
+  ],
+  "samling": "Upprop, regler och genomgång av dagens pass. (5 min, Tommy)\n\nDela upp barnen i tre grupper, bygg de tre stationerna och börja preppa hinderbanan så mycket som möjligt. Stationerna roterar sedan i grupperna under cirka 30 minuter, följt av gemensam hinderbana i 15 minuter.",
+  "uppvarmning": "Sida-till-sida. (5 min, Ludvig)",
+  "avslutning": "Gemensam avslutning. (5 min, Tommy)",
+  "moment": [
+    {
+      "id": "station1-kast-precision",
+      "namn": "Station 1 – Kast precision",
+      "ikon": "🎯",
+      "ordning": 1,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Kastprecision",
+      "text": "Ställ barnen i varsin rockring. Låt barnen kasta ärtpåsar i upp- och nedvända plintar – det behöver inte vara en plint per barn. Räkna hur många ärtpåsar barnen tillsammans lyckas kasta i plintarna.\n\nVariationer:\n\n- Låt barnen kasta på ledaren i stället för plintarna\n- Kasta med \"fel\" hand",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-kast-stationer.png",
+          "bildtext": "Skiss: station 1 (kast precision) och station 2 (kast över bom)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station2-kast-over-bom",
+      "namn": "Station 2 – Kast över bom",
+      "ikon": "🎯",
+      "ordning": 2,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Kastteknik – båge",
+      "text": "Sänk ned en bom (cirka 1,5 m över marken). Låt barnen kasta ärtpåsar över bommen. Räkna hur många ärtpåsar barnen tillsammans lyckas kasta över bommen.\n\nVariationer:\n\n- Sänk bommen ytterligare lite till och låt barnen kasta sittande från bänkar för att isolera kaströrelsen\n- Kasta med \"fel\" hand",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-kast-stationer.png",
+          "bildtext": "Skiss: station 1 (kast precision) och station 2 (kast över bom)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station3-lek",
+      "namn": "Station 3 – Lek",
+      "ikon": "🎯",
+      "ordning": 3,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Lekstation",
+      "text": "Lekar: Banankull, Rött ljus grönt ljus.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "🎯",
+      "ordning": 4,
+      "ansvarig": "Ludvig",
+      "syfte": "Gemensam hinderbana",
+      "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
+      "bilder": [],
+      "filer": []
+    }
+  ],
+  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdateradAv": "system"
+}

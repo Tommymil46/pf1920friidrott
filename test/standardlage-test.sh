@@ -16,17 +16,17 @@ assert d['krav_losenordsbyte'] is False, d
 TOK=$(echo "$R" | python3 -c "import sys,json;print(json.load(sys.stdin)['token'])")
 AUTH="Authorization: Bearer $TOK"
 
-PFIL=$(mktemp); curl -sS $B/pass > "$PFIL"
+PFIL=$(mktemp); curl -sS $B/pass/lopning > "$PFIL"
 SHA=$(python3 -c "import json;print(json.load(open('$PFIL'))['sha'])")
 NYFIL=$(mktemp)
 python3 - "$PFIL" "$SHA" "$NYFIL" <<'PY'
 import json, sys
 kalla, sha, ut = sys.argv[1], sys.argv[2], sys.argv[3]
-p = json.load(open(kalla))['pass']
-p['pass'][0]['samling'] = 'Ändrat utan lösenordsbyte'
-json.dump({"pass": p, "meddelande": "test", "sha": sha}, open(ut, 'w'), ensure_ascii=False)
+p = json.load(open(kalla))['data']
+p['samling'] = 'Ändrat utan lösenordsbyte'
+json.dump({"data": p, "meddelande": "test", "sha": sha}, open(ut, 'w'), ensure_ascii=False)
 PY
-K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$NYFIL")
+K=$(curl -sS -o /dev/null -w "%{http_code}" -X PUT $B/pass/lopning -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$NYFIL")
 [ "$K" = "200" ] && ok "redigering fungerar direkt med startlösenordet" || fel "redigering gav $K"
 
 echo "misslyckade: $MISS"

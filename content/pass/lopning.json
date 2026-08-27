@@ -1,0 +1,78 @@
+{
+  "id": "lopning",
+  "namn": "Löpning",
+  "ikon": "🏃",
+  "datum": "2026-09-06",
+  "tid": "15:00–16:00",
+  "plats": "Hagunda IP",
+  "grupp": "Friidrott PF 19/20",
+  "ansvarigaLedare": [
+    "Tommy",
+    "Ludvig",
+    "Johan",
+    "Anna",
+    "Eric",
+    "Jossan"
+  ],
+  "samling": "Upprop, regler och genomgång av dagens pass. (5 min, Tommy)\n\nDela upp barnen i tre grupper, bygg de tre stationerna och börja preppa hinderbanan så mycket som möjligt. Stationerna roterar sedan i grupperna under cirka 30 minuter, följt av gemensam hinderbana i 15 minuter.",
+  "uppvarmning": "Sida-till-sida. (5 min, Ludvig)",
+  "avslutning": "Gemensam avslutning. (5 min, Tommy)",
+  "moment": [
+    {
+      "id": "station1-hinderbana-stafett",
+      "namn": "Station 1 – Hinderbana stafett",
+      "ikon": "🏃",
+      "ordning": 1,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Stafett – hinderbana",
+      "text": "Hinderbana stafett enligt skiss. Två lag. Använd stafettpinne.",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-lopning-stationer.png",
+          "bildtext": "Skiss: station 1 (hinderbana stafett) och station 2 (löpning/häcklöpning)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station2-lopning-hacklopning",
+      "namn": "Station 2 – Löpning/häcklöpning",
+      "ikon": "🏃",
+      "ordning": 2,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Löpteknik och uthållighet",
+      "text": "Löpning runt halva salen (runt koner) under 2 minuter. Räkna allas varv och försök slå antalet varv i följande omgångar.\n\nStationen varieras mellan omgångarna:\n\n1. Omgång 1: Löpning\n2. Omgång 2: Häcklöpning\n3. Omgång 3: Stafett, ett barn i taget. Använd stafettpinne.",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-lopning-stationer.png",
+          "bildtext": "Skiss: station 1 (hinderbana stafett) och station 2 (löpning/häcklöpning)"
+        }
+      ],
+      "filer": []
+    },
+    {
+      "id": "station3-lek",
+      "namn": "Station 3 – Lek",
+      "ikon": "🏃",
+      "ordning": 3,
+      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "syfte": "Lekstation",
+      "text": "Lekar: Stafett med ärtpåse i ribbstol, Armkrokskull.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "🏃",
+      "ordning": 4,
+      "ansvarig": "Ludvig",
+      "syfte": "Gemensam hinderbana",
+      "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
+      "bilder": [],
+      "filer": []
+    }
+  ],
+  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdateradAv": "system"
+}

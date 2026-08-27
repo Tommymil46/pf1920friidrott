@@ -77,6 +77,10 @@ Ingen fara – ingenting försvinner. Klicka **Historik**, leta upp versionen du
 vill tillbaka till och klicka **Återställ**. Även den version du lämnar finns
 kvar i historiken.
 
+Historiken gäller bara det pass (eller lekbanken) du står på när du klickar
+**Historik** – att återställa Höjd rör alltså inte Löpning, Rörelse, Kast,
+Längd eller lekbanken.
+
 ## Arkivera ett genomfört pass
 
 Klicka på fliken för det pass som genomförts, sedan **Redigera passinfo** och

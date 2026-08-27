@@ -8,8 +8,13 @@ const OWNER = process.env.GITHUB_OWNER;
 const REPO = process.env.GITHUB_REPO;
 const BRANCH = process.env.GITHUB_BRANCH || "main";
 const TOKEN = process.env.GITHUB_TOKEN;
-const PASS_PATH = process.env.CONTENT_PATH || "content/pass.json";
+const CONTENT_BASE = (process.env.CONTENT_BASE || "content").replace(/\/+$/, "");
+const INDEX_PATH = `${CONTENT_BASE}/index.json`;
+const PASS_DIR = `${CONTENT_BASE}/pass`;
+const LEKAR_PATH = `${CONTENT_BASE}/lekar.json`;
 const UPLOAD_DIR = process.env.UPLOAD_PATH || "content/uploads";
+
+function passPath(id) { return `${PASS_DIR}/${id}.json`; }
 
 /* GITHUB_API kan pekas om för test eller GitHub Enterprise. */
 const API = (process.env.GITHUB_API || "https://api.github.com").replace(/\/+$/, "");
@@ -54,27 +59,6 @@ async function gh(vag, opts = {}) {
 const b64enc = (str) => Buffer.from(str, "utf8").toString("base64");
 const b64dec = (str) => Buffer.from(String(str).replace(/\n/g, ""), "base64").toString("utf8");
 
-/* --- Hämta aktuellt pass --- */
-async function hamtaPass(ref) {
-  const q = "?ref=" + encodeURIComponent(ref || BRANCH);
-  const d = await gh(`/repos/${OWNER}/${REPO}/contents/${PASS_PATH}${q}`);
-  return { pass: JSON.parse(b64dec(d.content)), sha: d.sha };
-}
-
-/* --- Spara pass (commit) --- */
-async function sparaPass(pass, meddelande, sha, forfattare) {
-  const innehall = JSON.stringify(pass, null, 2) + "\n";
-  const body = {
-    message: meddelande,
-    content: b64enc(innehall),
-    branch: BRANCH,
-    ...(sha ? { sha } : {}),
-    ...(forfattare ? { author: forfattare, committer: forfattare } : {})
-  };
-  const d = await gh(`/repos/${OWNER}/${REPO}/contents/${PASS_PATH}`, { method: "PUT", body });
-  return { sha: d.content.sha, commit: d.commit.sha };
-}
-
 /* --- Ladda upp fil (commit) --- */
 async function sparaFil(relativVag, buffer, meddelande, forfattare) {
   const vag = `${UPLOAD_DIR}/${relativVag}`.replace(/\/+/g, "/");
@@ -95,10 +79,12 @@ async function sparaFil(relativVag, buffer, meddelande, forfattare) {
   return { vag, sha: d.content.sha, commit: d.commit.sha };
 }
 
-/* --- Historik för passfilen --- */
-async function historik(antal = 40) {
+/* --- Historik och tidigare version för en godtycklig fil ---
+   Gör att varje pass, index och lekbanken har sin egen, oberoende
+   historik och kan återställas var för sig. */
+async function historikForVag(vag, antal = 40) {
   const d = await gh(
-    `/repos/${OWNER}/${REPO}/commits?path=${encodeURIComponent(PASS_PATH)}` +
+    `/repos/${OWNER}/${REPO}/commits?path=${encodeURIComponent(vag)}` +
     `&sha=${encodeURIComponent(BRANCH)}&per_page=${antal}`);
   return d.map((c) => ({
     sha: c.sha,
@@ -109,13 +95,12 @@ async function historik(antal = 40) {
   }));
 }
 
-async function passVidCommit(sha) {
-  const d = await gh(
-    `/repos/${OWNER}/${REPO}/contents/${PASS_PATH}?ref=${encodeURIComponent(sha)}`);
+async function jsonVidCommit(vag, sha) {
+  const d = await gh(`/repos/${OWNER}/${REPO}/contents/${vag}?ref=${encodeURIComponent(sha)}`);
   return JSON.parse(b64dec(d.content));
 }
 
-/* --- Godtycklig JSON-fil i repot (används för arkivet) --- */
+/* --- Godtycklig JSON-fil i repot --- */
 async function hamtaJson(vag, ref) {
   const q = "?ref=" + encodeURIComponent(ref || BRANCH);
   const d = await gh(`/repos/${OWNER}/${REPO}/contents/${vag}${q}`);
@@ -137,10 +122,10 @@ async function sparaJson(vag, data, meddelande, sha, forfattare) {
 function konfig() {
   return {
     owner: OWNER, repo: REPO, branch: BRANCH,
-    passPath: PASS_PATH, uploadPath: UPLOAD_DIR,
+    indexPath: INDEX_PATH, passDir: PASS_DIR, lekarPath: LEKAR_PATH, uploadPath: UPLOAD_DIR,
     konfigurerad: !!(OWNER && REPO && TOKEN)
   };
 }
 
-module.exports = { hamtaPass, sparaPass, sparaFil, historik, passVidCommit,
-                   hamtaJson, sparaJson, konfig };
+module.exports = { sparaFil, historikForVag, jsonVidCommit, hamtaJson, sparaJson, konfig,
+                   INDEX_PATH, PASS_DIR, LEKAR_PATH, passPath };

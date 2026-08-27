@@ -17,9 +17,9 @@ k("inloggning med startlösenord lyckas", r.status === 200 && r.data.token);
 let TOK = r.data.token;
 let AUTH = { Authorization: "Bearer " + TOK };
 
-r = await anropa(env, "/pass", {
+r = await anropa(env, "/pass/lopning", {
   method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ pass: { block: [] }, meddelande: "x" })
+  body: JSON.stringify({ data: { id: "lopning", moment: [] }, meddelande: "x" })
 });
 k("startlösenord får inte spara", r.status === 403 && r.data.kod === "startlosenord");
 
@@ -46,71 +46,117 @@ k("publik status läcker inte ledarnamn", r.status === 200 && !("ledare" in r.da
 r = await anropa(env, "/status/detaljer", { headers: AUTH });
 k("inloggad ser detaljerna", r.status === 200 && r.data.ledare.length === 5);
 
-/* --- pass: hämta, spara, konflikt --- */
-r = await anropa(env, "/pass");
-k("hämtar pass + sha", r.status === 200 && r.data.pass.block.length === 5 && r.data.sha);
-const SHA = r.data.sha;
+/* --- index: hämta, spara, konflikt --- */
+r = await anropa(env, "/index");
+k("hämtar index + sha", r.status === 200 && r.data.data.pass.length === 5 && r.data.sha);
 
-r = await anropa(env, "/pass", { method: "PUT" });
+r = await anropa(env, "/index", { method: "PUT" });
 k("sparning kräver inloggning", r.status === 401 && r.data.kod === "session");
 
-const nyttPass = JSON.parse(JSON.stringify(r.data.pass || (await anropa(env, "/pass")).data.pass));
-nyttPass.titel = "Pass från workertest";
-nyttPass.block[0].text = "Nytt innehåll från workern";
+/* --- pass: hämta, spara, konflikt --- */
+r = await anropa(env, "/pass/lopning");
+k("hämtar löpningspasset + sha", r.status === 200 && r.data.data.moment.length === 4 && r.data.sha);
+const SHA = r.data.sha;
 
-r = await anropa(env, "/pass", {
+const nyttPass = JSON.parse(JSON.stringify(r.data.data));
+nyttPass.namn = "Löpning (testad)";
+nyttPass.moment[0].text = "Nytt innehåll från workern";
+
+r = await anropa(env, "/pass/lopning", {
   method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ pass: nyttPass, meddelande: "Testuppdatering", sha: SHA })
+  body: JSON.stringify({ data: nyttPass, meddelande: "Testuppdatering", sha: SHA })
 });
-k("spara som ledare, uppdateradAv sätts", r.status === 200 && r.data.pass.uppdateradAv === "Ludvig");
+k("spara som ledare, uppdateradAv sätts", r.status === 200 && r.data.data.uppdateradAv === "Ludvig");
 const NY_SHA = r.data.sha;
 
-r = await anropa(env, "/pass", {
+r = await anropa(env, "/pass/lopning", {
   method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ pass: nyttPass, meddelande: "Igen", sha: SHA })
+  body: JSON.stringify({ data: nyttPass, meddelande: "Igen", sha: SHA })
 });
 k("konflikt upptäcks när två ledare sparar", r.status === 409);
 
+r = await anropa(env, "/pass/okant-id", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: nyttPass, meddelande: "fel id", sha: NY_SHA })
+});
+k("passets id måste matcha adressen", r.status === 400);
+
 /* --- innehållsgranskning --- */
 const ondPass = JSON.parse(JSON.stringify(nyttPass));
-ondPass.block[0].bilder = [
+ondPass.moment[0].bilder = [
   { url: "javascript:alert(1)", bildtext: "ond" },
   { url: "https://exempel.se/ok.png", bildtext: "ok" },
   { url: "content/uploads/bra.png", bildtext: "ok" }
 ];
-r = await anropa(env, "/pass", {
+r = await anropa(env, "/pass/lopning", {
   method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ pass: ondPass, meddelande: "test", sha: NY_SHA })
+  body: JSON.stringify({ data: ondPass, meddelande: "test", sha: NY_SHA })
 });
 k("javascript:-adress filtreras bort på servern",
-  r.status === 200 && r.data.pass.block[0].bilder.length === 2 &&
-  !r.data.pass.block[0].bilder.some((b) => b.url.startsWith("javascript:")));
+  r.status === 200 && r.data.data.moment[0].bilder.length === 2 &&
+  !r.data.data.moment[0].bilder.some((b) => b.url.startsWith("javascript:")));
 
 const langtPass = JSON.parse(JSON.stringify(nyttPass));
-langtPass.block[0].text = "x".repeat(40000);
-r = await anropa(env, "/pass", {
+langtPass.moment[0].text = "x".repeat(40000);
+r = await anropa(env, "/pass/lopning", {
   method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ pass: langtPass, meddelande: "test", sha: r.data.sha })
+  body: JSON.stringify({ data: langtPass, meddelande: "test", sha: r.data.sha })
 });
-k("för långt blockinnehåll avvisas", r.status === 400);
+k("för långt momentinnehåll avvisas", r.status === 400);
 
-/* --- historik --- */
-r = await anropa(env, "/historik", { headers: AUTH });
-k("historiken visar vem och vad", r.status === 200 && r.data[0].vem === "Ludvig" && r.data.length >= 3);
+const forFaPass = JSON.parse(JSON.stringify(nyttPass));
+forFaPass.moment = forFaPass.moment.slice(0, 2);
+r = await anropa(env, "/pass/lopning", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: forFaPass, meddelande: "test", sha: r.status === 400 ? NY_SHA : r.data.sha })
+});
+k("färre än fyra moment avvisas", r.status === 400);
+
+/* --- historik, per pass --- */
+r = await anropa(env, "/historik/pass/lopning", { headers: AUTH });
+k("historiken visar vem och vad", r.status === 200 && r.data[0].vem === "Ludvig" && r.data.length >= 2);
 const historikSvar = r.data;
-
-r = await anropa(env, "/historik/" + historikSvar[historikSvar.length - 1].sha, { headers: AUTH });
-k("kan läsa tidigare version", r.status === 200 && r.data.pass.titel !== "Pass från workertest");
 
 r = await anropa(env, "/aterstall", {
   method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
-  body: JSON.stringify({ sha: historikSvar[historikSvar.length - 1].sha })
+  body: JSON.stringify({ target: "pass/lopning", sha: historikSvar[historikSvar.length - 1].sha })
 });
 k("återställning till tidigare version",
-  r.status === 200 && r.data.pass.titel !== "Pass från workertest" && r.data.pass.uppdateradAv === "Ludvig");
+  r.status === 200 && r.data.data.namn !== "Löpning (testad)" && r.data.data.uppdateradAv === "Ludvig");
 
-r = await anropa(env, "/historik", { headers: AUTH });
+r = await anropa(env, "/historik/pass/lopning", { headers: AUTH });
 k("inget försvinner – historiken växer", r.data.length > historikSvar.length);
+
+/* --- ett annat pass rörs inte av löpningens historik/återställning --- */
+r = await anropa(env, "/pass/rorelse");
+k("rörelsepasset är opåverkat", r.status === 200 && r.data.data.namn === "Rörelse");
+
+/* --- index: sätt aktivt pass --- */
+r = await anropa(env, "/index");
+const idxData = r.data.data, idxSha = r.data.sha;
+idxData.aktivt = "rorelse";
+r = await anropa(env, "/index", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: idxData, meddelande: "Satte Rörelse som aktuellt", sha: idxSha })
+});
+k("index sparas separat från passen", r.status === 200 && r.data.data.aktivt === "rorelse");
+
+r = await anropa(env, "/historik/index", { headers: AUTH });
+k("indexet har sin egen historik", r.status === 200 && r.data.length >= 2);
+
+/* --- lekbanken --- */
+r = await anropa(env, "/lekar");
+k("hämtar lekbanken + sha", r.status === 200 && Array.isArray(r.data.data.lekar) && r.data.sha);
+const lekarData = r.data.data, lekarSha = r.data.sha;
+lekarData.lekar.push({ id: "test-lek", namn: "Testlek", ikon: "", text: "", bilder: [], filer: [] });
+r = await anropa(env, "/lekar", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: lekarData, meddelande: "Lade till en lek", sha: lekarSha })
+});
+k("lekbanken sparas separat", r.status === 200 && r.data.data.lekar.some((l) => l.id === "test-lek"));
+
+r = await anropa(env, "/historik/lekar", { headers: AUTH });
+k("lekbanken har sin egen historik", r.status === 200 && r.data.length >= 1);
 
 /* --- uppladdning --- */
 const fd1 = new FormData();
@@ -138,7 +184,10 @@ r = await anropa(env, "/upload", { method: "POST", body: fd1 });
 k("uppladdning kräver inloggning", r.status === 401);
 
 /* --- arkiv --- */
-r = await anropa(env, "/arkivera", { method: "POST", headers: AUTH });
+r = await anropa(env, "/arkivera", {
+  method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ passId: "lopning" })
+});
 k("arkivering skapar en post", r.status === 200 && r.data.post.fil.endsWith(".json"));
 const arkivFil = r.data.post.fil;
 
@@ -147,7 +196,7 @@ k("arkivlistan är publik och innehåller passet",
   r.status === 200 && r.data.pass.length === 1 && r.data.pass[0].arkiveradAv === "Ludvig");
 
 r = await anropa(env, "/arkiv/" + arkivFil);
-k("arkiverat pass går att läsa", r.status === 200 && r.data.pass.block);
+k("arkiverat pass går att läsa", r.status === 200 && r.data.pass.moment);
 
 for (const bad of ["../pass.json", "index.json"]) {
   r = await anropa(env, "/arkiv/" + encodeURIComponent(bad));
