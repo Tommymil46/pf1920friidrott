@@ -210,6 +210,19 @@
     d.showModal();
   }
 
+  /* Låser en knapp och byter text medan ett anrop pågår, så det syns att
+     klicket registrerats – annars ser ett långsamt anrop ut som ett
+     ouppmärksammat klick och man klickar om, i onödan. */
+  function knappUnderVantan(knapp, vantetext) {
+    var ursprung = knapp.textContent;
+    knapp.disabled = true;
+    knapp.textContent = vantetext;
+    return function aterstall() {
+      knapp.disabled = false;
+      knapp.textContent = ursprung;
+    };
+  }
+
   /* ---------- Historik ---------- Varje pass och lekbanken har sin egen
      historik – dialogen visar historiken för den flik som är öppen just nu,
      och Återställ rör bara den filen. */
@@ -421,7 +434,10 @@
       var anv = document.getElementById("login-user").value.trim();
       var los = document.getElementById("login-pass").value;
       var fel = document.getElementById("login-error");
+      var aterstallKnapp = knappUnderVantan(
+        e.target.querySelector("button[type=submit]"), "Loggar in…");
       window.API.loggaIn(anv, los).then(function (d) {
+        aterstallKnapp();
         document.getElementById("dlg-login").close();
         document.getElementById("form-login").reset();
         uppdateraInloggningsvy();
@@ -438,6 +454,7 @@
           }
         });
       }).catch(function (err) {
+        aterstallKnapp();
         fel.textContent = err.status === 401
           ? "Fel användarnamn eller lösenord."
           : "Kunde inte logga in: " + err.message;
@@ -463,13 +480,17 @@
       var n1 = document.getElementById("pw-new").value;
       var n2 = document.getElementById("pw-new2").value;
       if (n1 !== n2) { fel.textContent = "De nya lösenorden är inte lika."; fel.hidden = false; return; }
+      var aterstallKnapp = knappUnderVantan(
+        e.target.querySelector("button[type=submit]"), "Sparar…");
       window.API.bytLosenord(document.getElementById("pw-old").value, n1).then(function () {
+        aterstallKnapp();
         document.getElementById("dlg-password").close();
         document.getElementById("form-password").reset();
         status("ok", "Lösenordet är bytt. Nu kan du redigera passet.");
         uppdateraInloggningsvy();
         return laddaOm();
       }).catch(function (err) {
+        aterstallKnapp();
         fel.textContent = err.message; fel.hidden = false;
       });
     });

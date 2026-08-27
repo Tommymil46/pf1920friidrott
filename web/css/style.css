@@ -46,6 +46,7 @@ h1,h2,h3,h4{font-family:var(--rubrik);font-weight:700;line-height:1.15;margin:0}
   transition:background .12s ease,color .12s ease,border-color .12s ease;
 }
 .btn:focus-visible{outline:3px solid var(--gul);outline-offset:2px}
+.btn:disabled{opacity:.6;cursor:not-allowed}
 a.btn{text-decoration:none;display:inline-block}
 .btn-accent{background:var(--gul);color:var(--bla-mork);border-color:var(--gul)}
 .btn-accent:hover{background:var(--gul-mork)}
