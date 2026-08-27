@@ -45,7 +45,7 @@ export function miljo(overrides = {}) {
     JWT_SECRET: "test-hemlighet",
     GITHUB_API: "http://127.0.0.1:9099",
     GITHUB_OWNER: "a", GITHUB_REPO: "b", GITHUB_TOKEN: "fejktoken", GITHUB_BRANCH: "main",
-    LEDARE: "Anna,Eric,Johan,Ludvig,tommy",
+    LEDARE: "Anna,Eric,Johan,Ludvig,Tommy",
     ...overrides
   };
 }

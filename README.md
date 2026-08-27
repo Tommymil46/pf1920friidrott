@@ -92,7 +92,9 @@ Sätt `apiBase` i [`web/js/config.js`](web/js/config.js) till adressen från
 
 ## Ledarkonton
 
-Anna, Eric, Johan, Ludvig och tommy. Startlösenordet är samma som kontonamnet.
+Anna, Eric, Johan, Ludvig och Tommy. Startlösenordet är samma som kontonamnet,
+skrivet med samma stora/små bokstäver (lösenordet är skiftlägeskänsligt,
+användarnamnet är det inte).
 Under uppbyggnaden (`KRAV_LOSENORDSBYTE=0`, standard) går det bra att fortsätta
 med det. Sätt `KRAV_LOSENORDSBYTE=1` (i `wrangler.toml` för Workern, eller
 `server/.env` för Docker-varianten) innan sidan går i skarp drift – då krävs

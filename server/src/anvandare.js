@@ -11,7 +11,7 @@ const bcrypt = require("bcryptjs");
 const DATA_DIR = process.env.DATA_DIR || "/data";
 const FIL = path.join(DATA_DIR, "ledare.json");
 
-const START_LEDARE = (process.env.LEDARE || "Anna,Eric,Johan,Ludvig,tommy")
+const START_LEDARE = (process.env.LEDARE || "Anna,Eric,Johan,Ludvig,Tommy")
   .split(",").map((s) => s.trim()).filter(Boolean);
 
 const EPOST_DOMAN = process.env.COMMIT_EPOST_DOMAN || "users.noreply.github.com";

@@ -3,8 +3,10 @@
 ## Logga in
 
 1. Gå till sidan och klicka **Logga in som ledare** högst upp.
-2. Användarnamn är ditt förnamn: `Anna`, `Eric`, `Johan`, `Ludvig` eller `tommy`.
-3. Första gången är lösenordet detsamma som namnet.
+2. Användarnamn är ditt förnamn: `Anna`, `Eric`, `Johan`, `Ludvig` eller `Tommy`
+   (användarnamnet är inte skiftlägeskänsligt, så `anna` fungerar lika bra).
+3. Första gången är lösenordet detsamma som namnet, **med stor bokstav** –
+   lösenordet är skiftlägeskänsligt, så `Anna` fungerar men `anna` gör det inte.
 4. **Byt lösenord innan sidan går i skarp drift.** Under uppbyggnaden går det
    bra att fortsätta med kontonamnet som lösenord. När Tommy säger till att
    sidan är klar för allmänheten tvingar appen fram ett byte automatiskt –

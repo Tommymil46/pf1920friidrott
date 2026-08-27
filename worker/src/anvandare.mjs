@@ -16,7 +16,7 @@ import { hashaLosenord, jamforLosenord } from "./kodning.mjs";
 const KV_NYCKEL = "ledare";
 
 function parseLedare(env) {
-  return (env.LEDARE || "Anna,Eric,Johan,Ludvig,tommy")
+  return (env.LEDARE || "Anna,Eric,Johan,Ludvig,Tommy")
     .split(",").map((s) => s.trim()).filter(Boolean);
 }
 
