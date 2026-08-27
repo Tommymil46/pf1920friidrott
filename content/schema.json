@@ -1,0 +1,194 @@
+{
+  "schemaVersion": 1,
+  "uppdaterad": "2026-08-27T00:00:00Z",
+  "uppdateradAv": "system",
+  "termin": "Höst 2026",
+  "tillfallen": [
+    {
+      "vecka": 36,
+      "datum": "2026-09-06",
+      "ansvariga": [
+        "Tommy",
+        "Anna"
+      ],
+      "pass": "lopning",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 37,
+      "datum": "2026-09-13",
+      "ansvariga": [
+        "Eric",
+        "Tommy"
+      ],
+      "pass": "lopning",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 38,
+      "datum": "2026-09-20",
+      "ansvariga": [
+        "Anna",
+        "Tommy"
+      ],
+      "pass": "lopning",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 39,
+      "datum": "2026-09-27",
+      "ansvariga": [
+        "Ludvig",
+        "Johan"
+      ],
+      "pass": "rorelse",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 40,
+      "datum": "2026-10-04",
+      "ansvariga": [
+        "Anna",
+        "Eric"
+      ],
+      "pass": "rorelse",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 41,
+      "datum": "2026-10-11",
+      "ansvariga": [
+        "Johan",
+        "Tommy"
+      ],
+      "pass": "rorelse",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 42,
+      "datum": "2026-10-18",
+      "ansvariga": [
+        "Eric",
+        "Ludvig"
+      ],
+      "pass": "kast",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 43,
+      "datum": "2026-10-25",
+      "ansvariga": [
+        "Tommy",
+        "Anna"
+      ],
+      "pass": "kast",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 44,
+      "datum": "2026-11-01",
+      "ansvariga": [],
+      "pass": null,
+      "installt": true,
+      "notering": "Höstlov, ingen träning"
+    },
+    {
+      "vecka": 45,
+      "datum": "2026-11-08",
+      "ansvariga": [
+        "Johan",
+        "Tommy"
+      ],
+      "pass": "kast",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 46,
+      "datum": "2026-11-15",
+      "ansvariga": [
+        "Ludvig",
+        "Eric"
+      ],
+      "pass": "hojd",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 47,
+      "datum": "2026-11-22",
+      "ansvariga": [
+        "Anna",
+        "Johan"
+      ],
+      "pass": "hojd",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 48,
+      "datum": "2026-11-29",
+      "ansvariga": [
+        "Eric",
+        "Tommy"
+      ],
+      "pass": "hojd",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 49,
+      "datum": "2026-12-06",
+      "ansvariga": [
+        "Johan",
+        "Ludvig"
+      ],
+      "pass": "langd",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 50,
+      "datum": "2026-12-13",
+      "ansvariga": [
+        "Ludvig",
+        "Tommy"
+      ],
+      "pass": "langd",
+      "installt": false,
+      "notering": ""
+    },
+    {
+      "vecka": 51,
+      "datum": "2026-12-16",
+      "ansvariga": [],
+      "pass": "langd",
+      "installt": false,
+      "notering": "Julavslutning – observera onsdag denna vecka, inte söndag"
+    },
+    {
+      "vecka": 52,
+      "datum": "2026-12-27",
+      "ansvariga": [],
+      "pass": null,
+      "installt": true,
+      "notering": "Inget pass planerat ännu"
+    },
+    {
+      "vecka": 53,
+      "datum": "2027-01-03",
+      "ansvariga": [],
+      "pass": null,
+      "installt": true,
+      "notering": "Inget pass planerat ännu"
+    }
+  ]
+}

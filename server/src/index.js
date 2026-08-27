@@ -269,6 +269,36 @@ function granskaLekar(data) {
   return fel;
 }
 
+function granskaSchema(data) {
+  if (!data || typeof data !== "object" || !Array.isArray(data.tillfallen)) {
+    return ["Schemat är trasigt."];
+  }
+  const { fel, strang } = nyGranskare();
+  strang(data.termin, 100, "Terminen");
+  if (data.tillfallen.length > 60) fel.push("För många tillfällen (max 60)");
+
+  data.tillfallen.forEach((t, i) => {
+    const namn = "Tillfälle " + (i + 1);
+    if (!t || typeof t !== "object") { fel.push(namn + " är trasigt"); return; }
+    if (!Number.isInteger(t.vecka) || t.vecka < 1 || t.vecka > 53) {
+      fel.push(namn + ": veckan måste vara 1–53");
+    }
+    if (!t.datum || !/^\d{4}-\d{2}-\d{2}$/.test(String(t.datum))) {
+      fel.push(namn + ": datumet måste skrivas som ÅÅÅÅ-MM-DD");
+    }
+    if (t.pass != null && !ID_MONSTER.test(t.pass)) {
+      fel.push(namn + ": ogiltigt pass-id");
+    }
+    if (t.ansvariga != null) {
+      if (!Array.isArray(t.ansvariga)) { fel.push(namn + ": ansvariga är trasigt"); return; }
+      if (t.ansvariga.length > 4) fel.push(namn + ": för många ansvariga (max 4)");
+      t.ansvariga.forEach((a, j) => strang(a, 60, namn + ": ansvarig " + (j + 1)));
+    }
+    strang(t.notering, 300, namn + ": noteringen");
+  });
+  return fel;
+}
+
 function granskaIndex(data) {
   if (!data || typeof data !== "object" || !Array.isArray(data.pass)) return ["Indexet är trasigt."];
   const { fel, strang } = nyGranskare();
@@ -345,6 +375,18 @@ api.put("/lekar", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
     const { data } = req.body || {};
     await sparaContent(gh.LEKAR_PATH, "lekar", data, granskaLekar, "Uppdaterade lekbanken", req, res);
+  } catch (e) { next(e); }
+});
+
+api.get("/schema", async (req, res, next) => {
+  try { res.json(await cachat("schema", () => gh.hamtaJson(gh.SCHEMA_PATH))); }
+  catch (e) { next(e); }
+});
+
+api.put("/schema", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
+  try {
+    const { data } = req.body || {};
+    await sparaContent(gh.SCHEMA_PATH, "schema", data, granskaSchema, "Uppdaterade terminsschemat", req, res);
   } catch (e) { next(e); }
 });
 
@@ -501,6 +543,7 @@ api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) 
 function malVag(target) {
   if (target === "index") return gh.INDEX_PATH;
   if (target === "lekar") return gh.LEKAR_PATH;
+  if (target === "schema") return gh.SCHEMA_PATH;
   if (target && target.startsWith("pass/")) {
     const id = target.slice(5);
     return ID_MONSTER.test(id) ? gh.passPath(id) : null;
@@ -514,6 +557,10 @@ api.get("/historik/index", kravInloggad, async (req, res, next) => {
 });
 api.get("/historik/lekar", kravInloggad, async (req, res, next) => {
   try { res.json(await gh.historikForVag(gh.LEKAR_PATH, Number(req.query.antal) || 40)); }
+  catch (e) { next(e); }
+});
+api.get("/historik/schema", kravInloggad, async (req, res, next) => {
+  try { res.json(await gh.historikForVag(gh.SCHEMA_PATH, Number(req.query.antal) || 40)); }
   catch (e) { next(e); }
 });
 api.get("/historik/pass/:id", kravInloggad, async (req, res, next) => {
@@ -540,7 +587,7 @@ api.post("/aterstall", kravInloggad, kravRiktigtLosenord, async (req, res, next)
       nuvarande.sha,
       anv.commitForfattare(req.ledare)
     );
-    cache.delete(target === "index" ? "index" : target === "lekar" ? "lekar" : "pass:" + target.slice(5));
+    cache.delete(target.startsWith("pass/") ? "pass:" + target.slice(5) : target);
     res.json({ ok: true, sha: r.sha, commit: r.commit, data: gammalt });
   } catch (e) { next(e); }
 });
@@ -567,11 +614,12 @@ if (fs.existsSync(CONTENT_DIR)) {
   /* Läs alltid färskt innehåll från GitHub när filerna efterfrågas statiskt
      (t.ex. index.json, pass/lopning.json, lekar.json) – annars faller vi
      tillbaka på den lokala kopian på disk. */
-  app.get(/^\/content\/(index\.json|pass\/[\w-]+\.json|lekar\.json)$/, async (req, res) => {
+  app.get(/^\/content\/(index\.json|pass\/[\w-]+\.json|lekar\.json|schema\.json)$/, async (req, res) => {
     const relativVag = req.path.replace(/^\/content\//, "");
     const passMatch = relativVag.match(/^pass\/([\w-]+)\.json$/);
     const fullVag = relativVag === "index.json" ? gh.INDEX_PATH
       : relativVag === "lekar.json" ? gh.LEKAR_PATH
+      : relativVag === "schema.json" ? gh.SCHEMA_PATH
       : passMatch ? gh.passPath(passMatch[1])
       : null;
     try {

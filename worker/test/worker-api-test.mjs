@@ -158,6 +158,20 @@ k("lekbanken sparas separat", r.status === 200 && r.data.data.lekar.some((l) => 
 r = await anropa(env, "/historik/lekar", { headers: AUTH });
 k("lekbanken har sin egen historik", r.status === 200 && r.data.length >= 1);
 
+/* --- terminsschemat --- */
+r = await anropa(env, "/schema");
+k("hämtar schemat + sha", r.status === 200 && Array.isArray(r.data.data.tillfallen) && r.data.sha);
+const schemaData = r.data.data, schemaSha = r.data.sha;
+schemaData.tillfallen[0].notering = "Testnotering";
+r = await anropa(env, "/schema", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: schemaData, meddelande: "Testade schemat", sha: schemaSha })
+});
+k("schemat sparas separat", r.status === 200 && r.data.data.tillfallen[0].notering === "Testnotering");
+
+r = await anropa(env, "/historik/schema", { headers: AUTH });
+k("schemat har sin egen historik", r.status === 200 && r.data.length >= 1);
+
 /* --- uppladdning --- */
 const fd1 = new FormData();
 fd1.append("fil", new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], "Ödla Räv.png", { type: "image/png" }));

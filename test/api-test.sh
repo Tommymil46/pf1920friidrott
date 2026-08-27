@@ -147,6 +147,33 @@ curl -sS $B/historik/lekar -H "$AUTH" | python3 -c "
 import sys,json;assert len(json.load(sys.stdin))>=1
 " && ok "lekbanken har sin egen historik" || fel "lekbankshistorik"
 
+# 12b. terminsschemat sparas separat
+SFIL=$(mktemp); curl -sS $B/schema > "$SFIL"
+python3 -c "
+import json
+d=json.load(open('$SFIL'))
+assert isinstance(d['data']['tillfallen'], list) and d['sha']
+" && ok "hämtar schemat + sha" || fel "hämta schemat"
+SSHA=$(python3 -c "import json;print(json.load(open('$SFIL'))['sha'])")
+SNYFIL=$(mktemp)
+python3 - "$SFIL" "$SSHA" "$SNYFIL" <<'SCH'
+import json, sys
+kalla, sha, ut = sys.argv[1], sys.argv[2], sys.argv[3]
+d = json.load(open(kalla))['data']
+d['tillfallen'][0]['notering'] = 'Testnotering'
+json.dump({"data": d, "meddelande": "Testade schemat", "sha": sha}, open(ut, 'w'), ensure_ascii=False)
+SCH
+curl -sS -X PUT $B/schema -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$SNYFIL" \
+  | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+assert d['data']['tillfallen'][0]['notering']=='Testnotering'
+" && ok "schemat sparas separat" || fel "schema-sparning"
+
+curl -sS $B/historik/schema -H "$AUTH" | python3 -c "
+import sys,json;assert len(json.load(sys.stdin))>=1
+" && ok "schemat har sin egen historik" || fel "schema-historik"
+
 # 13. uppladdning: bild
 printf '\x89PNG\r\n\x1a\n0123456789' > /tmp/testbild.png
 U=$(curl -sS -X POST $B/upload -H "$AUTH" -F "fil=@/tmp/testbild.png;type=image/png")

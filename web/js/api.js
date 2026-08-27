@@ -110,6 +110,7 @@
   function hamtaIndex() { return hamtaContent("index"); }
   function hamtaPassFil(id) { return hamtaContent("pass", id); }
   function hamtaLekar() { return hamtaContent("lekar"); }
+  function hamtaSchema() { return hamtaContent("schema"); }
 
   function sparaIndex(data, meddelande, sha) {
     return anrop("/index", { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
@@ -120,6 +121,9 @@
   }
   function sparaLekar(data, meddelande, sha) {
     return anrop("/lekar", { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
+  }
+  function sparaSchema(data, meddelande, sha) {
+    return anrop("/schema", { method: "PUT", body: { data: data, meddelande: meddelande, sha: sha } });
   }
 
   function laddaUpp(fil, blockId) {
@@ -175,8 +179,8 @@
   window.API = {
     harApi: harApi, anvandare: anvandare, loggaIn: loggaIn, loggaUt: loggaUt,
     bytLosenord: bytLosenord,
-    hamtaIndex: hamtaIndex, hamtaPassFil: hamtaPassFil, hamtaLekar: hamtaLekar,
-    sparaIndex: sparaIndex, sparaPassFil: sparaPassFil, sparaLekar: sparaLekar,
+    hamtaIndex: hamtaIndex, hamtaPassFil: hamtaPassFil, hamtaLekar: hamtaLekar, hamtaSchema: hamtaSchema,
+    sparaIndex: sparaIndex, sparaPassFil: sparaPassFil, sparaLekar: sparaLekar, sparaSchema: sparaSchema,
     laddaUpp: laddaUpp, historik: historik,
     arkiv: arkiv, arkivPass: arkivPass, arkivera: arkivera,
     innehallsbas: innehallsbas,

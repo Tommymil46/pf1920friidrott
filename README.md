@@ -21,6 +21,10 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
   på en gång.
 * **Arkiv.** Genomförda pass arkiveras och finns kvar under *Arkiv*, där de
   kan läsas och skrivas ut precis som de såg ut den dagen.
+* **Schema.** Under *Schema* ser alla terminens veckor, datum, vilka ledare
+  som ansvarar och vilket pass som gäller – inklusive inställda tillfällen
+  (t.ex. lov) och noteringar om avvikande dag. Ledare kan redigera raderna
+  precis som ett pass, med egen historik och återställning.
 
 ## Så hänger delarna ihop
 
@@ -42,6 +46,8 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
   * **content/pass/lopning.json** (m.fl., ett per pass) – det enskilda
     passets innehåll.
   * **content/lekar.json** – den fristående lekbanken.
+  * **content/schema.json** – terminsschemat (vecka, datum, ansvariga
+    ledare, pass och ev. notering per tillfälle).
 * **content/arkiv/** – genomförda pass, ett per fil, plus `index.json`.
 * **content/uploads/** – bilder och PDF:er som ledarna laddat upp.
 * **worker/** – ledartjänsten som Cloudflare Worker: inloggning, uppladdning

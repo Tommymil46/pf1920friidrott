@@ -23,6 +23,7 @@ function b64Fil(relativVag) {
 }
 put('content/index.json', b64Fil('index.json'), 'Startinnehåll', { name: 'system' });
 put('content/lekar.json', b64Fil('lekar.json'), 'Startinnehåll', { name: 'system' });
+put('content/schema.json', b64Fil('schema.json'), 'Startinnehåll', { name: 'system' });
 for (const namn of fs.readdirSync(new URL('pass/', contentDir))) {
   put('content/pass/' + namn, b64Fil('pass/' + namn), 'Startinnehåll', { name: 'system' });
 }

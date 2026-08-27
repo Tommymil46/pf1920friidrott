@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Träningspass – Friidrott PF 19/20</title>
-<meta name="description" content="Träningspass (Löpning, Rörelse, Kast, Höjd, Längd) för friidrottsgruppen PF 19/20, Hagunda IF.">
+<title>Terminsschema – Friidrott PF 19/20</title>
+<meta name="description" content="Terminsschema för friidrottsgruppen PF 19/20, Hagunda IF – vilket pass och vilka ledare som gäller varje vecka.">
 <link rel="icon" href="img/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,11 +19,8 @@
   <div class="wrap topbar-inner">
     <span class="topbar-brand">Hagunda IF · Friidrott</span>
     <div class="topbar-actions">
-      <a class="btn btn-ghost" href="schema.html">Schema</a>
+      <a class="btn btn-ghost" href="index.html">← Aktuellt pass</a>
       <a class="btn btn-ghost" href="arkiv.html">Arkiv</a>
-      <button id="btn-print" class="btn btn-ghost" type="button" title="Skriv ut underlaget (max 3 sidor)">
-        <span aria-hidden="true">🖨</span> Skriv ut
-      </button>
       <button id="btn-login" class="btn btn-accent" type="button">Logga in som ledare</button>
       <div id="user-box" class="user-box" hidden>
         <span id="user-name" class="user-name"></span>
@@ -40,41 +37,42 @@
   <div class="wrap header-inner">
     <img src="img/logo.svg" alt="Hagunda IF" class="logo">
     <div class="header-text">
-      <h1>Träningspass</h1>
+      <h1>Terminsschema</h1>
       <p class="subtitle" id="group-name">Friidrott PF 19/20</p>
     </div>
   </div>
 </header>
-
-<nav class="navbar navbar-pass no-print">
-  <div class="wrap navbar-inner" id="pass-tabs"><!-- fylls av js: löpning, rörelse, kast, höjd, längd --></div>
-</nav>
-
-<nav class="navbar no-print">
-  <div class="wrap navbar-inner" id="block-nav"><!-- fylls av js --></div>
-</nav>
 
 <!-- ===== Statusrad ===== -->
 <div id="status" class="status no-print" hidden></div>
 
 <main class="wrap" id="main">
 
-  <!-- Passets fakta -->
-  <section class="pass-head" id="pass-head">
-    <div class="pass-facts" id="pass-facts"></div>
-    <div class="pass-common" id="pass-common"></div>
-  </section>
+  <p class="arkiv-intro no-print">
+    Vilket pass och vilka ledare som gäller varje vecka under terminen.
+    Klicka på ett pass för att öppna det. Inställda tillfällen och
+    noteringar (t.ex. lov eller ändrad veckodag) är markerade.
+  </p>
 
-  <!-- Friidrottsmomenten -->
-  <section id="blocks" class="blocks"></section>
-
-  <!-- Lägg till moment (endast inloggad) -->
-  <div class="add-block no-print" id="add-block-row" hidden>
-    <button id="btn-add-block" class="btn btn-primary" type="button">+ Lägg till friidrottsmoment</button>
+  <div class="schema-tabell-wrap">
+    <table class="schema-tabell" id="schema-tabell">
+      <thead>
+        <tr>
+          <th>Vecka</th>
+          <th>Datum</th>
+          <th>Ansvariga</th>
+          <th>Pass</th>
+          <th>Notering</th>
+          <th class="no-print"></th>
+        </tr>
+      </thead>
+      <tbody id="schema-rader"></tbody>
+    </table>
   </div>
 
-  <!-- Avslutning -->
-  <section class="pass-avslutning" id="pass-avslutning" hidden></section>
+  <div class="add-block no-print" id="add-tillfalle-row" hidden>
+    <button id="btn-add-tillfalle" class="btn btn-primary" type="button">+ Lägg till tillfälle</button>
+  </div>
 
   <footer class="pass-footer">
     <p id="meta-line"></p>
@@ -134,7 +132,6 @@
 <script src="js/markdown.js"></script>
 <script src="js/api.js"></script>
 <script src="js/render.js"></script>
-<script src="js/edit.js"></script>
-<script src="js/app.js"></script>
+<script src="js/schema-app.js"></script>
 </body>
 </html>

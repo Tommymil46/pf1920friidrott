@@ -12,6 +12,7 @@ const CONTENT_BASE = (process.env.CONTENT_BASE || "content").replace(/\/+$/, "")
 const INDEX_PATH = `${CONTENT_BASE}/index.json`;
 const PASS_DIR = `${CONTENT_BASE}/pass`;
 const LEKAR_PATH = `${CONTENT_BASE}/lekar.json`;
+const SCHEMA_PATH = `${CONTENT_BASE}/schema.json`;
 const UPLOAD_DIR = process.env.UPLOAD_PATH || "content/uploads";
 
 function passPath(id) { return `${PASS_DIR}/${id}.json`; }
@@ -122,10 +123,11 @@ async function sparaJson(vag, data, meddelande, sha, forfattare) {
 function konfig() {
   return {
     owner: OWNER, repo: REPO, branch: BRANCH,
-    indexPath: INDEX_PATH, passDir: PASS_DIR, lekarPath: LEKAR_PATH, uploadPath: UPLOAD_DIR,
+    indexPath: INDEX_PATH, passDir: PASS_DIR, lekarPath: LEKAR_PATH, schemaPath: SCHEMA_PATH,
+    uploadPath: UPLOAD_DIR,
     konfigurerad: !!(OWNER && REPO && TOKEN)
   };
 }
 
 module.exports = { sparaFil, historikForVag, jsonVidCommit, hamtaJson, sparaJson, konfig,
-                   INDEX_PATH, PASS_DIR, LEKAR_PATH, passPath };
+                   INDEX_PATH, PASS_DIR, LEKAR_PATH, SCHEMA_PATH, passPath };

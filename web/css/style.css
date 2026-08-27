@@ -236,6 +236,25 @@ main{padding-bottom:48px}
   .arkiv-datum{width:auto}
 }
 
+/* ---------- Terminsschema ---------- */
+.schema-tabell-wrap{
+  margin-top:18px;overflow-x:auto;background:var(--kort);border:1px solid var(--linje);
+  border-radius:var(--radie);box-shadow:var(--skugga);
+}
+.schema-tabell{width:100%;border-collapse:collapse;font-size:14px;white-space:nowrap}
+.schema-tabell th,.schema-tabell td{padding:9px 14px;text-align:left;border-bottom:1px solid var(--linje)}
+.schema-tabell th{
+  background:var(--bla);color:#fff;font-family:var(--rubrik);text-transform:uppercase;
+  letter-spacing:.03em;font-size:13px;white-space:nowrap;
+}
+.schema-tabell tbody tr:last-child td{border-bottom:none}
+.schema-tabell td.schema-notering{color:var(--text-svag);white-space:normal;min-width:180px}
+.schema-tabell a{color:var(--bla);font-weight:600;text-decoration:none}
+.schema-tabell a:hover{text-decoration:underline}
+.schema-installt td{color:var(--text-svag);font-style:italic}
+.schema-installt td.schema-notering{color:#8a1f1f;font-style:normal;font-weight:600}
+.schema-tabell .redigera-form{white-space:normal}
+
 /* ---------- Mobil ---------- */
 @media (max-width:640px){
   .header-text h1{font-size:26px}

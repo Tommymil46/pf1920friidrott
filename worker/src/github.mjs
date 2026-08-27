@@ -15,6 +15,7 @@ function konfig(env) {
     indexPath: `${base}/index.json`,
     passDir: `${base}/pass`,
     lekarPath: `${base}/lekar.json`,
+    schemaPath: `${base}/schema.json`,
     uploadDir: env.UPLOAD_PATH || "content/uploads",
     api: (env.GITHUB_API || "https://api.github.com").replace(/\/+$/, ""),
     konfigurerad: !!(env.GITHUB_OWNER && env.GITHUB_REPO && env.GITHUB_TOKEN)

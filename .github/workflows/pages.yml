@@ -42,7 +42,7 @@ jobs:
         run: |
           python3 -c "
           import json, glob
-          filer = ['_site/content/index.json', '_site/content/lekar.json'] + sorted(glob.glob('_site/content/pass/*.json'))
+          filer = ['_site/content/index.json', '_site/content/lekar.json', '_site/content/schema.json'] + sorted(glob.glob('_site/content/pass/*.json'))
           assert filer, 'Hittade inga innehållsfiler'
           for f in filer:
               json.load(open(f))

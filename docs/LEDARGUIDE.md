@@ -73,15 +73,24 @@ friidrottsmoment. Redigering, uppladdning och historik fungerar likadant
 som för passen. Lekarna sorteras alltid automatiskt i bokstavsordning
 (a–ö), så det går inte att flytta dem för hand.
 
+## Terminsschemat
+
+Under **Schema** i toppmenyn ser alla vilken vecka som gäller vilket pass,
+vilka två ledare som ansvarar och om något tillfälle är inställt (t.ex. lov)
+eller har en avvikande dag. Inloggad ledare kan klicka **Redigera** på en rad
+för att ändra vecka, datum, ansvariga, pass eller notering, eller lägga till
+ett nytt tillfälle längst ned. Precis som passen och lekbanken har schemat
+sin egen historik och går att återställa för sig.
+
 ## Om du råkar ta bort något
 
 Ingen fara – ingenting försvinner. Klicka **Historik**, leta upp versionen du
 vill tillbaka till och klicka **Återställ**. Även den version du lämnar finns
 kvar i historiken.
 
-Historiken gäller bara det pass (eller lekbanken) du står på när du klickar
-**Historik** – att återställa Höjd rör alltså inte Löpning, Rörelse, Kast,
-Längd eller lekbanken.
+Historiken gäller bara det pass (eller lekbanken/schemat) du står på när du
+klickar **Historik** – att återställa Höjd rör alltså inte Löpning, Rörelse,
+Kast, Längd, lekbanken eller schemat.
 
 ## Arkivera ett genomfört pass
 

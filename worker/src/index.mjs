@@ -215,6 +215,36 @@ function granskaLekar(data) {
   return fel;
 }
 
+function granskaSchema(data) {
+  if (!data || typeof data !== "object" || !Array.isArray(data.tillfallen)) {
+    return ["Schemat är trasigt."];
+  }
+  const { fel, strang } = nyGranskare();
+  strang(data.termin, 100, "Terminen");
+  if (data.tillfallen.length > 60) fel.push("För många tillfällen (max 60)");
+
+  data.tillfallen.forEach((t, i) => {
+    const namn = "Tillfälle " + (i + 1);
+    if (!t || typeof t !== "object") { fel.push(namn + " är trasigt"); return; }
+    if (!Number.isInteger(t.vecka) || t.vecka < 1 || t.vecka > 53) {
+      fel.push(namn + ": veckan måste vara 1–53");
+    }
+    if (!t.datum || !/^\d{4}-\d{2}-\d{2}$/.test(String(t.datum))) {
+      fel.push(namn + ": datumet måste skrivas som ÅÅÅÅ-MM-DD");
+    }
+    if (t.pass != null && !ID_MONSTER.test(t.pass)) {
+      fel.push(namn + ": ogiltigt pass-id");
+    }
+    if (t.ansvariga != null) {
+      if (!Array.isArray(t.ansvariga)) { fel.push(namn + ": ansvariga är trasigt"); return; }
+      if (t.ansvariga.length > 4) fel.push(namn + ": för många ansvariga (max 4)");
+      t.ansvariga.forEach((a, j) => strang(a, 60, namn + ": ansvarig " + (j + 1)));
+    }
+    strang(t.notering, 300, namn + ": noteringen");
+  });
+  return fel;
+}
+
 function granskaIndex(data) {
   if (!data || typeof data !== "object" || !Array.isArray(data.pass)) return ["Indexet är trasigt."];
   const { fel, strang } = nyGranskare();
@@ -314,6 +344,12 @@ async function handle(request, env, ctx) {
       () => gh.hamtaJson(env, k.lekarPath)));
   }
 
+  if (path === "/schema" && metod === "GET") {
+    const k = gh.konfig(env);
+    return jsonSvar(await cachat(ctx, "schema", Number(env.LAS_CACHE_MS || 20000) / 1000,
+      () => gh.hamtaJson(env, k.schemaPath)));
+  }
+
   if ((m = path.match(/^\/pass\/([^/]+)$/)) && metod === "GET") {
     const id = decodeURIComponent(m[1]);
     if (!ID_MONSTER.test(id)) return jsonSvar({ fel: "Ogiltigt pass-id." }, 400);
@@ -397,6 +433,10 @@ async function handle(request, env, ctx) {
     return sparaContent(gh.konfig(env).lekarPath, "lekar", granskaLekar, "Uppdaterade lekbanken");
   }
 
+  if (path === "/schema" && metod === "PUT") {
+    return sparaContent(gh.konfig(env).schemaPath, "schema", granskaSchema, "Uppdaterade terminsschemat");
+  }
+
   if ((m = path.match(/^\/pass\/([^/]+)$/)) && metod === "PUT") {
     const id = decodeURIComponent(m[1]);
     if (!ID_MONSTER.test(id)) return jsonSvar({ fel: "Ogiltigt pass-id." }, 400);
@@ -443,6 +483,7 @@ async function handle(request, env, ctx) {
     const k = gh.konfig(env);
     if (target === "index") return k.indexPath;
     if (target === "lekar") return k.lekarPath;
+    if (target === "schema") return k.schemaPath;
     if (target && target.startsWith("pass/")) {
       const id = target.slice(5);
       return ID_MONSTER.test(id) ? gh.passPath(k, id) : null;
@@ -457,6 +498,10 @@ async function handle(request, env, ctx) {
   if (path === "/historik/lekar" && metod === "GET") {
     await kravInloggad(request, env);
     return jsonSvar(await gh.historikForVag(env, gh.konfig(env).lekarPath, Number(url.searchParams.get("antal")) || 40));
+  }
+  if (path === "/historik/schema" && metod === "GET") {
+    await kravInloggad(request, env);
+    return jsonSvar(await gh.historikForVag(env, gh.konfig(env).schemaPath, Number(url.searchParams.get("antal")) || 40));
   }
   if ((m = path.match(/^\/historik\/pass\/([^/]+)$/)) && metod === "GET") {
     await kravInloggad(request, env);
@@ -480,7 +525,7 @@ async function handle(request, env, ctx) {
     const r = await gh.sparaJson(env, vag, gammalt,
       `Återställde ${target} till version ${String(sha).slice(0, 7)} (${ledare.namn})`,
       nuvarande.sha, anv.commitForfattare(ledare));
-    await rensaCache(ctx, [target === "index" ? "index" : target === "lekar" ? "lekar" : "pass:" + target.slice(5)]);
+    await rensaCache(ctx, [target.startsWith("pass/") ? "pass:" + target.slice(5) : target]);
     return jsonSvar({ ok: true, sha: r.sha, commit: r.commit, data: gammalt });
   }
 
