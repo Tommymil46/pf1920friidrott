@@ -258,6 +258,16 @@ function granskaPassObjekt(p, forvantatId) {
   if (p.moment.length > 40) fel.push("För många moment (max 40)");
   if (p.moment.length < MINST_MOMENT) fel.push("Passet behöver minst " + MINST_MOMENT + " friidrottsmoment");
   p.moment.forEach((m, j) => granskaKort(m, "Moment " + (j + 1)));
+  ["hallskiss", "hallskissFiler"].forEach((falt) => {
+    if (p[falt] == null) return;
+    if (!Array.isArray(p[falt])) { fel.push("Hallskiss: " + falt + " är trasigt"); return; }
+    if (p[falt].length > 10) fel.push("Hallskiss: för många filer (max 10)");
+    p[falt] = p[falt].filter((x) => x && typeof x === "object" && SAKER_URL.test(String(x.url)));
+    p[falt].forEach((x) => {
+      x.bildtext = strang(x.bildtext, 300, "Hallskiss: bildtexten");
+      x.namn = strang(x.namn, 200, "Hallskiss: filnamnet");
+    });
+  });
   return fel;
 }
 

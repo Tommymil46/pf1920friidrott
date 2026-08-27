@@ -96,6 +96,20 @@ k("javascript:-adress filtreras bort på servern",
   r.status === 200 && r.data.data.moment[0].bilder.length === 2 &&
   !r.data.data.moment[0].bilder.some((b) => b.url.startsWith("javascript:")));
 
+/* --- hallskiss (skiss över idrottshallen, på passet – inte på ett moment) --- */
+const hallskissPass = JSON.parse(JSON.stringify(r.data.data));
+hallskissPass.hallskiss = [
+  { url: "javascript:alert(1)", bildtext: "ond" },
+  { url: "content/uploads/hallskiss.png", bildtext: "Hallens layout" }
+];
+r = await anropa(env, "/pass/lopning", {
+  method: "PUT", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ data: hallskissPass, meddelande: "Lade till hallskiss", sha: r.data.sha })
+});
+k("hallskiss sparas och rensas från otillåtna adresser",
+  r.status === 200 && r.data.data.hallskiss.length === 1 &&
+  r.data.data.hallskiss[0].url === "content/uploads/hallskiss.png");
+
 const langtPass = JSON.parse(JSON.stringify(nyttPass));
 langtPass.moment[0].text = "x".repeat(40000);
 r = await anropa(env, "/pass/lopning", {

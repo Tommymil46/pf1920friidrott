@@ -13,7 +13,12 @@ passet kan skrivas ut som underlag för träningen på högst tre A4-sidor.
 * **Lekar** är en sjätte flik, på samma nivå som de fem passen – en
   fristående lekbank (namn, hur leken går till, bilder/PDF) som inte är
   knuten till ett visst pass, utan kan användas som inslag i vilket
-  träningspass som helst.
+  träningspass som helst. Under redigering av ett pass går det att
+  **lägga till en lek som moment** direkt ur banken (dropdown) – namn,
+  instruktion och bilder kopieras in utan att behöva skrivas om.
+* **Skiss över idrottshallen.** Under Redigera passinfo kan ansvarig ledare
+  ladda upp en bild som visar hur hela hallen och redskapen ska stå för
+  passet – separat från de enskilda momentens egna bilder.
 * **Ingenting försvinner.** Varje sparning blir en commit i det här
   GitHub-repot. Ledarna ser historiken direkt i appen och kan återställa en
   tidigare version med ett klick – historiken och återställningen gäller

@@ -86,6 +86,28 @@
     post("Ledare", (pass.ansvarigaLedare || []).join(", "));
     v.appendChild(rad);
 
+    if ((pass.hallskiss || []).length || (pass.hallskissFiler || []).length) {
+      var hallskiss = el("div", "hallskiss-vy");
+      hallskiss.appendChild(el("h3", null, "Skiss: idrottshallen"));
+      if ((pass.hallskiss || []).length) {
+        var bildRad = el("div", "bild-rad");
+        pass.hallskiss.forEach(function (b) { bildRad.appendChild(ritaBild(b)); });
+        hallskiss.appendChild(bildRad);
+      }
+      if ((pass.hallskissFiler || []).length) {
+        var filLista = el("ul", "fil-lista");
+        pass.hallskissFiler.forEach(function (f) {
+          var li = el("li");
+          var a = el("a", null, (f.typ === "pdf" ? "📄 " : "📎 ") + (f.namn || "Bilaga"));
+          a.href = window.API.filUrl(f.url);
+          a.target = "_blank"; a.rel = "noopener noreferrer";
+          li.appendChild(a); filLista.appendChild(li);
+        });
+        hallskiss.appendChild(filLista);
+      }
+      v.appendChild(hallskiss);
+    }
+
     document.getElementById("group-name").textContent = pass.grupp || CFG.klubb;
     document.title = (pass.namn || "Träningspass") + " – " + (pass.grupp || "Friidrott");
   }
@@ -247,6 +269,8 @@
     radKnapp.hidden = !kanRedigera;
     var laggTillKnapp = document.getElementById("btn-add-block");
     if (laggTillKnapp) laggTillKnapp.textContent = "+ Lägg till friidrottsmoment";
+    var laggTillLekKnapp = document.getElementById("btn-add-lek-moment");
+    if (laggTillLekKnapp) laggTillLekKnapp.hidden = false;
   }
 
   /* Lekbanken: samma nivå som ett träningspass i flikraden, men utan
@@ -297,6 +321,8 @@
     radKnapp.hidden = !kanRedigera;
     var laggTillKnapp = document.getElementById("btn-add-block");
     if (laggTillKnapp) laggTillKnapp.textContent = "+ Lägg till lek";
+    var laggTillLekKnapp = document.getElementById("btn-add-lek-moment");
+    if (laggTillLekKnapp) laggTillLekKnapp.hidden = true;
   }
 
   /* Förstasidan: fem träningspass + lekbanken som flikar. */

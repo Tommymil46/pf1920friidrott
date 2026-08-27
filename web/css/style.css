@@ -1,12 +1,12 @@
 /* ===========================================================
-   Friidrott PF 19/20 – tema efter hagundaif.se
-   Klubbfärger: blå #293589, gul #EFD73A
+   Friidrott PF 19/20 – enligt Hagunda IF:s grafiska profil 1.0
+   Klubbfärger (ur emblemet): blå #0000A3, gul #EFD53A
    =========================================================== */
 :root{
-  --bla:#293589;
-  --bla-mork:#1d2765;
-  --gul:#EFD73A;
-  --gul-mork:#d8c02a;
+  --bla:#0000A3;
+  --bla-mork:#000086;
+  --gul:#EFD53A;
+  --gul-mork:#C4AF30;
   --text:#222;
   --text-svag:#5a5a5a;
   --linje:#e2e2e6;
@@ -15,7 +15,7 @@
   --radie:6px;
   --skugga:0 1px 3px rgba(0,0,0,.10);
   --sans:'Open Sans',Tahoma,Arial,'Helvetica Neue',Helvetica,sans-serif;
-  --rubrik:'Roboto Condensed',Tahoma,Arial,'Helvetica Neue',Helvetica,sans-serif;
+  --rubrik:'Oswald','Roboto Condensed',Tahoma,Arial,'Helvetica Neue',Helvetica,sans-serif;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -62,8 +62,13 @@ main .btn-ghost:hover{background:#eef0f8}
 
 /* ---------- Header ---------- */
 .site-header{background:#fff;border-bottom:4px solid var(--gul)}
-.header-inner{display:flex;align-items:center;gap:18px;padding-top:18px;padding-bottom:18px}
+.header-inner{display:flex;align-items:center;gap:18px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap}
 .logo{width:76px;height:76px;flex:none}
+/* Föreningens emblem används oförändrat (se grafisk profil) – namnet sätts
+   som text bredvid, aldrig inbakat i bilden. */
+.header-mark{font-family:var(--rubrik);line-height:1.05;flex:none}
+.header-mark-klubb{display:block;font-size:22px;font-weight:700;color:var(--bla);text-transform:uppercase;letter-spacing:.02em}
+.header-mark-sektion{display:block;font-size:14px;font-weight:500;color:var(--text-svag);text-transform:uppercase;letter-spacing:.04em}
 .header-text h1{font-size:34px;color:var(--bla);text-transform:uppercase;letter-spacing:.01em}
 .subtitle{margin:2px 0 0;color:var(--text-svag);font-size:15px}
 
@@ -104,6 +109,9 @@ main{padding-bottom:48px}
 }
 .fakta-rad{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:15px;color:var(--text-svag)}
 .fakta-rad strong{color:var(--text);font-weight:600}
+
+.hallskiss-vy,.hallskiss-redigera{margin-top:14px}
+.hallskiss-vy h3,.hallskiss-redigera h3{font-size:16px;margin-bottom:4px}
 
 .pass-common,.pass-avslutning{
   margin-top:14px;background:var(--kort);border:1px solid var(--linje);
@@ -259,6 +267,8 @@ main{padding-bottom:48px}
 @media (max-width:640px){
   .header-text h1{font-size:26px}
   .logo{width:58px;height:58px}
+  .header-mark-klubb{font-size:18px}
+  .header-mark-sektion{font-size:12px}
   .navbar a{padding:9px 12px;font-size:14px}
   .topbar-inner{padding-top:6px;padding-bottom:6px}
 }

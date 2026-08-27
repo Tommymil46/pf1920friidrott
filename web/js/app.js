@@ -553,6 +553,30 @@
       else window.Edit.nyttMoment();
     });
 
+    document.getElementById("btn-add-lek-moment").addEventListener("click", function () {
+      var lista = lekar().slice().sort(function (a, b) {
+        return (a.namn || "").localeCompare(b.namn || "", "sv");
+      });
+      if (!lista.length) {
+        status("varning", "Det finns inga lekar i lekbanken ännu. Lägg till en under fliken Lekar.", true);
+        return;
+      }
+      var val = document.getElementById("add-lek-select");
+      val.innerHTML = "";
+      lista.forEach(function (l) {
+        var opt = document.createElement("option");
+        opt.value = l.id; opt.textContent = l.namn;
+        val.appendChild(opt);
+      });
+      oppnaDialog("dlg-add-lek");
+    });
+    document.getElementById("form-add-lek").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var id = document.getElementById("add-lek-select").value;
+      document.getElementById("dlg-add-lek").close();
+      if (id) window.Edit.lekSomMoment(id);
+    });
+
     /* Markera aktiv blocklänk vid scroll */
     window.addEventListener("hashchange", function () {
       document.querySelectorAll("#block-nav a").forEach(function (a) {

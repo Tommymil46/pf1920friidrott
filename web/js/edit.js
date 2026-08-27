@@ -64,6 +64,16 @@
     form.appendChild(rad2);
     form.appendChild(samling.label); form.appendChild(upp.label); form.appendChild(slut.label);
 
+    pass.hallskiss = pass.hallskiss || [];
+    pass.hallskissFiler = pass.hallskissFiler || [];
+    function ritaOmHallskiss() { App.rita(); redigeraPass(); }
+    var hallskissBox = el("div", "hallskiss-redigera");
+    hallskissBox.appendChild(el("h3", null, "Skiss: idrottshallen"));
+    hallskissBox.appendChild(el("p", "hjalp",
+      "En skiss över hela hallen och var redskapen ska stå, till hjälp för den som ansvarar för passet."));
+    hallskissBox.appendChild(bilagePanel({ id: "hallskiss-" + pass.id, bilder: pass.hallskiss, filer: pass.hallskissFiler }, ritaOmHallskiss));
+    form.appendChild(hallskissBox);
+
     var actions = el("div", "form-actions");
     actions.appendChild(knapp("Spara", "btn-primary", function () {
       pass.namn = namn.input.value.trim() || pass.namn;
@@ -257,6 +267,30 @@
        .catch(function () {});
   }
 
+  /* ---------- Lägg till en befintlig lek som moment i passet ----------
+     Kopierar innehållet (namn, ikon, instruktion, bilder) från lekbanken
+     så att ledaren slipper skriva ner instruktionen själv. Kopian lever
+     sedan självständigt i passet – ändras leken i banken senare påverkas
+     inte momentet, och tvärtom. */
+  function lekSomMoment(lekId) {
+    var pass = App.pass();
+    var lek = App.lekar().filter(function (l) { return l.id === lekId; })[0];
+    if (!lek) return;
+
+    var id = lek.id, n = 2;
+    while (pass.moment.some(function (m) { return m.id === id; })) { id = lek.id + "-" + (n++); }
+
+    pass.moment.push({
+      id: id, namn: lek.namn, ikon: lek.ikon || "", ordning: pass.moment.length + 1,
+      ansvarig: "", syfte: "", text: lek.text || "",
+      bilder: (lek.bilder || []).map(function (b) { return { url: b.url, bildtext: b.bildtext || "" }; }),
+      filer: (lek.filer || []).map(function (f) { return { url: f.url, namn: f.namn, typ: f.typ }; })
+    });
+    App.spara("Lade till leken " + lek.namn + " som moment i " + pass.namn)
+       .then(function () { redigeraMoment(id); })
+       .catch(function () {});
+  }
+
   /* ---------- Flytta ett moment ---------- */
   function flyttaMoment(momentId, riktning) {
     var pass = App.pass();
@@ -340,6 +374,7 @@
     redigeraPass: redigeraPass,
     redigeraMoment: redigeraMoment,
     nyttMoment: nyttMoment,
+    lekSomMoment: lekSomMoment,
     flyttaMoment: flyttaMoment,
     redigeraLek: redigeraLek,
     nyLek: nyLek,

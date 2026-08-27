@@ -267,6 +267,28 @@ assert 'javascript:alert(1)' not in urler, urler
 assert len(urler)==2, urler
 " && ok "javascript:-adress filtreras bort på servern" || fel "adressgranskning"
 
+# 21b. hallskiss (skiss över idrottshallen, på passet – inte på ett moment)
+HSFIL=$(mktemp)
+HSHA=$(curl -sS $B/pass/lopning | python3 -c "import sys,json;print(json.load(sys.stdin)['sha'])")
+python3 - "$PFIL" "$HSHA" "$HSFIL" <<'HALLSKISS'
+import json, sys
+kalla, sha, ut = sys.argv[1], sys.argv[2], sys.argv[3]
+p = json.load(open(kalla))['data']
+p['hallskiss'] = [
+    {"url": "javascript:alert(1)", "bildtext": "ond"},
+    {"url": "content/uploads/hallskiss.png", "bildtext": "Hallens layout"},
+]
+json.dump({"data": p, "meddelande": "Lade till hallskiss", "sha": sha}, open(ut, 'w'), ensure_ascii=False)
+HALLSKISS
+curl -sS -X PUT $B/pass/lopning -H "$AUTH" -H 'Content-Type: application/json' --data-binary "@$HSFIL" \
+  | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+h=d['data']['hallskiss']
+assert len(h)==1, h
+assert h[0]['url']=='content/uploads/hallskiss.png', h
+" && ok "hallskiss sparas och rensas från otillåtna adresser" || fel "hallskiss"
+
 # 22. för långt innehåll avvisas
 LONGFIL=$(mktemp)
 GSHA2=$(curl -sS $B/pass/lopning | python3 -c "import sys,json;print(json.load(sys.stdin)['sha'])")

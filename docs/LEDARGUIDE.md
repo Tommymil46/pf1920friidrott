@@ -55,9 +55,20 @@ bilder på barn, personuppgifter eller något annat som inte tål det.
 
 Klicka **Redigera passinfo** i den blå rutan högst upp.
 
+## Skiss över idrottshallen
+
+I **Redigera passinfo** finns även **Skiss: idrottshallen** – ladda upp en
+bild som visar hur hela hallen och redskapen ska stå för just det passet.
+Skissen är kopplad till passet (inte till ett enskilt moment) och syns för
+alla under passets fakta.
+
 ## Nya moment och ordningsföljd
 
-* **+ Lägg till friidrottsmoment** längst ned skapar ett nytt moment.
+* **+ Lägg till friidrottsmoment** längst ned skapar ett nytt, tomt moment.
+* **+ Lägg till lek** längst ned öppnar en lista där du väljer en lek ur
+  lekbanken – namn, instruktion och bilder kopieras direkt in som ett nytt
+  moment, så du slipper skriva om instruktionen. Kopian lever sedan för sig
+  i passet; ändrar du leken i banken efteråt påverkas inte momentet.
 * Pilarna **▲ ▼** i momentets rubrik flyttar momentet upp eller ned.
 * Varje pass behöver minst fyra moment – appen hindrar dig från att ta bort
   det fjärde om det är det sista som är kvar.
