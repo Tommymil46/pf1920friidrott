@@ -26,12 +26,12 @@
     },
     {
       "id": "kort-ansats",
-      "namn": "Hopp från kort ansats",
+      "namn": "Station 1 - längdhoppstafett",
       "ikon": "↔️",
       "ordning": 2,
       "ansvarig": "",
-      "syfte": "Längdhopp – ansats",
-      "text": "Hopp från kort ansats (5 steg).",
+      "syfte": "Längdhopp",
+      "text": "Barnen delas upp i två eller flera lag. Varje lag får en tunn madrass. Barnen hoppar längdhopp och landar på madrassen så den glider fram över golvet. Efter ett barn har hoppat springer man tillbaka och växlar med nästa lagkamrat. Första laget över till andra sidan vinner.",
       "bilder": [],
       "filer": []
     },
@@ -58,6 +58,6 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:35:44.546Z",
+  "uppdaterad": "2026-08-30T13:38:49.579Z",
   "uppdateradAv": "Tommy"
 }
