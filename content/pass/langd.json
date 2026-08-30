@@ -48,16 +48,16 @@
     },
     {
       "id": "landning",
-      "namn": "Landning",
+      "namn": "Hinderbana",
       "ikon": "↔️",
       "ordning": 4,
       "ansvarig": "",
-      "syfte": "Längdhopp – landning",
-      "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
+      "syfte": "",
+      "text": "",
       "bilder": [],
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:45:43.800Z",
+  "uppdaterad": "2026-08-30T13:46:12.727Z",
   "uppdateradAv": "Tommy"
 }
