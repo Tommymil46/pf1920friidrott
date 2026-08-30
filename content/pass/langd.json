@@ -47,28 +47,28 @@
       "filer": []
     },
     {
-      "id": "landning",
-      "namn": "Landning",
-      "ikon": "↔️",
-      "ordning": 4,
-      "ansvarig": "",
-      "syfte": "Längdhopp – landning",
-      "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
-      "bilder": [],
-      "filer": []
-    },
-    {
       "id": "station-3-lek",
       "namn": "Station 3 - Lek",
       "ikon": "↔️",
-      "ordning": 5,
+      "ordning": 4,
       "ansvarig": "",
       "syfte": "Rörelseglädje",
       "text": "",
       "bilder": [],
       "filer": []
+    },
+    {
+      "id": "landning",
+      "namn": "Landning",
+      "ikon": "↔️",
+      "ordning": 5,
+      "ansvarig": "",
+      "syfte": "Längdhopp – landning",
+      "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
+      "bilder": [],
+      "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:42:49.723Z",
+  "uppdaterad": "2026-08-30T13:42:56.582Z",
   "uppdateradAv": "Tommy"
 }
