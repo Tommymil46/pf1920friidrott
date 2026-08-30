@@ -36,24 +36,24 @@
       "filer": []
     },
     {
-      "id": "avstamp",
-      "namn": "Avstamp",
+      "id": "station-3-lek",
+      "namn": "Station 3 - Lek",
       "ikon": "↔️",
       "ordning": 3,
       "ansvarig": "",
-      "syfte": "Längdhopp – avstamp",
-      "text": "Fokus på avstamp med ett ben.",
+      "syfte": "Rörelseglädje",
+      "text": "",
       "bilder": [],
       "filer": []
     },
     {
-      "id": "station-3-lek",
-      "namn": "Station 3 - Lek",
+      "id": "avstamp",
+      "namn": "Avstamp",
       "ikon": "↔️",
       "ordning": 4,
       "ansvarig": "",
-      "syfte": "Rörelseglädje",
-      "text": "",
+      "syfte": "Längdhopp – avstamp",
+      "text": "Fokus på avstamp med ett ben.",
       "bilder": [],
       "filer": []
     },
@@ -69,6 +69,6 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:42:56.582Z",
+  "uppdaterad": "2026-08-30T13:42:59.312Z",
   "uppdateradAv": "Tommy"
 }
