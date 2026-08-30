@@ -47,21 +47,10 @@
       "filer": []
     },
     {
-      "id": "avstamp",
-      "namn": "Avstamp",
-      "ikon": "↔️",
-      "ordning": 4,
-      "ansvarig": "",
-      "syfte": "Längdhopp – avstamp",
-      "text": "Fokus på avstamp med ett ben.",
-      "bilder": [],
-      "filer": []
-    },
-    {
       "id": "landning",
       "namn": "Landning",
       "ikon": "↔️",
-      "ordning": 5,
+      "ordning": 4,
       "ansvarig": "",
       "syfte": "Längdhopp – landning",
       "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
@@ -69,6 +58,6 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:42:59.312Z",
+  "uppdaterad": "2026-08-30T13:43:45.599Z",
   "uppdateradAv": "Tommy"
 }
