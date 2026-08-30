@@ -56,8 +56,19 @@
       "text": "Landning på båda fötterna, framåt.\n\nKratta gropen mellan varje hoppare.",
       "bilder": [],
       "filer": []
+    },
+    {
+      "id": "station-3-lek",
+      "namn": "Station 3 - Lek",
+      "ikon": "↔️",
+      "ordning": 5,
+      "ansvarig": "",
+      "syfte": "",
+      "text": "",
+      "bilder": [],
+      "filer": []
     }
   ],
-  "uppdaterad": "2026-08-30T13:38:54.813Z",
+  "uppdaterad": "2026-08-30T13:41:55.033Z",
   "uppdateradAv": "Tommy"
 }
