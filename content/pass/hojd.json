@@ -9,55 +9,76 @@
   "ansvarigaLedare": [
     "Anna"
   ],
-  "samling": "Samling vid läktaren. Namnupprop.",
-  "uppvarmning": "2 varv lugn löpning + rörlighet 5 min.",
-  "avslutning": "Gemensam nedvarvning, stretch och veckans peppsnack.",
+  "samling": "Upprop, regler och genomgång av dagens pass. (5 min, Tommy)\n\nDela upp barnen i tre grupper, bygg de tre stationerna och börja preppa hinderbanan så mycket som möjligt. Stationerna roterar sedan i grupperna under cirka 30 minuter, följt av gemensam lek och gemensam hinderbana.",
+  "uppvarmning": "Sida-till-sida. (5 min, Ludvig)",
+  "avslutning": "Gemensam avslutning. (5 min, Tommy)",
   "moment": [
     {
-      "id": "uppvarmningshopp",
-      "namn": "Uppvärmningshopp",
+      "id": "station1-hopp-och-hackbana",
+      "namn": "Station 1 – Hopp och häckbana",
       "ikon": "⬆️",
       "ordning": 1,
-      "ansvarig": "",
-      "syfte": "Avstampsträning",
-      "text": "Öva avstamp och landning utan ribba innan hoppen börjar.",
-      "bilder": [],
+      "ansvarig": "Anna, Eric, Johan, Ludvig, Tommy",
+      "syfte": "Avstampsträning – tjockmatta och häckbana",
+      "text": "**Tjockmatta 1 – Fallande lövet**\n\n\"Du är ett löv som faller från trädet och landar mjukt på mattan.\" Barnet står på en stabil plint (låg höjd) bredvid den tjocka skumgummimattan, gör ett litet hopp och landar mjukt på rygg eller rumpa. Känna att det är tryggt att hamna på rygg/rumpa.\n\n**Tjockmatta 2 – Flyg upp på molnet**\n\n\"Spring mot molnet – stampa med en fot och flyg upp!\" Spring mot konan (startpunkt) och hoppa upp på tjockmattan. Tränar ansats: springa – en fot – upp.\n\n**Häckbana**\n\nBana med stigande höjd:\n\n- Mushopp (rep på marken)\n- Kaninhopp (lite högre)\n- Känguruhopp (ännu högre)\n\n**Bom med band**\n\nSpring fram och hoppa så högt man kan för att nudda banden.",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-hojd-stationer.png",
+          "bildtext": "Skiss: station 1 (hopp och häckbana) och station 2 (rädda prinsessan Peach)"
+        }
+      ],
       "filer": []
     },
     {
-      "id": "insteg",
-      "namn": "Insteg",
+      "id": "station2-radda-prinsessan-peach",
+      "namn": "Station 2 – Hinderbana (rädda prinsessan Peach)",
       "ikon": "⬆️",
       "ordning": 2,
-      "ansvarig": "",
-      "syfte": "Höjdhoppsteknik – sats",
-      "text": "3 steg, jämfota landning på matta.",
-      "bilder": [],
+      "ansvarig": "Anna, Eric, Johan, Ludvig, Tommy",
+      "syfte": "Balans och hoppteknik – hinderbana",
+      "text": "Ta dig genom träsket och rädda prinsessan Peach!\n\n1. Ta dig över träskets djupa avgrund (hoppa från bänk med lianer)\n2. Hoppa mellan de säkra öarna i träsket (rockringar)\n3. Hoppa över krokodilerna – nudda inte krokodilerna! (2–3 hopprep som ligger på marken)\n4. Ta dig förbi jätteormen (häck – dragkampsrepet ligger på golvet)\n5. Nudda bilden på Peach som sitter på bommen",
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-hojd-stationer.png",
+          "bildtext": "Skiss: station 1 (hopp och häckbana) och station 2 (rädda prinsessan Peach)"
+        }
+      ],
       "filer": []
     },
     {
-      "id": "sax",
-      "namn": "Sax",
+      "id": "station3-lek",
+      "namn": "Station 3 – Lek",
       "ikon": "⬆️",
       "ordning": 3,
-      "ansvarig": "",
-      "syfte": "Höjdhoppsteknik – avslut",
-      "text": "Sax över låg ribba.\n\nRibban höjs individuellt. Alla hoppar på sin nivå.",
+      "ansvarig": "Anna, Eric, Johan, Ludvig, Tommy",
+      "syfte": "Lekstation",
+      "text": "Lekar: Hoppkull, Raketkull, Djuren rymmer från lekparken.",
       "bilder": [],
       "filer": []
     },
     {
-      "id": "bagehopp",
-      "namn": "Bågehopp",
+      "id": "gemensam-lek",
+      "namn": "Gemensam lek",
       "ikon": "⬆️",
       "ordning": 4,
-      "ansvarig": "",
-      "syfte": "Höjdhoppsteknik – för de som är redo",
-      "text": "Bågehopp för de som är redo.",
+      "ansvarig": "Anna, Eric, Johan, Ludvig, Tommy",
+      "syfte": "Lekstation för hela gruppen",
+      "text": "Lekar: Akta din svans, Musiklek med stationer.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "⬆️",
+      "ordning": 5,
+      "ansvarig": "Anna, Eric, Johan, Ludvig, Tommy",
+      "syfte": "Gemensam hinderbana",
+      "text": "Använd höjd-banornas stationer och bygg ihop till en hinderbana. Lägg till två elefantryggar och tunnlar med tunna mattor.",
       "bilder": [],
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdaterad": "2026-08-30T12:00:00Z",
   "uppdateradAv": "system"
 }

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "uppdaterad": "2026-08-25T12:00:00Z",
+  "uppdaterad": "2026-08-30T12:00:00Z",
   "uppdateradAv": "system",
   "lekar": [
     {
@@ -60,10 +60,26 @@
       "filer": []
     },
     {
+      "id": "djuren-rymmer-fran-lekparken",
+      "namn": "Djuren rymmer från lekparken",
+      "ikon": "🐾",
+      "text": "Barnen rör sig fritt i salen. Ledaren ropar ett djur och barnen härmar det. Ropar ledaren \"Rym!\" får alla springa runt igen.\n\nRopar ledaren \"Raket!\" ska barnen och ledaren stanna, gå ner på huk och göra ett jättehögt hopp.",
+      "bilder": [],
+      "filer": []
+    },
+    {
       "id": "hinderlopnings-stafett-i-cirkel",
       "namn": "Hinderlöpnings-stafett i cirkel",
       "ikon": "🔄",
       "text": "Två eller flera lag med minst 5–6 deltagare. Varje lag bildar en cirkel och lägger sig på mage med huvudet in mot mitten. Ett barn utses till förste man.\n\nPå en given signal reser sig startaren och springer över alla lagkamraterna motsols och tillbaka till sin egen plats igen. Då barnet ligger ner får nästa barn starta. Stafetten är slut då alla har sprungit.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "hoppkull",
+      "namn": "Hoppkull",
+      "ikon": "🦘",
+      "text": "Den som kullas måste stå på huk. För att rädda kompisen gör man ett högt hopp bredvid.",
       "bilder": [],
       "filer": []
     },
@@ -168,6 +184,14 @@
       "namn": "Namn och vinka",
       "ikon": "👋",
       "text": "Man går ringen runt. Var och en säger sitt namn samtidigt som hen gör en rörelse, t.ex. vinkar, sträcker tummen upp, klappar händerna eller snurrar ett varv. Alla andra i ringen gör därefter samma rörelse och säger \"Hej [namnet]!\".\n\nBra att säga till barnen i förväg att man alltid kan vinka om man inte kommer på någon annan rörelse.",
+      "bilder": [],
+      "filer": []
+    },
+    {
+      "id": "raketkull",
+      "namn": "Raketkull",
+      "ikon": "🚀",
+      "text": "Kompisen och den kullade gör raketen tillsammans: räkna 3–2–1 raket och hoppa upp från hukstående.",
       "bilder": [],
       "filer": []
     },
