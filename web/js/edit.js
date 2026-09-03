@@ -89,7 +89,7 @@
       pass.avslutning = slut.input.value;
       App.spara("Uppdaterade passinformationen för " + pass.namn).catch(function () {});
     }));
-    actions.appendChild(knapp("Avbryt", "btn-ghost", function () { App.rita(); }));
+    actions.appendChild(knapp("Avbryt", "btn-ghost", function () { form.remove(); }));
     if (!App.arAktivt()) {
       actions.appendChild(knapp("Sätt som aktuellt pass", "btn-ghost", function () {
         App.sattAktivt();
