@@ -24,7 +24,8 @@
       "bilder": [
         {
           "url": "content/uploads/skiss-lopning-station1-hinderbana.png",
-          "bildtext": "Skiss: station 1, hinderbana stafett"
+          "bildtext": "Skiss: station 1, hinderbana stafett",
+          "namn": ""
         }
       ],
       "filer": []
@@ -40,7 +41,8 @@
       "bilder": [
         {
           "url": "content/uploads/skiss-lopning-station2-lopning-hacklopning.png",
-          "bildtext": "Skiss: station 2, löpning/häcklöpning"
+          "bildtext": "Skiss: station 2, löpning/häcklöpning",
+          "namn": ""
         }
       ],
       "filer": []
@@ -68,6 +70,8 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-08-25T12:00:00Z",
-  "uppdateradAv": "system"
+  "uppdaterad": "2026-09-03T09:39:49.906Z",
+  "uppdateradAv": "Tommy",
+  "hallskiss": [],
+  "hallskissFiler": []
 }
