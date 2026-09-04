@@ -86,30 +86,84 @@
     post("Ledare", (pass.ansvarigaLedare || []).join(", "));
     v.appendChild(rad);
 
-    if ((pass.hallskiss || []).length || (pass.hallskissFiler || []).length) {
-      var hallskiss = el("div", "hallskiss-vy");
-      hallskiss.appendChild(el("h3", null, "Skiss: idrottshallen"));
-      if ((pass.hallskiss || []).length) {
-        var bildRad = el("div", "bild-rad");
-        pass.hallskiss.forEach(function (b) { bildRad.appendChild(ritaBild(b)); });
-        hallskiss.appendChild(bildRad);
-      }
-      if ((pass.hallskissFiler || []).length) {
-        var filLista = el("ul", "fil-lista");
-        pass.hallskissFiler.forEach(function (f) {
-          var li = el("li");
-          var a = el("a", null, (f.typ === "pdf" ? "📄 " : "📎 ") + (f.namn || "Bilaga"));
-          a.href = window.API.filUrl(f.url);
-          a.target = "_blank"; a.rel = "noopener noreferrer";
-          li.appendChild(a); filLista.appendChild(li);
-        });
-        hallskiss.appendChild(filLista);
-      }
-      v.appendChild(hallskiss);
-    }
-
     document.getElementById("group-name").textContent = pass.grupp || CFG.klubb;
     document.title = (pass.namn || "Träningspass") + " – " + (pass.grupp || "Friidrott");
+  }
+
+  /* ---------- PM: kort tabell över genomförandet, överst i passet ----------
+     Genereras alltid från samma data som resten av sidan (samling,
+     uppvärmning, momenten) – ingen egen text att redigera. */
+  function ritaPM(pass) {
+    var v = document.getElementById("pass-pm");
+    if (!v) return;
+    v.innerHTML = "";
+
+    var rader = [];
+    if (pass.samling && String(pass.samling).trim()) rader.push(["1", "Samling"]);
+    if (pass.uppvarmning && String(pass.uppvarmning).trim()) rader.push(["2", "Uppvärmning"]);
+    (pass.moment || [])
+      .slice()
+      .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
+      .forEach(function (m, i) {
+        rader.push(["3" + String.fromCharCode(97 + i), m.namn || "Moment"]);
+      });
+
+    v.hidden = rader.length === 0;
+    if (v.hidden) return;
+
+    v.appendChild(el("h3", null, "PM"));
+    var wrap = el("div", "pm-tabell-wrap");
+    var tabell = el("table", "pm-tabell");
+    var thead = el("thead");
+    var rubrikRad = el("tr");
+    rubrikRad.appendChild(el("th", null, "Nr"));
+    rubrikRad.appendChild(el("th", null, "Innehåll"));
+    thead.appendChild(rubrikRad);
+    tabell.appendChild(thead);
+
+    var tbody = el("tbody");
+    rader.forEach(function (r) {
+      var tr = el("tr");
+      tr.appendChild(el("td", "pm-nr", r[0]));
+      tr.appendChild(el("td", "pm-innehall", r[1]));
+      tbody.appendChild(tr);
+    });
+    tabell.appendChild(tbody);
+
+    wrap.appendChild(tabell);
+    v.appendChild(wrap);
+  }
+
+  /* ---------- Skiss: idrottshallen – egen sektion, full bredd i utskrift --- */
+  function ritaHallskiss(pass) {
+    var v = document.getElementById("pass-hallskiss");
+    if (!v) return;
+    v.innerHTML = "";
+
+    var harBilder = (pass.hallskiss || []).length;
+    var harFiler = (pass.hallskissFiler || []).length;
+    v.hidden = !(harBilder || harFiler);
+    if (v.hidden) return;
+
+    var hallskiss = el("div", "hallskiss-vy");
+    hallskiss.appendChild(el("h3", null, "Skiss: idrottshallen"));
+    if (harBilder) {
+      var bildRad = el("div", "bild-rad");
+      pass.hallskiss.forEach(function (b) { bildRad.appendChild(ritaBild(b)); });
+      hallskiss.appendChild(bildRad);
+    }
+    if (harFiler) {
+      var filLista = el("ul", "fil-lista");
+      pass.hallskissFiler.forEach(function (f) {
+        var li = el("li");
+        var a = el("a", null, (f.typ === "pdf" ? "📄 " : "📎 ") + (f.namn || "Bilaga"));
+        a.href = window.API.filUrl(f.url);
+        a.target = "_blank"; a.rel = "noopener noreferrer";
+        li.appendChild(a); filLista.appendChild(li);
+      });
+      hallskiss.appendChild(filLista);
+    }
+    v.appendChild(hallskiss);
   }
 
   function ritaSamlingUppvarmning(pass) {
@@ -252,6 +306,8 @@
      arkivsidan) ---------- */
   function ritaPassInnehall(pass, kanRedigera, arAktivt, fot) {
     ritaFakta(pass, arAktivt);
+    ritaPM(pass);
+    ritaHallskiss(pass);
     ritaSamlingUppvarmning(pass);
     ritaBlockNav(pass);
 
@@ -291,6 +347,11 @@
     fakta.appendChild(el("p", "hjalp",
       "En fristående lekbank – inte ett eget träningspass – att använda som inslag i vilket pass som helst. " +
       "Lekarna sorteras alltid i bokstavsordning."));
+
+    var pm = document.getElementById("pass-pm");
+    if (pm) { pm.innerHTML = ""; pm.hidden = true; }
+    var hallskiss = document.getElementById("pass-hallskiss");
+    if (hallskiss) { hallskiss.innerHTML = ""; hallskiss.hidden = true; }
 
     var common = document.getElementById("pass-common");
     common.innerHTML = "";

@@ -38,13 +38,25 @@ main{padding-bottom:0}
 .pass-titel{font-size:14pt;margin-bottom:2pt}
 .fakta-rad{font-size:9pt;gap:2pt 12pt;color:#000}
 
-.pass-common,.pass-avslutning{
+.pass-common,.pass-avslutning,.pass-pm,.pass-hallskiss{
   margin-top:5pt;box-shadow:none;border:0.6pt solid #bbb;border-radius:0;padding:5pt 8pt;
   break-inside:avoid;page-break-inside:avoid;
 }
 .gem-post{margin-bottom:3pt}
-.gem-post h3,.pass-avslutning h3{font-size:8.5pt;margin:0 0 2pt}
+.gem-post h3,.pass-avslutning h3,.pass-pm h3,.pass-hallskiss h3{font-size:8.5pt;margin:0 0 2pt}
 .gem-post p,.pass-avslutning p{margin:0}
+
+/* ---- PM-tabell ---- */
+.pm-tabell{font-size:8.5pt}
+.pm-tabell th,.pm-tabell td{padding:2pt 5pt}
+.pm-tabell th{background:#293589 !important;color:#fff !important;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+/* ---- Hallskiss: skissen ska täcka hela sidans bredd ---- */
+.pass-hallskiss .hallskiss-vy{margin-top:0}
+.pass-hallskiss .bild-rad{display:block}
+.pass-hallskiss .bild-kort{width:100%;margin:0 0 4pt}
+.pass-hallskiss .bild-kort img{aspect-ratio:auto;object-fit:contain;max-height:150mm}
 
 /* ---- Block i två spalter ---- */
 /* En spalt: läsbart som underlag och ger förutsägbara sidbrytningar
