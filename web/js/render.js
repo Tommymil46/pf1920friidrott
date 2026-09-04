@@ -62,7 +62,17 @@
     lagg(LEKAR_ID, "Lekar", "🎲", false);
   }
 
-  /* ---------- Sidhuvud / fakta för det valda passet ---------- */
+  /* Plockar ut en inbäddad tidsangivelse, t.ex. "(5 min, Tommy)" =&gt; "5 min". */
+  function extraheraTid(text) {
+    if (!text) return "";
+    var m = String(text).match(/\((\d+)\s*min\b/i);
+    return m ? (m[1] + " min") : "";
+  }
+
+  /* ---------- Sidhuvud / fakta + PM, i samma stycke ----------
+     Tänkt att kunna hållas i handen ensamt: vem/var/när, och en
+     tabell som på en blick visar vad som ska göras och i vilken
+     ordning. Den detaljerade planen finns i styckena/momenten under. */
   function ritaFakta(pass, arAktivt) {
     var v = document.getElementById("pass-facts");
     v.innerHTML = "";
@@ -86,52 +96,48 @@
     post("Ledare", (pass.ansvarigaLedare || []).join(", "));
     v.appendChild(rad);
 
-    document.getElementById("group-name").textContent = pass.grupp || CFG.klubb;
-    document.title = (pass.namn || "Träningspass") + " – " + (pass.grupp || "Friidrott");
-  }
-
-  /* ---------- PM: kort tabell över genomförandet, överst i passet ----------
-     Genereras alltid från samma data som resten av sidan (samling,
-     uppvärmning, momenten) – ingen egen text att redigera. */
-  function ritaPM(pass) {
-    var v = document.getElementById("pass-pm");
-    if (!v) return;
-    v.innerHTML = "";
-
     var rader = [];
-    if (pass.samling && String(pass.samling).trim()) rader.push(["1", "Samling"]);
-    if (pass.uppvarmning && String(pass.uppvarmning).trim()) rader.push(["2", "Uppvärmning"]);
+    if (pass.samling && String(pass.samling).trim()) {
+      rader.push(["1", "Samling", extraheraTid(pass.samling)]);
+    }
+    if (pass.uppvarmning && String(pass.uppvarmning).trim()) {
+      rader.push(["2", "Uppvärmning", extraheraTid(pass.uppvarmning)]);
+    }
     (pass.moment || [])
       .slice()
       .sort(function (a, b) { return (a.ordning || 0) - (b.ordning || 0); })
       .forEach(function (m, i) {
-        rader.push(["3" + String.fromCharCode(97 + i), m.namn || "Moment"]);
+        rader.push(["3" + String.fromCharCode(97 + i), m.namn || "Moment", extraheraTid(m.text)]);
       });
 
-    v.hidden = rader.length === 0;
-    if (v.hidden) return;
+    if (rader.length) {
+      v.appendChild(el("h3", "pm-titel", "PM"));
+      var wrap = el("div", "pm-tabell-wrap");
+      var tabell = el("table", "pm-tabell");
+      var thead = el("thead");
+      var rubrikRadTabell = el("tr");
+      rubrikRadTabell.appendChild(el("th", null, "Nr"));
+      rubrikRadTabell.appendChild(el("th", null, "Innehåll"));
+      rubrikRadTabell.appendChild(el("th", null, "Tid"));
+      thead.appendChild(rubrikRadTabell);
+      tabell.appendChild(thead);
 
-    v.appendChild(el("h3", null, "PM"));
-    var wrap = el("div", "pm-tabell-wrap");
-    var tabell = el("table", "pm-tabell");
-    var thead = el("thead");
-    var rubrikRad = el("tr");
-    rubrikRad.appendChild(el("th", null, "Nr"));
-    rubrikRad.appendChild(el("th", null, "Innehåll"));
-    thead.appendChild(rubrikRad);
-    tabell.appendChild(thead);
+      var tbody = el("tbody");
+      rader.forEach(function (r) {
+        var tr = el("tr");
+        tr.appendChild(el("td", "pm-nr", r[0]));
+        tr.appendChild(el("td", "pm-innehall", r[1]));
+        tr.appendChild(el("td", "pm-tid", r[2]));
+        tbody.appendChild(tr);
+      });
+      tabell.appendChild(tbody);
 
-    var tbody = el("tbody");
-    rader.forEach(function (r) {
-      var tr = el("tr");
-      tr.appendChild(el("td", "pm-nr", r[0]));
-      tr.appendChild(el("td", "pm-innehall", r[1]));
-      tbody.appendChild(tr);
-    });
-    tabell.appendChild(tbody);
+      wrap.appendChild(tabell);
+      v.appendChild(wrap);
+    }
 
-    wrap.appendChild(tabell);
-    v.appendChild(wrap);
+    document.getElementById("group-name").textContent = pass.grupp || CFG.klubb;
+    document.title = (pass.namn || "Träningspass") + " – " + (pass.grupp || "Friidrott");
   }
 
   /* ---------- Skiss: idrottshallen – egen sektion, full bredd i utskrift --- */
@@ -306,7 +312,6 @@
      arkivsidan) ---------- */
   function ritaPassInnehall(pass, kanRedigera, arAktivt, fot) {
     ritaFakta(pass, arAktivt);
-    ritaPM(pass);
     ritaHallskiss(pass);
     ritaSamlingUppvarmning(pass);
     ritaBlockNav(pass);
@@ -348,8 +353,6 @@
       "En fristående lekbank – inte ett eget träningspass – att använda som inslag i vilket pass som helst. " +
       "Lekarna sorteras alltid i bokstavsordning."));
 
-    var pm = document.getElementById("pass-pm");
-    if (pm) { pm.innerHTML = ""; pm.hidden = true; }
     var hallskiss = document.getElementById("pass-hallskiss");
     if (hallskiss) { hallskiss.innerHTML = ""; hallskiss.hidden = true; }
 

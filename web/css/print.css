@@ -38,15 +38,17 @@ main{padding-bottom:0}
 .pass-titel{font-size:14pt;margin-bottom:2pt}
 .fakta-rad{font-size:9pt;gap:2pt 12pt;color:#000}
 
-.pass-common,.pass-avslutning,.pass-pm,.pass-hallskiss{
+.pass-common,.pass-avslutning,.pass-hallskiss{
   margin-top:5pt;box-shadow:none;border:0.6pt solid #bbb;border-radius:0;padding:5pt 8pt;
   break-inside:avoid;page-break-inside:avoid;
 }
 .gem-post{margin-bottom:3pt}
-.gem-post h3,.pass-avslutning h3,.pass-pm h3,.pass-hallskiss h3{font-size:8.5pt;margin:0 0 2pt}
+.gem-post h3,.pass-avslutning h3,.pass-hallskiss h3{font-size:8.5pt;margin:0 0 2pt}
 .gem-post p,.pass-avslutning p{margin:0}
+.pass-facts{break-inside:avoid;page-break-inside:avoid}
 
-/* ---- PM-tabell ---- */
+/* ---- PM-tabell (i samma stycke som fakta) ---- */
+.pm-titel{font-size:8.5pt;margin:4pt 0 2pt}
 .pm-tabell{font-size:8.5pt}
 .pm-tabell th,.pm-tabell td{padding:2pt 5pt}
 .pm-tabell th{background:#293589 !important;color:#fff !important;

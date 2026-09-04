@@ -113,12 +113,8 @@ main{padding-bottom:48px}
 .hallskiss-vy,.hallskiss-redigera{margin-top:14px}
 .hallskiss-vy h3,.hallskiss-redigera h3{font-size:16px;margin-bottom:4px}
 
-/* ---------- PM: sammanfattande tabell överst i passet ---------- */
-.pass-pm{
-  margin-top:14px;background:var(--kort);border:1px solid var(--linje);
-  border-radius:var(--radie);box-shadow:var(--skugga);padding:14px 18px;
-}
-.pass-pm h3{font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--bla);margin-bottom:8px}
+/* ---------- PM: sammanfattande tabell, i samma stycke som fakta ---------- */
+.pm-titel{margin:14px 0 8px;font-size:15px;text-transform:uppercase;letter-spacing:.04em;color:var(--bla)}
 .pm-tabell-wrap{overflow-x:auto}
 .pm-tabell{width:100%;border-collapse:collapse;font-size:14px}
 .pm-tabell th,.pm-tabell td{padding:7px 12px;text-align:left;border-bottom:1px solid var(--linje)}
@@ -128,6 +124,7 @@ main{padding-bottom:48px}
 }
 .pm-tabell tbody tr:last-child td{border-bottom:none}
 .pm-tabell td.pm-nr{white-space:nowrap;font-weight:700;color:var(--bla);width:1%}
+.pm-tabell td.pm-tid{white-space:nowrap;color:var(--text-svag);width:1%}
 
 /* ---------- Skiss: idrottshallen – egen sektion efter PM ---------- */
 .pass-hallskiss{
