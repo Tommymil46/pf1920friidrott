@@ -15,10 +15,10 @@
   "moment": [
     {
       "id": "station1-hinderbana-stafett",
-      "namn": "Station 1 – Hinderbana stafett",
+      "namn": "Station 1 – Hinderbane stafett",
       "ikon": "🏃",
       "ordning": 1,
-      "ansvarig": "Johan, Anna, Eric, Jossan, Tommy",
+      "ansvarig": "Tommy",
       "syfte": "Stafett – hinderbana",
       "text": "Hinderbana stafett enligt skiss. Två lag. Använd stafettpinne.",
       "bilder": [
@@ -70,7 +70,7 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-09-06T11:30:40.219Z",
+  "uppdaterad": "2026-09-06T11:31:17.042Z",
   "uppdateradAv": "Tommy",
   "hallskiss": [],
   "hallskissFiler": []
