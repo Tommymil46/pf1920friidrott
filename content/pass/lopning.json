@@ -68,9 +68,20 @@
       "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
       "bilder": [],
       "filer": []
+    },
+    {
+      "id": "stadare-och-stokare",
+      "namn": "Städare och stökare",
+      "ikon": "",
+      "ordning": 5,
+      "ansvarig": "",
+      "syfte": "",
+      "text": "",
+      "bilder": [],
+      "filer": []
     }
   ],
-  "uppdaterad": "2026-09-06T11:32:31.345Z",
+  "uppdaterad": "2026-09-06T11:33:12.874Z",
   "uppdateradAv": "Tommy",
   "hallskiss": [],
   "hallskissFiler": []
