@@ -77,12 +77,24 @@
       "ansvarig": "Ludvig",
       "syfte": "Gemensam hinderbana",
       "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
-      "bilder": [],
+      "bilder": [
+        {
+          "url": "content/uploads/skiss-lopning-hinderbana-fullbana.jpg",
+          "bildtext": "Skiss: hinderbana (byggs under stationerna, körs gemensamt)",
+          "namn": ""
+        }
+      ],
       "filer": []
     }
   ],
-  "uppdaterad": "2026-09-06T11:48:35.619Z",
+  "uppdaterad": "2026-09-06T12:07:37.000Z",
   "uppdateradAv": "Tommy",
-  "hallskiss": [],
+  "hallskiss": [
+    {
+      "url": "content/uploads/skiss-lopning-hinderbana-fullbana.jpg",
+      "bildtext": "Skiss: idrottshallen, hinderbana för dagens pass",
+      "namn": ""
+    }
+  ],
   "hallskissFiler": []
 }
