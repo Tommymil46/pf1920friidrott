@@ -59,29 +59,29 @@
       "filer": []
     },
     {
-      "id": "hinderbana",
-      "namn": "Hinderbana",
-      "ikon": "🏃",
-      "ordning": 4,
-      "ansvarig": "Ludvig",
-      "syfte": "Gemensam hinderbana",
-      "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
-      "bilder": [],
-      "filer": []
-    },
-    {
       "id": "stadare-och-stokare",
       "namn": "Städare och stökare",
       "ikon": "",
-      "ordning": 5,
+      "ordning": 4,
       "ansvarig": "",
       "syfte": "",
       "text": "",
       "bilder": [],
       "filer": []
+    },
+    {
+      "id": "hinderbana",
+      "namn": "Hinderbana",
+      "ikon": "🏃",
+      "ordning": 5,
+      "ansvarig": "Ludvig",
+      "syfte": "Gemensam hinderbana",
+      "text": "Bygg färdigt hinderbanan från förberedelserna och kör igenom den tillsammans.",
+      "bilder": [],
+      "filer": []
     }
   ],
-  "uppdaterad": "2026-09-06T11:48:11.015Z",
+  "uppdaterad": "2026-09-06T11:48:35.619Z",
   "uppdateradAv": "Tommy",
   "hallskiss": [],
   "hallskissFiler": []
