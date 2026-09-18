@@ -1,0 +1,153 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1160" viewBox="0 0 1600 1160">
+<rect width="1600" height="1160" fill="#ffffff"/>
+<g font-family="DejaVu Sans" fill="#14201c">
+
+<text x="48" y="56" font-size="34" font-weight="bold">Station 2 – Fart och jakt</text>
+<text x="48" y="88" font-size="19" fill="#5c6a66">En uppställning, tre lekar på ca 3 minuter var. Banan står kvar hela stationen.</text>
+
+<!-- ============ PANEL 1: UPPSTÄLLNING ============ -->
+<rect x="40" y="112" width="1520" height="432" rx="6" fill="#f4f6f5" stroke="#cbd3d0" stroke-width="2"/>
+<text x="64" y="150" font-size="17" font-weight="bold" letter-spacing="2" fill="#5c6a66">UPPSTÄLLNING</text>
+
+<g font-size="17" font-weight="bold" fill="#14201c">
+  <text x="196" y="192">MYRSTEGEN</text>
+  <text x="596" y="192">ELEFANTSTEGEN</text>
+  <text x="1000" y="192">SPRINTEN</text>
+  <text x="1372" y="192">MÅL</text>
+</g>
+
+<!-- bana A -->
+<text x="60" y="242" font-size="15" font-weight="bold" fill="#1b4fa0">START</text>
+<polygon points="150,208 138,236 162,236" fill="#1b4fa0"/>
+<g stroke="#b8402e" stroke-width="5" stroke-linecap="round">
+  <line x1="210" y1="206" x2="210" y2="266"/><line x1="268" y1="206" x2="268" y2="266"/>
+  <line x1="326" y1="206" x2="326" y2="266"/><line x1="384" y1="206" x2="384" y2="266"/>
+  <line x1="442" y1="206" x2="442" y2="266"/><line x1="500" y1="206" x2="500" y2="266"/>
+</g>
+<g stroke="#b8402e" stroke-width="4" fill="none">
+  <path d="M600 266 v-42 h54 v42"/><path d="M690 266 v-42 h54 v42"/>
+  <path d="M780 266 v-42 h54 v42"/><path d="M870 266 v-42 h54 v42"/>
+</g>
+<line x1="960" y1="236" x2="1276" y2="236" stroke="#1b4fa0" stroke-width="4"/>
+<polygon points="1292,236 1274,227 1274,245" fill="#1b4fa0"/>
+<polygon points="1330,208 1318,236 1342,236" fill="#1b4fa0"/>
+<circle cx="1420" cy="236" r="34" fill="none" stroke="#b5811a" stroke-width="5"/>
+<g fill="#b5811a"><rect x="1400" y="218" width="16" height="12" rx="2"/><rect x="1422" y="218" width="16" height="12" rx="2"/><rect x="1400" y="236" width="16" height="12" rx="2"/><rect x="1422" y="236" width="16" height="12" rx="2"/><rect x="1411" y="254" width="16" height="12" rx="2"/></g>
+
+<g font-size="17" fill="#5c6a66">
+  <text x="196" y="300">6 hopprep tvärs, 40 cm mellan</text>
+  <text x="596" y="300">4 häckar lägsta höjd, 1,2 m</text>
+  <text x="1000" y="300">8 m sprint</text>
+  <text x="1362" y="300">rockring</text>
+</g>
+
+<!-- bana B -->
+<polygon points="150,322 138,350 162,350" fill="#1b4fa0"/>
+<g stroke="#b8402e" stroke-width="5" stroke-linecap="round">
+  <line x1="210" y1="320" x2="210" y2="380"/><line x1="268" y1="320" x2="268" y2="380"/>
+  <line x1="326" y1="320" x2="326" y2="380"/><line x1="384" y1="320" x2="384" y2="380"/>
+  <line x1="442" y1="320" x2="442" y2="380"/><line x1="500" y1="320" x2="500" y2="380"/>
+</g>
+<g stroke="#b8402e" stroke-width="4" fill="none">
+  <path d="M600 380 v-42 h54 v42"/><path d="M690 380 v-42 h54 v42"/>
+  <path d="M780 380 v-42 h54 v42"/><path d="M870 380 v-42 h54 v42"/>
+</g>
+<line x1="960" y1="350" x2="1276" y2="350" stroke="#1b4fa0" stroke-width="4"/>
+<polygon points="1292,350 1274,341 1274,359" fill="#1b4fa0"/>
+<polygon points="1330,322 1318,350 1342,350" fill="#1b4fa0"/>
+<circle cx="1420" cy="350" r="34" fill="none" stroke="#b5811a" stroke-width="5"/>
+<g fill="#b5811a"><rect x="1400" y="332" width="16" height="12" rx="2"/><rect x="1422" y="332" width="16" height="12" rx="2"/><rect x="1400" y="350" width="16" height="12" rx="2"/><rect x="1422" y="350" width="16" height="12" rx="2"/><rect x="1411" y="368" width="16" height="12" rx="2"/></g>
+
+<!-- returgång -->
+<rect x="140" y="410" width="1320" height="76" rx="6" fill="#ffffff" stroke="#5c6a66" stroke-width="2" stroke-dasharray="12 9"/>
+<line x1="1380" y1="440" x2="266" y2="440" stroke="#5c6a66" stroke-width="4"/>
+<polygon points="248,440 266,431 266,449" fill="#5c6a66"/>
+<text x="470" y="474" font-size="19" font-weight="bold" fill="#5c6a66">RETURGÅNG – fri yta, ca 3 m bred, spelplan i lek 3</text>
+
+<text x="64" y="524" font-size="17" fill="#5c6a66">Två identiska banor, minst 1,5 m mellan. Repen dras raka, handtagen utanför rutan åt samma håll.</text>
+
+<!-- ============ PANEL 2: LEK 1 ============ -->
+<rect x="40" y="568" width="484" height="560" rx="6" fill="#f4f6f5" stroke="#cbd3d0" stroke-width="2"/>
+<rect x="40" y="568" width="484" height="7" rx="3" fill="#1b4fa0"/>
+<text x="64" y="614" font-size="16" font-weight="bold" letter-spacing="2" fill="#1b4fa0">LEK 1 · 3 MIN</text>
+<text x="64" y="650" font-size="25" font-weight="bold">Raketstarten</text>
+<text x="64" y="682" font-size="17" fill="#5c6a66">Utgångsläget byts varje omgång.</text>
+
+<line x1="120" y1="712" x2="120" y2="984" stroke="#1b4fa0" stroke-width="5"/>
+<g fill="#14201c" opacity="0.55">
+  <rect x="134" y="726" width="16" height="34" rx="7"/>
+  <rect x="134" y="782" width="16" height="26" rx="7"/>
+  <rect x="134" y="840" width="34" height="14" rx="7"/>
+  <rect x="134" y="896" width="34" height="14" rx="7"/>
+  <rect x="134" y="948" width="16" height="30" rx="7"/>
+</g>
+<g font-size="17" fill="#5c6a66">
+  <text x="190" y="748">stående</text>
+  <text x="190" y="802">sittande</text>
+  <text x="190" y="854">på mage</text>
+  <text x="190" y="910">på rygg</text>
+  <text x="190" y="972">ryggen mot</text>
+</g>
+<line x1="120" y1="1018" x2="446" y2="1018" stroke="#1b4fa0" stroke-width="4"/>
+<polygon points="464,1018 446,1009 446,1027" fill="#1b4fa0"/>
+<text x="120" y="1052" font-size="17" fill="#5c6a66">hela banan igenom</text>
+<text x="64" y="1090" font-size="17" fill="#5c6a66">Signal: klapp, ordet GO, eller en</text>
+<text x="64" y="1112" font-size="17" fill="#5c6a66">ärtpåse som släpps i golvet.</text>
+
+<!-- ============ PANEL 3: LEK 2 ============ -->
+<rect x="558" y="568" width="484" height="560" rx="6" fill="#f4f6f5" stroke="#cbd3d0" stroke-width="2"/>
+<rect x="558" y="568" width="484" height="7" rx="3" fill="#b5811a"/>
+<text x="582" y="614" font-size="16" font-weight="bold" letter-spacing="2" fill="#b5811a">LEK 2 · 3 MIN</text>
+<text x="582" y="650" font-size="25" font-weight="bold">Skattkammaren</text>
+<text x="582" y="682" font-size="17" fill="#5c6a66">En ärtpåse per vända.</text>
+
+<circle cx="662" cy="800" r="44" fill="none" stroke="#b5811a" stroke-width="5"/>
+<text x="608" y="876" font-size="17" font-weight="bold" fill="#b5811a">tom ring</text>
+<circle cx="944" cy="800" r="44" fill="none" stroke="#b5811a" stroke-width="5"/>
+<g fill="#b5811a"><rect x="918" y="776" width="20" height="14" rx="3"/><rect x="946" y="776" width="20" height="14" rx="3"/><rect x="918" y="796" width="20" height="14" rx="3"/><rect x="946" y="796" width="20" height="14" rx="3"/><rect x="932" y="816" width="20" height="14" rx="3"/></g>
+<text x="866" y="876" font-size="17" font-weight="bold" fill="#b5811a">skattkammaren</text>
+
+<line x1="716" y1="746" x2="874" y2="746" stroke="#1b4fa0" stroke-width="4"/>
+<polygon points="892,746 874,737 874,755" fill="#1b4fa0"/>
+<text x="716" y="730" font-size="17" fill="#1b4fa0">spring tom</text>
+<line x1="892" y1="856" x2="734" y2="856" stroke="#b5811a" stroke-width="4" stroke-dasharray="11 8"/>
+<polygon points="716,856 734,847 734,865" fill="#b5811a"/>
+<text x="680" y="918" font-size="17" fill="#b5811a">tillbaka med en påse</text>
+
+<text x="582" y="982" font-size="17" fill="#5c6a66">Hinner vi tömma skattkammaren</text>
+<text x="582" y="1004" font-size="17" fill="#5c6a66">innan jag räknat till trettio?</text>
+<text x="582" y="1046" font-size="17" fill="#5c6a66">Räkna påsarna ihop. Häll tillbaka.</text>
+<text x="582" y="1068" font-size="17" fill="#5c6a66">Kör igen — slå er egen siffra.</text>
+<text x="582" y="1110" font-size="17" fill="#5c6a66">Ingen jämförs med någon annan.</text>
+
+<!-- ============ PANEL 4: LEK 3 ============ -->
+<rect x="1076" y="568" width="484" height="560" rx="6" fill="#f4f6f5" stroke="#cbd3d0" stroke-width="2"/>
+<rect x="1076" y="568" width="484" height="7" rx="3" fill="#b8402e"/>
+<text x="1100" y="614" font-size="16" font-weight="bold" letter-spacing="2" fill="#b8402e">LEK 3 · 3 MIN</text>
+<text x="1100" y="650" font-size="25" font-weight="bold">Färgjakten</text>
+<text x="1100" y="682" font-size="17" fill="#5c6a66">På returgången, inte i banan.</text>
+
+<line x1="1136" y1="726" x2="1136" y2="926" stroke="#5c6a66" stroke-width="4"/>
+<ellipse cx="1172" cy="762" rx="30" ry="14" fill="#1b4fa0"/>
+<ellipse cx="1172" cy="808" rx="30" ry="14" fill="#b8402e"/>
+<ellipse cx="1172" cy="862" rx="30" ry="14" fill="#1b4fa0"/>
+<ellipse cx="1172" cy="908" rx="30" ry="14" fill="#b8402e"/>
+<text x="1212" y="752" font-size="17" fill="#5c6a66">blå</text>
+<text x="1212" y="826" font-size="17" fill="#5c6a66">röd</text>
+
+<line x1="1248" y1="808" x2="1424" y2="808" stroke="#b8402e" stroke-width="4"/>
+<polygon points="1442,808 1424,799 1424,817" fill="#b8402e"/>
+<line x1="1248" y1="762" x2="1370" y2="788" stroke="#1b4fa0" stroke-width="4" stroke-dasharray="11 8"/>
+<polygon points="1388,792 1368,780 1366,798" fill="#1b4fa0"/>
+<polygon points="1480,780 1468,808 1492,808" fill="#5c6a66"/>
+<text x="1452" y="846" font-size="15" fill="#5c6a66">kon</text>
+
+<text x="1100" y="972" font-size="19" font-weight="bold" fill="#1b4fa0">BLÅ!  →  blå jagar</text>
+<text x="1100" y="1000" font-size="19" font-weight="bold" fill="#b8402e">röd springer till konan</text>
+
+<text x="1100" y="1046" font-size="17" fill="#5c6a66">Ligger på mage, 1 m isär.</text>
+<text x="1100" y="1068" font-size="17" fill="#5c6a66">Ingen vet sin roll förrän ropet.</text>
+<text x="1100" y="1110" font-size="17" fill="#5c6a66">Para ihop lika snabba barn.</text>
+
+</g>
+</svg>

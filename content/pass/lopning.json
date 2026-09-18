@@ -32,16 +32,16 @@
     },
     {
       "id": "station2-lopning-hacklopning",
-      "namn": "Station 2 – Löpning/häcklöpning",
+      "namn": "Station 2 – Fart och jakt",
       "ikon": "🏃",
       "ordning": 2,
       "ansvarig": "Tommy",
-      "syfte": "Löpteknik och uthållighet",
-      "text": "Löpning runt halva salen (runt koner) under 2 minuter. Räkna allas varv och försök slå antalet varv i följande omgångar.\n\nStationen varieras mellan omgångarna:\n\n1. Omgång 1: Löpning\n2. Omgång 2: Häcklöpning\n3. Omgång 3: Stafett, ett barn i taget. Använd stafettpinne.",
+      "syfte": "Reaktion, stegfrekvens och acceleration",
+      "text": "**Uppställning** – står kvar hela stationen\n\nTvå identiska banor bredvid varandra, minst 1,5 m mellan, med en fri returgång på ca 3 m vid sidan. Varje bana: startkon, 6 hopprep tvärs över löpriktningen med ca 40 cm mellan, 4 häckar på lägsta höjd med ca 1,2 m mellan, och 8 m sprint fram till en målkon med en rockring.\n\nRepen dras raka och handtagen läggs utanför rutan åt samma håll – ringlade rep är den vanligaste snubbelorsaken. Saknas hopprep fungerar golvets egna färglinjer lika bra.\n\nStationen är **tre lekar på ca 3 minuter var** på samma uppställning. Annonsera bytet högt: \"Nu byter vi lek!\" Nio minuter av samma sak tappar sexåringarna.\n\n**Lek 1 – Raketstarten (3 min)**\n\nFyra barn startar samtidigt och springer hela banan: myrstegen (små snabba steg, en fot per ruta), elefantstegen (stora steg, höga knän), sprinten. Jogg tillbaka på returgången.\n\nUtgångsläget byts varje omgång:\n\n1. Stående\n2. Sittande med benen framåt\n3. Liggande på mage\n4. Liggande på rygg\n5. Stående med ryggen mot banan\n\nSignalen varieras också: en klapp, ordet GO, eller en ärtpåse som släpps i golvet. Falskstart straffas aldrig – skratta och gör om.\n\n**Lek 2 – Skattkammaren (3 min)**\n\nRockringen vid målkonan fylls med ärtpåsar. Barnen springer banan, hämtar **en** påse, springer tillbaka på returgången och lägger den i en tom rockring vid start. Sedan direkt iväg igen.\n\nFrågan som driver leken: hinner vi tömma skattkammaren innan ledaren räknat till trettio? Räkna högt och långsamt. Räkna sedan påsarna ihop, häll tillbaka dem och kör en omgång till – nu ska gruppen slå sin egen siffra. Ingen jämförs med någon annan.\n\n**Lek 3 – Färgjakten (3 min)**\n\nKörs på returgången, inte i banan. Barnen ligger två och två på mage, ca en meter isär, med huvudena åt samma håll. Det ena barnet är blått, det andra rött – säg det högt innan omgången börjar.\n\nLedaren ropar en färg. Den färgen jagar, den andra springer tio meter till konan. Hinner den fram utan att bli nuddad har den klarat sig. Ingen poängräkning – byt plats och kör igen.\n\nPoängen är att ingen vet sin roll förrän ropet kommer, så båda måste reagera och båda springer för fullt.\n\n**Nivå**\n\n- Yngre: häckarna läggs platt på golvet som streck att kliva över, och start sker stående eller sittande.\n- Äldre: längre häckavstånd, liggande start, och i färgjakten ett tredje rop – RAKET! – som betyder att båda springer och ingen jagar.\n- Para ihop ungefär lika snabba barn i färgjakten. En nioåring mot en fyraåring blir inte roligt för någon av dem.\n\n**Ledartips**\n\n- Max tre i kö. Blir gruppen större än åtta, lägg till en tredje bana hellre än en till i kön.\n- Återgången ska ha ett jobb: bär påsen, jogga baklänges, hoppa jämfota. Aldrig bara gå.\n- Repen glider ur läge efter ungefär tio genomgångar. Ge ett av de äldre barnen uppdraget \"repvakt\" mellan sina egna varv.\n- Nödutgång om energin är slut: byt lek 3 mot Rött ljus, grönt ljus ur lekbanken. Den har en helt annan rytm.\n\n**Utrustning**\n\n12 hopprep, 8 häckar på lägsta höjd, 6 konor, 3 rockringar, ca 12 ärtpåsar.",
       "bilder": [
         {
-          "url": "content/uploads/skiss-lopning-station2-lopning-hacklopning.png",
-          "bildtext": "Skiss: station 2, löpning/häcklöpning",
+          "url": "content/uploads/skiss-lopning-station2-fart-och-jakt.svg",
+          "bildtext": "Skiss: station 2, uppställning och de tre lekarna",
           "namn": ""
         }
       ],
@@ -87,7 +87,7 @@
       "filer": []
     }
   ],
-  "uppdaterad": "2026-09-06T12:07:37.000Z",
+  "uppdaterad": "2026-09-18T15:05:00.000Z",
   "uppdateradAv": "Tommy",
   "hallskiss": [
     {
