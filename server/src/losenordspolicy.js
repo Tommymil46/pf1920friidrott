@@ -21,6 +21,13 @@ function kontrolleraNyttLosenord(nytt, { anvandarnamn = "", namn = "", gammalt =
   const liten = s.toLowerCase();
   const egna = [anvandarnamn, namn].map((x) => String(x || "").trim().toLowerCase()).filter(Boolean);
   if (egna.some((x) => liten.includes(x))) return "Lösenordet får inte innehålla ditt namn.";
+  return lattgissat(s);
+}
+
+/* Lättgissat oavsett vem man är: ett och samma tecken, bara siffror/tecken,
+   eller ett ord på spärrlistan. Returnerar felmeddelande eller null. */
+function lattgissat(nytt) {
+  const liten = String(nytt || "").toLowerCase();
   if (/^(.)\1*$/u.test(liten.replace(/\s/g, ""))) return "Lösenordet får inte bestå av ett och samma tecken.";
   const bokstaver = liten.replace(/[^\p{L}]/gu, "");
   if (!bokstaver) return "Lösenordet får inte bara bestå av siffror och tecken – använd gärna ett par ord.";
@@ -28,4 +35,4 @@ function kontrolleraNyttLosenord(nytt, { anvandarnamn = "", namn = "", gammalt =
   return null;
 }
 
-module.exports = { kontrolleraNyttLosenord, MIN_LANGD };
+module.exports = { kontrolleraNyttLosenord, lattgissat, MIN_LANGD };

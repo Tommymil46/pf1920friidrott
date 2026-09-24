@@ -109,9 +109,6 @@
     <label>Nuvarande lösenord
       <input type="password" id="pw-old" autocomplete="current-password" required>
     </label>
-    <p class="dlg-hjalp">Minst 8 tecken. Tips: ett par ord är lättare att komma ihåg
-      än krångliga tecken, t.ex. <em>blå häck</em> eller <em>kasta spjut</em>.
-      Får inte innehålla ditt namn.</p>
     <label>Nytt lösenord
       <input type="password" id="pw-new" autocomplete="new-password" minlength="8" required>
     </label>
@@ -119,6 +116,22 @@
       <input type="password" id="pw-new2" autocomplete="new-password" minlength="8" required>
     </label>
     <label class="dlg-kryss"><input type="checkbox" id="pw-visa"> Visa lösenorden</label>
+    <div class="pw-policy">
+      <p><strong>Ditt nya lösenord ska</strong></p>
+      <ul id="pw-regler">
+        <li data-regel="langd">vara minst 8 tecken långt – mellanslag och å, ä, ö går bra</li>
+        <li data-regel="namn">inte innehålla ditt namn</li>
+        <li data-regel="olikt">inte vara samma som lösenordet du har nu</li>
+        <li data-regel="gissa">inte vara lätt att gissa, som <em>hagunda2026</em>,
+          <em>lösenord1</em> eller <em>12345678</em></li>
+        <li data-regel="lika">skrivas likadant båda gångerna</li>
+      </ul>
+      <p><strong>Tips:</strong> ta ett par ord som du kommer ihåg, till exempel
+        <em>blå häck</em> eller <em>kasta spjut</em>. Det är lättare att minnas än
+        krångliga tecken – och svårare för andra att gissa. Du behöver inga siffror
+        eller specialtecken, och du behöver aldrig byta igen om ingen annan fått
+        reda på lösenordet.</p>
+    </div>
     <p class="dlg-error" id="pw-error" hidden></p>
     <div class="dlg-actions">
       <button type="button" class="btn btn-ghost" data-close>Avbryt</button>
