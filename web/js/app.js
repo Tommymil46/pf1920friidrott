@@ -12,10 +12,10 @@
 
   /* ---------- Schemastyrt aktuellt pass ----------
      Vilket pass som visas som "aktuellt" styrs i första hand av
-     terminsschemat: det senaste tillfället t.o.m. idag som varken är
-     inställt eller saknar pass. Håller ett höstlov utan att byta pass –
-     det senast hållna passet räknas som aktuellt tills nästa tillfälle.
-     Saknar schemat en träff (t.ex. innan/efter terminen) faller vi
+     terminsschemat: det närmaste tillfället fr.o.m. idag som varken är
+     inställt eller saknar pass. Dagen efter ett pass visas alltså redan
+     nästa pass, och inställda tillfällen (t.ex. höstlov) hoppas över.
+     Saknar schemat en träff (t.ex. efter terminen) faller vi
      tillbaka på det manuellt satta "aktivt" i index.json. Inget sparas
      här – det är bara vad som visas vid sidladdning. */
   function idagISO() {
@@ -30,8 +30,8 @@
     var idag = idagISO();
     var val = null;
     t.forEach(function (r) {
-      if (r && r.pass && !r.installt && r.datum && r.datum <= idag) {
-        if (!val || r.datum > val.datum) val = r;
+      if (r && r.pass && !r.installt && r.datum && r.datum >= idag) {
+        if (!val || r.datum < val.datum) val = r;
       }
     });
     return val ? val.pass : null;
