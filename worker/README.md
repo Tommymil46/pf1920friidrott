@@ -54,7 +54,7 @@ npx wrangler secret put GITHUB_TOKEN
 | `GITHUB_OWNER` / `GITHUB_REPO` / `GITHUB_BRANCH` | Var passet lagras |
 | `LEDARE` | Kommaseparerad lista med ledarnamn |
 | `ALLOWED_ORIGINS` | Webbadressen som får anropa API:t |
-| `KRAV_LOSENORDSBYTE` | `"0"` under uppbyggnaden, `"1"` i skarp drift – se [../docs/SAKERHET.md](../docs/SAKERHET.md) |
+| `KRAV_LOSENORDSBYTE` | `"1"` – startlösenordet måste bytas innan något går att ändra (`"0"` stänger av spärren) – se [../docs/SAKERHET.md](../docs/SAKERHET.md) |
 | `TOKEN_TIMMAR` | Hur länge en inloggning gäller |
 | `MAX_FIL_MB` | Största tillåtna uppladdning |
 | `LAS_CACHE_MS` | Hur länge publika läsningar cachas |

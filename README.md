@@ -106,10 +106,11 @@ Sätt `apiBase` i [`web/js/config.js`](web/js/config.js) till adressen från
 Anna, Eric, Johan, Ludvig och Tommy. Startlösenordet är samma som kontonamnet,
 skrivet med samma stora/små bokstäver (lösenordet är skiftlägeskänsligt,
 användarnamnet är det inte).
-Under uppbyggnaden (`KRAV_LOSENORDSBYTE=0`, standard) går det bra att fortsätta
-med det. Sätt `KRAV_LOSENORDSBYTE=1` (i `wrangler.toml` för Workern, eller
-`server/.env` för Docker-varianten) innan sidan går i skarp drift – då krävs
-ett riktigt lösenord innan något går att ändra. Lösenorden lagras hashade
+Workern kör med `KRAV_LOSENORDSBYTE = "1"` (i `wrangler.toml`), så ett nytt
+lösenord krävs vid första inloggningen innan något går att ändra (för
+Docker-varianten styrs det av `server/.env`). Det nya lösenordet ska vara
+minst 8 tecken och får inte innehålla namnet eller vara lättgissat – se
+[lösenordspolicyn](docs/SAKERHET.md#lösenordspolicy). Lösenorden lagras hashade
 (PBKDF2 i Workern, bcrypt i Docker-varianten), aldrig i klartext, aldrig i
 GitHub.
 

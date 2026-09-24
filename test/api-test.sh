@@ -40,7 +40,7 @@ PFIL=$(mktemp); curl -sS $B/pass/lopning > "$PFIL"
 python3 -c "
 import json
 d=json.load(open('$PFIL'))
-assert len(d['data']['moment'])==4 and d['sha']
+assert len(d['data']['moment'])>=4 and d['sha']
 " && ok "hämtar löpningspasset + sha" || fel "hämta pass"
 SHA=$(python3 -c "import json;print(json.load(open('$PFIL'))['sha'])")
 

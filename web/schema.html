@@ -109,12 +109,16 @@
     <label>Nuvarande lösenord
       <input type="password" id="pw-old" autocomplete="current-password" required>
     </label>
-    <label>Nytt lösenord (minst 8 tecken)
+    <p class="dlg-hjalp">Minst 8 tecken. Tips: ett par ord är lättare att komma ihåg
+      än krångliga tecken, t.ex. <em>blå häck</em> eller <em>kasta spjut</em>.
+      Får inte innehålla ditt namn.</p>
+    <label>Nytt lösenord
       <input type="password" id="pw-new" autocomplete="new-password" minlength="8" required>
     </label>
     <label>Upprepa nytt lösenord
       <input type="password" id="pw-new2" autocomplete="new-password" minlength="8" required>
     </label>
+    <label class="dlg-kryss"><input type="checkbox" id="pw-visa"> Visa lösenorden</label>
     <p class="dlg-error" id="pw-error" hidden></p>
     <div class="dlg-actions">
       <button type="button" class="btn btn-ghost" data-close>Avbryt</button>
@@ -136,6 +140,7 @@
 <script src="js/config.js"></script>
 <script src="js/markdown.js"></script>
 <script src="js/api.js"></script>
+<script src="js/losenordspolicy.js"></script>
 <script src="js/render.js"></script>
 <script src="js/schema-app.js"></script>
 </body>

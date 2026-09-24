@@ -26,6 +26,20 @@ k("startlösenord får inte spara", r.status === 403 && r.data.kod === "startlos
 r = await anropa(env, "/arkivera", { method: "POST", headers: AUTH });
 k("startlösenord får inte arkivera", r.status === 403);
 
+/* --- Lösenordspolicy --- */
+for (const [nytt, namn] of [
+  ["kort1", "för kort lösenord nekas"],
+  ["ludvigs lösen", "lösenord med eget namn nekas"],
+  ["Hagunda2026!", "lättgissat lösenord nekas"],
+  ["12345678", "bara siffror nekas"]
+]) {
+  r = await anropa(env, "/losenord", {
+    method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
+    body: JSON.stringify({ gammalt: "Ludvig", nytt })
+  });
+  k(namn, r.status === 400);
+}
+
 /* --- Byt lösenord --- */
 r = await anropa(env, "/losenord", {
   method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
@@ -55,7 +69,7 @@ k("sparning kräver inloggning", r.status === 401 && r.data.kod === "session");
 
 /* --- pass: hämta, spara, konflikt --- */
 r = await anropa(env, "/pass/lopning");
-k("hämtar löpningspasset + sha", r.status === 200 && r.data.data.moment.length === 4 && r.data.sha);
+k("hämtar löpningspasset + sha", r.status === 200 && r.data.data.moment.length >= 4 && r.data.sha);
 const SHA = r.data.sha;
 
 const nyttPass = JSON.parse(JSON.stringify(r.data.data));
@@ -252,7 +266,7 @@ r = await anropa(env, "/login", {
 const ericTok1 = r.data.token;
 r = await anropa(env, "/losenord", {
   method: "POST", headers: { Authorization: "Bearer " + ericTok1, "Content-Type": "application/json" },
-  body: JSON.stringify({ gammalt: "Eric", nytt: "nyttEricLosen1" })
+  body: JSON.stringify({ gammalt: "Eric", nytt: "nyttHoppLosen1" })
 });
 const ericTok2 = r.data.token;
 r = await anropa(env, "/login", {

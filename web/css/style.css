@@ -222,6 +222,9 @@ main{padding-bottom:48px}
 .dlg-help{font-size:13px;color:var(--text-svag);margin:6px 0 12px}
 .dlg-actions{display:flex;justify-content:flex-end;gap:8px;padding-bottom:20px;padding-top:6px}
 .dlg form .dlg-actions{padding-left:0;padding-right:0}
+.dlg-hjalp{font-size:13px;color:#555;margin:0 0 10px}
+.dlg .dlg-kryss{display:flex;align-items:center;gap:8px;font-weight:400}
+.dlg .dlg-kryss input{width:auto;margin:0}
 .dlg-error{background:#fbeaea;color:#8a1f1f;border-radius:var(--radie);padding:8px 10px;font-size:14px;margin:0 0 10px}
 
 .history-list{max-height:52vh;overflow:auto;border:1px solid var(--linje);border-radius:var(--radie)}

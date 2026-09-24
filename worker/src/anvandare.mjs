@@ -12,6 +12,7 @@
    =========================================================== */
 
 import { hashaLosenord, jamforLosenord } from "./kodning.mjs";
+import { kontrolleraNyttLosenord } from "./losenordspolicy.mjs";
 
 const KV_NYCKEL = "ledare";
 
@@ -78,9 +79,8 @@ async function bytLosenord(env, id, gammalt, nytt) {
   if (!(await jamforLosenord(gammalt, l.hash))) {
     const e = new Error("Fel nuvarande lösenord."); e.status = 401; throw e;
   }
-  if (String(nytt || "").length < 8) {
-    const e = new Error("Det nya lösenordet måste vara minst 8 tecken."); e.status = 400; throw e;
-  }
+  const policyFel = kontrolleraNyttLosenord(nytt, { anvandarnamn: l.id, namn: l.namn, gammalt });
+  if (policyFel) { const e = new Error(policyFel); e.status = 400; throw e; }
   l.hash = await hashaLosenord(nytt);
   l.startlosenord = false;
   l.andrad = new Date().toISOString();

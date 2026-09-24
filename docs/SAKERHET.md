@@ -85,16 +85,35 @@ repot. Lösenorden ligger PBKDF2-hashade i Workers KV, inte i klartext.
 * Redigering kräver alltid inloggning; sparning kontrollerar att ingen annan
   hunnit ändra samtidigt.
 
+## Lösenordspolicy
+
+Längd framför krångel, i linje med NIST SP 800-63B. Samma regler kontrolleras
+i webbläsaren (för snabb återkoppling) och i tjänsten (det som faktiskt gäller):
+`worker/src/losenordspolicy.mjs`, `server/src/losenordspolicy.js` och
+`web/js/losenordspolicy.js` – håll de tre i takt.
+
+* Minst 8 tecken. Mellanslag och å, ä, ö är tillåtna.
+* Inga krav på stora bokstäver, siffror eller specialtecken.
+* Får inte innehålla det egna användarnamnet/namnet.
+* Får inte vara samma som det nuvarande lösenordet.
+* Får inte bestå av bara ett och samma tecken, eller bara siffror/tecken.
+* Spärrlista: när siffror och tecken tagits bort får det som blir kvar inte
+  vara t.ex. `hagunda`, `friidrott`, `lösenord`, `password` eller `qwerty`.
+* Inget tvång att byta med jämna mellanrum – byt vid misstanke om läcka,
+  eller när en ledare slutar.
+
+Det låga längdkravet vägs upp av spärren mot lösenordsgissning (för många
+felaktiga försök ger 15 minuters spärr) och av att lösenorden lagras hashade.
+
 ## Kvar att göra – och det är du som gör det
 
 1. **Kör aldrig tjänsten över oskyddad HTTP.** Lösenorden skickas då i
    klartext. Workern får HTTPS automatiskt av Cloudflare – inget att göra
    där. Kör ni Docker-varianten i stället: antingen VPN, eller en omvänd
    proxy med HTTPS.
-2. **Sätt `KRAV_LOSENORDSBYTE=1` innan sidan går i skarp drift** – alltså innan
-   ni bjuder in fler än er själva att läsa den, eller lägger upp riktiga
-   uppgifter ni bryr er om. Fram tills dess konton kan redigera med
-   kontonamnet som lösenord (t.ex. `anna/anna`).
+2. ~~Sätt `KRAV_LOSENORDSBYTE=1`~~ – **gjort i Workern 2026-09-24.** Konton
+   med startlösenord kan bara byta lösenord tills bytet är gjort.
+   (Docker-varianten styrs av `server/.env` och står kvar på `0` där.)
 3. **Sätt `ALLOWED_ORIGINS`** till adressen där sidan publiceras. Lämnas den tom
    får vilken webbplats som helst anropa API:t.
 4. **Sätt en utgångstid på GitHub-tokenen** och skriv upp när den går ut.

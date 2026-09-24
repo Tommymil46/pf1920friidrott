@@ -7,6 +7,7 @@ const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
 const bcrypt = require("bcryptjs");
+const { kontrolleraNyttLosenord } = require("./losenordspolicy");
 
 const DATA_DIR = process.env.DATA_DIR || "/data";
 const FIL = path.join(DATA_DIR, "ledare.json");
@@ -86,9 +87,8 @@ function bytLosenord(id, gammalt, nytt) {
   if (!bcrypt.compareSync(String(gammalt || ""), l.hash)) {
     const e = new Error("Fel nuvarande lösenord."); e.status = 401; throw e;
   }
-  if (String(nytt || "").length < 8) {
-    const e = new Error("Det nya lösenordet måste vara minst 8 tecken."); e.status = 400; throw e;
-  }
+  const policyFel = kontrolleraNyttLosenord(nytt, { anvandarnamn: l.id, namn: l.namn, gammalt });
+  if (policyFel) { const e = new Error(policyFel); e.status = 400; throw e; }
   l.hash = bcrypt.hashSync(String(nytt), 10);
   l.startlosenord = false;
   l.andrad = new Date().toISOString();

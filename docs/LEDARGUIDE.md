@@ -7,11 +7,19 @@
    (användarnamnet är inte skiftlägeskänsligt, så `anna` fungerar lika bra).
 3. Första gången är lösenordet detsamma som namnet, **med stor bokstav** –
    lösenordet är skiftlägeskänsligt, så `Anna` fungerar men `anna` gör det inte.
-4. **Byt lösenord innan sidan går i skarp drift.** Under uppbyggnaden går det
-   bra att fortsätta med kontonamnet som lösenord. När Tommy säger till att
-   sidan är klar för allmänheten tvingar appen fram ett byte automatiskt –
-   du kommer då inte åt att ändra något förrän du bytt. Nytt lösenord: minst
-   8 tecken.
+4. **Byt lösenord första gången du loggar in.** Appen öppnar rutan
+   *Byt lösenord* direkt, och du kommer inte åt att ändra något förrän du
+   bytt. Regler för det nya lösenordet:
+   * minst 8 tecken – mellanslag och å, ä, ö går bra
+   * inga krav på siffror eller specialtecken
+   * får inte innehålla ditt namn, och inte vara något lättgissat som
+     `hagunda2026`, `lösenord1` eller `12345678`
+
+   **Tips:** ta ett par ord du kommer ihåg, t.ex. `blå häck`, `kasta spjut`
+   eller `vänge söndag`. Det är både lättare att minnas och svårare att gissa
+   än `Anna2026!`. Kryssa i *Visa lösenorden* om du vill se vad du skriver.
+   Du behöver aldrig byta igen, om du inte tror att någon annan fått reda på
+   lösenordet.
 
 ## De fem träningspassen
 

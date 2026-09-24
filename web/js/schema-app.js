@@ -373,7 +373,12 @@
       var n1 = document.getElementById("pw-new").value;
       var n2 = document.getElementById("pw-new2").value;
       if (n1 !== n2) { fel.textContent = "De nya lösenorden är inte lika."; fel.hidden = false; return; }
-      window.API.bytLosenord(document.getElementById("pw-old").value, n1).then(function () {
+      var gammalt = document.getElementById("pw-old").value;
+      var jag = window.API.anvandare() || {};
+      var policyFel = window.Losenordspolicy.kontrollera(n1,
+        { anvandarnamn: jag.id, namn: jag.namn, gammalt: gammalt });
+      if (policyFel) { fel.textContent = policyFel; fel.hidden = false; return; }
+      window.API.bytLosenord(gammalt, n1).then(function () {
         document.getElementById("dlg-password").close();
         document.getElementById("form-password").reset();
         status("ok", "Lösenordet är bytt.");
