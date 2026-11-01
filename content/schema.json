@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "uppdaterad": "2026-08-27T00:00:00Z",
-  "uppdateradAv": "system",
+  "uppdaterad": "2026-11-01T13:40:00Z",
+  "uppdateradAv": "Tommy",
   "termin": "Höst 2026",
   "tillfallen": [
     {
@@ -84,21 +84,21 @@
     {
       "vecka": 43,
       "datum": "2026-10-25",
+      "ansvariga": [],
+      "pass": null,
+      "installt": true,
+      "notering": "Inställt (ledare borta) – passet flyttat till 1/11"
+    },
+    {
+      "vecka": 44,
+      "datum": "2026-11-01",
       "ansvariga": [
         "Tommy",
         "Anna"
       ],
       "pass": "kast",
       "installt": false,
-      "notering": ""
-    },
-    {
-      "vecka": 44,
-      "datum": "2026-11-01",
-      "ansvariga": [],
-      "pass": null,
-      "installt": true,
-      "notering": "Höstlov, ingen träning"
+      "notering": "Flyttat från 25/10 (höstlov)"
     },
     {
       "vecka": 45,
