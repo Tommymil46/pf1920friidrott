@@ -24,17 +24,36 @@
            "-" + String(d.getDate()).padStart(2, "0");
   }
 
-  function schemaAktivtId() {
+  /* Närmaste kommande tillfälle (fr.o.m. idag) som inte är inställt –
+     för ett visst pass, eller för vilket pass som helst om passId saknas. */
+  function nastaTillfalle(passId) {
     var t = state.schema && state.schema.tillfallen;
     if (!Array.isArray(t)) return null;
     var idag = idagISO();
     var val = null;
     t.forEach(function (r) {
-      if (r && r.pass && !r.installt && r.datum && r.datum >= idag) {
+      if (r && r.pass && !r.installt && r.datum && r.datum >= idag &&
+          (!passId || r.pass === passId)) {
         if (!val || r.datum < val.datum) val = r;
       }
     });
+    return val;
+  }
+
+  function schemaAktivtId() {
+    var val = nastaTillfalle();
     return val ? val.pass : null;
+  }
+
+  /* Datum och ledare i passets faktarad visas enligt schemat (passets
+     nästa tillfälle) när det finns ett – annars det som står i passfilen.
+     Bara visningen påverkas; passfilen sparas som den är. */
+  function medSchemaFakta(pass) {
+    var r = nastaTillfalle(pass.id);
+    if (!r) return pass;
+    var kopia = Object.assign({}, pass, { datum: r.datum });
+    if (r.ansvariga && r.ansvariga.length) kopia.ansvarigaLedare = r.ansvariga;
+    return kopia;
   }
 
   function effektivtAktivt() {
@@ -77,7 +96,7 @@
       aktivt: effektivtAktivt(),
       pass: ((state.index && state.index.pass) || []).map(function (id) {
         var p = state.pass[id];
-        return p ? p.data : null;
+        return p ? medSchemaFakta(p.data) : null;
       }).filter(Boolean),
       lekar: state.lekar ? state.lekar.lekar : []
     };
