@@ -40,6 +40,20 @@
     return val;
   }
 
+  /* Tillfället som ett pass arkiveras som: det senast genomförda (t.o.m.
+     idag), annars det närmast kommande. Arkiverar man några dagar efter
+     träningen ska alltså den träningens datum och ledare följa med, inte
+     nästa veckas. */
+  function arkivTillfalle(passId) {
+    var idag = idagISO();
+    var val = null;
+    ((state.schema && state.schema.tillfallen) || []).forEach(function (r) {
+      if (r && r.pass === passId && !r.installt && r.datum && r.datum <= idag &&
+          (!val || r.datum > val.datum)) val = r;
+    });
+    return val || nastaTillfalle(passId);
+  }
+
   function schemaAktivtId() {
     var val = nastaTillfalle();
     return val ? val.pass : null;
@@ -109,6 +123,11 @@
   }
 
   function rita() {
+    /* Passinfo-formuläret ligger utanför det som ritas om nedan – stäng
+       det, annars skulle det stå kvar och peka på ett gammalt passobjekt
+       efter Avbryt, sparning, återställning eller sparkrock. */
+    var passForm = document.querySelector("#pass-head .redigera-form");
+    if (passForm) passForm.remove();
     var visadPass = window.Render.rita(samladVy(), state.valtId, kanRedigera(), vaxlaPass);
     document.body.classList.toggle("redigerar", kanRedigera());
     if (kanRedigera() && visadPass) {
@@ -138,7 +157,9 @@
         }).catch(function () { state.schema = null; })
       ]));
     }).then(function () {
-      state.valtId = effektivtAktivt();
+      /* Fliken man står på ligger kvar vid omladdning (Avbryt, återställning,
+         sparkrock, in-/utloggning) – bara första laddningen väljer aktuellt pass. */
+      if (!visarLekar() && !state.pass[state.valtId]) state.valtId = effektivtAktivt();
       rita();
     }).catch(function (e) {
       status("fel", "Kunde inte hämta träningspassen: " + e.message, true);
@@ -230,12 +251,15 @@
   function arkivera() {
     if (!kanRedigera()) { status("fel", "Du måste vara inloggad som ledare."); return; }
     var p = valtPass() || {};
+    var t = arkivTillfalle(p.id);
+    var datum = t ? t.datum : p.datum;
+    var ledare = t && t.ansvariga && t.ansvariga.length ? t.ansvariga : p.ansvarigaLedare;
     if (!confirm("Arkivera \"" + (p.namn || "passet") + "\"" +
-                 (p.datum ? " (" + p.datum + ")" : "") + "?\n\n" +
+                 (datum ? " (" + window.Render.datumText(datum) + ")" : "") + "?\n\n" +
                  "En kopia sparas i arkivet precis som passet ser ut nu. " +
                  "Det aktuella passet ligger kvar och kan redigeras vidare inför nästa gång.")) return;
     status("info", "Arkiverar…", true);
-    window.API.arkivera(p.id).then(function (r) {
+    window.API.arkivera(p.id, datum, ledare).then(function (r) {
       status("ok", "Passet är arkiverat som " + r.post.fil + ". Det finns nu under Arkiv.");
       rita();
     }).catch(function (e) {
@@ -333,7 +357,7 @@
      A4:ans textbredd. Då blir siffran den verkliga, inte en gissning. */
   var A4_BREDD_PX = 703;      // 210 mm - 24 mm marginal, vid 96 dpi
   var A4_HOJD_PX = 1032;      // 297 mm - 24 mm marginal, vid 96 dpi
-  var matningPagar = false;
+  var matningNr = 0;          // bara den senast startade mätningen får visas
 
   /* Mäter i en dold ram med utskriftsstilen påslagen: först hur högt
      sidhuvudet + passinfon blir, sedan varje block för sig. Därefter
@@ -414,13 +438,17 @@
   }
 
   function visaSidUppskattning() {
-    if (matningPagar) return;
-    matningPagar = true;
-    var max = CFG.maxSidor || 3;
-    matSidor(false).then(function (sidor) {
-      matningPagar = false;
+    var nr = ++matningNr;
+    var taBortGammal = function () {
       var gammal = document.querySelector(".sidvarning");
       if (gammal) gammal.remove();
+    };
+    /* Lekbanken är inget underlag för ett pass – sidgränsen gäller inte där. */
+    if (visarLekar()) return taBortGammal();
+    var max = CFG.maxSidor || 3;
+    matSidor(false).then(function (sidor) {
+      if (nr !== matningNr) return;
+      taBortGammal();
       var ord = sidor === 1 ? "A4-sida" : "A4-sidor";
       var v = window.Render.el("div", "sidvarning no-print " + (sidor <= max ? "ok" : "varning"));
       v.textContent = sidor <= max
@@ -430,7 +458,7 @@
       v.dataset.sidor = String(sidor);
       var main = document.getElementById("main");
       main.insertBefore(v, main.querySelector(".pass-footer"));
-    }).catch(function () { matningPagar = false; });
+    });
   }
 
   function skrivUt() {
@@ -466,7 +494,12 @@
     window.Edit.init({
       pass: valtPass,
       lekar: lekar,
-      arAktivt: function () { var p = valtPass(); return !!p && p.id === effektivtAktivt(); },
+      /* Schemat styr vilket pass som är aktuellt så länge det har ett
+         kommande tillfälle – först därefter har det manuella valet verkan. */
+      kanSattaAktivt: function () {
+        var p = valtPass();
+        return !!p && !schemaAktivtId() && p.id !== state.index.aktivt;
+      },
       spara: spara, rita: rita, laddaOm: laddaOm, status: status,
       arkivera: arkivera, sattAktivt: sattAktivt
     });
@@ -610,11 +643,11 @@
 
     uppdateraInloggningsvy();
     laddaOm().then(function () {
-      /* Djuplänk från t.ex. Arkiv-sidan: index.html?visa=lekar öppnar
-         direkt på lekbanksfliken i stället för det aktuella passet. */
-      if (new URLSearchParams(location.search).get("visa") === "lekar") {
-        vaxlaPass(window.Render.LEKAR_ID);
-      }
+      /* Djuplänk från schemat och arkivet: index.html?visa=hojd (eller
+         ?visa=lekar) öppnar direkt på den fliken i stället för det
+         aktuella passet. */
+      var visa = new URLSearchParams(location.search).get("visa");
+      if (visa === window.Render.LEKAR_ID || state.pass[visa]) vaxlaPass(visa);
       if (!window.API.harApi()) return;
       if (!window.API.anvandare()) return;
       status("info", "Inloggad som ledare – klicka Redigera i ett moment för att ändra.");

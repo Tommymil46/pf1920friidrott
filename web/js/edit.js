@@ -66,12 +66,11 @@
 
     pass.hallskiss = pass.hallskiss || [];
     pass.hallskissFiler = pass.hallskissFiler || [];
-    function ritaOmHallskiss() { App.rita(); redigeraPass(); }
     var hallskissBox = el("div", "hallskiss-redigera");
     hallskissBox.appendChild(el("h3", null, "Skiss: idrottshallen"));
     hallskissBox.appendChild(el("p", "hjalp",
       "En skiss över hela hallen och var redskapen ska stå, till hjälp för den som ansvarar för passet."));
-    hallskissBox.appendChild(bilagePanel({ id: "hallskiss-" + pass.id, bilder: pass.hallskiss, filer: pass.hallskissFiler }, ritaOmHallskiss));
+    hallskissBox.appendChild(bilagePanel({ id: "hallskiss-" + pass.id, bilder: pass.hallskiss, filer: pass.hallskissFiler }));
     form.appendChild(hallskissBox);
 
     var actions = el("div", "form-actions");
@@ -89,8 +88,8 @@
       pass.avslutning = slut.input.value;
       App.spara("Uppdaterade passinformationen för " + pass.namn).catch(function () {});
     }));
-    actions.appendChild(knapp("Avbryt", "btn-ghost", function () { form.remove(); }));
-    if (!App.arAktivt()) {
+    actions.appendChild(knapp("Avbryt", "btn-ghost", function () { App.laddaOm(); }));
+    if (App.kanSattaAktivt()) {
       actions.appendChild(knapp("Sätt som aktuellt pass", "btn-ghost", function () {
         App.sattAktivt();
       }));
@@ -107,9 +106,14 @@
     namn.input.focus();
   }
 
-  /* ---------- Bilagor (bild / pdf) ---------- */
-  function bilagePanel(moment, ritaOm) {
-    var box = el("div");
+  /* ---------- Bilagor (bild / pdf) ----------
+     Panelen ritar bara om sig själv när en bilaga läggs till eller tas
+     bort – resten av formuläret rörs inte, så text som ledaren hunnit
+     skriva men inte sparat ligger kvar. */
+  function bilagePanel(moment, box) {
+    box = box || el("div");
+    box.innerHTML = "";
+    function ritaOm() { bilagePanel(moment, box); }
 
     if ((moment.bilder || []).length) {
       box.appendChild(el("p", "hjalp", "Bilder:"));
@@ -214,8 +218,7 @@
     form.appendChild(syfte.label);
     form.appendChild(text.label);
 
-    function ritaOm() { App.rita(); redigeraMoment(momentId); }
-    form.appendChild(bilagePanel(moment, ritaOm));
+    form.appendChild(bilagePanel(moment));
 
     var actions = el("div", "form-actions");
     actions.appendChild(knapp("Spara moment", "btn-primary", function () {
@@ -326,8 +329,7 @@
     form.appendChild(rad);
     form.appendChild(text.label);
 
-    function ritaOm() { App.rita(); redigeraLek(lekId); }
-    form.appendChild(bilagePanel(lek, ritaOm));
+    form.appendChild(bilagePanel(lek));
 
     var actions = el("div", "form-actions");
     actions.appendChild(knapp("Spara lek", "btn-primary", function () {

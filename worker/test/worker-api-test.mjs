@@ -240,6 +240,20 @@ k("arkivlistan är publik och innehåller passet",
 r = await anropa(env, "/arkiv/" + arkivFil);
 k("arkiverat pass går att läsa", r.status === 200 && r.data.pass.moment);
 
+r = await anropa(env, "/arkivera", {
+  method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ passId: "hojd", datum: "2026-11-15", ledare: ["Ludvig", "Eric"] })
+});
+k("arkivkopian bär schemats datum och ledare",
+  r.status === 200 && r.data.post.fil === "2026-11-15-hojd.json" &&
+  r.data.post.datum === "2026-11-15" && r.data.post.ledare.join() === "Ludvig,Eric");
+
+r = await anropa(env, "/arkivera", {
+  method: "POST", headers: { ...AUTH, "Content-Type": "application/json" },
+  body: JSON.stringify({ passId: "hojd", datum: "15/11" })
+});
+k("felaktigt arkivdatum stoppas", r.status === 400);
+
 for (const bad of ["../pass.json", "index.json"]) {
   r = await anropa(env, "/arkiv/" + encodeURIComponent(bad));
   k("sökvägsflykt avvisas (" + bad + ")", r.status === 400 || r.status === 404);
