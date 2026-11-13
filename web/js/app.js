@@ -123,6 +123,11 @@
   }
 
   function rita() {
+    /* Passinfo-formuläret ligger utanför det som ritas om nedan – stäng
+       det, annars skulle det stå kvar och peka på ett gammalt passobjekt
+       efter Avbryt, sparning, återställning eller sparkrock. */
+    var passForm = document.querySelector("#pass-head .redigera-form");
+    if (passForm) passForm.remove();
     var visadPass = window.Render.rita(samladVy(), state.valtId, kanRedigera(), vaxlaPass);
     document.body.classList.toggle("redigerar", kanRedigera());
     if (kanRedigera() && visadPass) {
