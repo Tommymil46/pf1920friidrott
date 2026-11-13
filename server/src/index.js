@@ -473,6 +473,20 @@ function arkivSlug(pass) {
   return `${datum}-${namn}`;
 }
 
+/* Arkivkopian bär datum och ledare för det tillfälle i schemat som passet
+   genomfördes – webbappen skickar med dem. Passfilens egna värden gäller
+   om de utelämnas. Returnerar ett felmeddelande eller null. */
+function granskaArkivTillfalle(datum, ledare) {
+  if (datum != null && !/^\d{4}-\d{2}-\d{2}$/.test(String(datum))) {
+    return "Datumet måste skrivas som ÅÅÅÅ-MM-DD.";
+  }
+  if (ledare != null && !(Array.isArray(ledare) && ledare.length <= 4 &&
+      ledare.every((a) => typeof a === "string" && a.length <= 60))) {
+    return "Ledarna är felaktigt angivna.";
+  }
+  return null;
+}
+
 async function hamtaArkivIndex() {
   try {
     return await gh.hamtaJson(`${ARKIV_DIR}/index.json`);
@@ -502,8 +516,10 @@ api.get("/arkiv/:fil", async (req, res, next) => {
 
 api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) => {
   try {
-    const { passId } = req.body || {};
+    const { passId, datum, ledare: schemaLedare } = req.body || {};
     if (!passId || !ID_MONSTER.test(passId)) return res.status(400).json({ fel: "Okänt träningspass." });
+    const tillfalleFel = granskaArkivTillfalle(datum, schemaLedare);
+    if (tillfalleFel) return res.status(400).json({ fel: tillfalleFel });
     let original;
     try {
       original = (await gh.hamtaJson(gh.passPath(passId))).data;
@@ -512,6 +528,8 @@ api.post("/arkivera", kravInloggad, kravRiktigtLosenord, async (req, res, next) 
       throw e;
     }
     const pass = JSON.parse(JSON.stringify(original));
+    if (datum) pass.datum = datum;
+    if (schemaLedare && schemaLedare.length) pass.ansvarigaLedare = schemaLedare;
 
     const index = await hamtaArkivIndex();
     let bas = arkivSlug(pass), fil = `${bas}.json`, n = 2;

@@ -28,7 +28,7 @@ async function byteLosenord(p, start, nytt) {
 const kollar = [];
 const k = (n, v) => kollar.push([n, !!v]);
 
-await p.goto('http://127.0.0.1:8096/', { waitUntil: 'networkidle' });
+await p.goto('http://127.0.0.1:8096/?visa=lopning', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 k('läser passet från GitHub', (await p.locator('.pass-titel').textContent()).includes('Löpning'));
 
@@ -81,19 +81,19 @@ k('bilden med i sparat block', await p.locator('#block-station1-hinderbana-stafe
 await p.evaluate(() => { window.prompt = () => 'Häck'; });
 await p.click('#btn-add-block');
 await p.waitForTimeout(1800);
-k('nytt moment skapat', await p.locator('.block').count() === 5);
+k('nytt moment skapat', await p.locator('.block').count() === 6);
 k('nytt moment i navigeringen', (await p.locator('#block-nav').textContent()).includes('Häck'));
 
 await p.locator('#block-hack button[data-action=upp]').click();
 await p.waitForTimeout(1600);
 const ordning = await p.locator('.block h2').allTextContents();
-k('momentet flyttades upp (' + ordning.join(',') + ')', ordning[3] === 'Häck');
+k('momentet flyttades upp (' + ordning.join(',') + ')', ordning[4] === 'Häck');
 
 await p.locator('#block-hack button[data-action=redigera]').click();
 await p.waitForTimeout(400);
 await p.locator('#block-hack .form-actions button', { hasText: 'Ta bort momentet' }).click();
 await p.waitForTimeout(1800);
-k('momentet borttaget', await p.locator('.block').count() === 4);
+k('momentet borttaget', await p.locator('.block').count() === 5);
 
 await p.click('#btn-history');
 await p.waitForTimeout(1400);

@@ -147,7 +147,7 @@ mot samma `DATA_DIR` misslyckas annars. Se [test/README.md](test/README.md).
 
 ```bash
 cd worker && npm install
-node test/worker-api-test.mjs   # 39 kontroller, workern anropas direkt
+node test/worker-api-test.mjs   # 41 kontroller, workern anropas direkt
 ```
 
 Se [worker/README.md](worker/README.md#test) för hur man även testar mot en

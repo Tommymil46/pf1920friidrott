@@ -148,7 +148,10 @@
     return anrop("/arkiv/" + encodeURIComponent(fil)).catch(statisk);
   }
 
-  function arkivera(passId) { return anrop("/arkivera", { method: "POST", body: { passId: passId } }); }
+  /* datum/ledare: tillfället enligt schemat, som arkivkopian ska bära. */
+  function arkivera(passId, datum, ledare) {
+    return anrop("/arkivera", { method: "POST", body: { passId: passId, datum: datum, ledare: ledare } });
+  }
 
   /* --- Historik ---
      target: "index" | "lekar" | "pass/<id>" – varje fil har sin egen

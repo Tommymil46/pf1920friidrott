@@ -34,7 +34,7 @@ await p.waitForTimeout(1000);
 k('tomt arkiv förklaras', (await p.locator('#arkivposter').textContent()).includes('tomt'));
 
 // arkivera från förstasidan
-await p.goto(BAS + '/', { waitUntil: 'networkidle' });
+await p.goto(BAS + '/?visa=lopning', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 await p.click('#btn-login');
 await p.fill('#login-user','Johan'); await p.fill('#login-pass','Johan');
@@ -47,19 +47,19 @@ await p.locator('#pass-head .form-actions button', { hasText: 'Arkivera passet' 
 await p.waitForTimeout(2000);
 const st = await p.locator('#status').textContent();
 k('arkivering bekräftad (' + st.trim() + ')', st.includes('arkiverat'));
-k('filnamn av datum + rubrik', /2026-09-06-lopning\.json/.test(st));
+k('filnamn av datum + rubrik', /2026-09-20-lopning\.json/.test(st));
 
 // listan
 await p.goto(BAS + '/arkiv.html', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 k('ett kort i arkivet', await p.locator('.arkiv-kort').count() === 1);
-k('datum skrivs ut på svenska', (await p.locator('.arkiv-datum').textContent()).includes('söndag 6 september 2026'));
-k('momenten listas som etiketter', await p.locator('.arkiv-etikett').count() === 4);
+k('datum skrivs ut på svenska', (await p.locator('.arkiv-datum').textContent()).includes('söndag 20 september 2026'));
+k('momenten listas som etiketter', await p.locator('.arkiv-etikett').count() === 5);
 
 // öppna passet
 await p.locator('.arkiv-kort').click();
 await p.waitForTimeout(1500);
-k('passet visas', await p.locator('#arkivpass .block').count() === 4);
+k('passet visas', await p.locator('#arkivpass .block').count() === 5);
 k('inga redigeringsknappar i arkivet', await p.locator('button[data-action=redigera]').count() === 0);
 k('arkiveringsinfo i foten', (await p.locator('#meta-line').textContent()).includes('Arkiverat'));
 k('rubriken byts', (await p.locator('#sidrubrik').textContent()).startsWith('Arkiverat pass'));
