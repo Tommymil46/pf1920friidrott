@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="pil" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b4fa0"/></marker></defs>
+<rect width="1920" height="1080" fill="#ffffff"/>
+<g font-family="Helvetica, Arial, sans-serif" fill="#14201c">
+<text x="440" y="84" font-size="46" text-anchor="middle" font-weight="bold">Station 3 – Lek</text>
+<text x="1360" y="100" font-size="46" text-anchor="middle" font-weight="bold">Station 1 – Kullerbyttbana</text>
+<rect x="1104" y="200" width="110" height="64" rx="4" fill="#e6ecea" stroke="#5c6a66" stroke-width="4"/>
+<line x1="1140.6666666666667" y1="200" x2="1140.6666666666667" y2="264" stroke="#5c6a66" stroke-width="3"/><line x1="1177.3333333333333" y1="200" x2="1177.3333333333333" y2="264" stroke="#5c6a66" stroke-width="3"/>
+<rect x="1508" y="200" width="110" height="64" rx="4" fill="#e6ecea" stroke="#5c6a66" stroke-width="4"/>
+<line x1="1544.6666666666667" y1="200" x2="1544.6666666666667" y2="264" stroke="#5c6a66" stroke-width="3"/><line x1="1581.3333333333333" y1="200" x2="1581.3333333333333" y2="264" stroke="#5c6a66" stroke-width="3"/>
+<text x="1160" y="334" font-size="30" text-anchor="middle">Matta över plint på lägsta</text>
+<text x="1160" y="372" font-size="30" text-anchor="middle">nivå (lutande plan)</text>
+<text x="1566" y="334" font-size="30" text-anchor="middle">Kullerbytta med hjälp</text>
+<polygon points="1062,402 1043,450 1081,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1037" y1="450" x2="1087" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1180,402 1161,450 1199,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1155" y1="450" x2="1205" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1274,402 1255,450 1293,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1249" y1="450" x2="1299" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1398,402 1379,450 1417,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1373" y1="450" x2="1423" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1518,402 1499,450 1537,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1493" y1="450" x2="1543" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1610,402 1591,450 1629,450" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1585" y1="450" x2="1635" y2="450" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1130,466 1111,514 1149,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1105" y1="514" x2="1155" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1220,466 1201,514 1239,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1195" y1="514" x2="1245" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1314,466 1295,514 1333,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1289" y1="514" x2="1339" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1466,466 1447,514 1485,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1441" y1="514" x2="1491" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1554,466 1535,514 1573,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1529" y1="514" x2="1579" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<polygon points="1650,466 1631,514 1669,514" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1625" y1="514" x2="1675" y2="514" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<text x="1390" y="586" font-size="30" text-anchor="middle">Slalom mellan koner</text>
+<polygon points="1762,308 1743,356 1781,356" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1737" y1="356" x2="1787" y2="356" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<path d="M1792,262 C1880,280 1890,380 1772,402" fill="none" stroke="#1b4fa0" stroke-width="14" stroke-linecap="round" marker-end="url(#pil)"/>
+<text x="524" y="450" font-size="46" text-anchor="middle" font-weight="bold">Station 2 – Rörelsebana</text>
+<rect x="146" y="552" width="196" height="26" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/><rect x="146" y="632" width="196" height="26" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/>
+<rect x="176" y="560" width="70" height="100" rx="8" fill="#dbe6f5" stroke="#1b4fa0" stroke-width="4"/><rect x="186" y="570" width="50" height="80" rx="4" fill="none" stroke="#1b4fa0" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="250" y="560" width="70" height="100" rx="8" fill="#dbe6f5" stroke="#1b4fa0" stroke-width="4"/><rect x="260" y="570" width="50" height="80" rx="4" fill="none" stroke="#1b4fa0" stroke-width="2" stroke-dasharray="8 6"/>
+<text x="254" y="706" font-size="30" text-anchor="middle">Åla under madrasser</text>
+<rect x="440" y="596" width="200" height="36" rx="4" fill="#d9e1de" stroke="#5c6a66" stroke-width="4"/><line x1="448" y1="614.0" x2="632" y2="614.0" stroke="#5c6a66" stroke-width="3"/>
+<rect x="664" y="596" width="200" height="36" rx="4" fill="#d9e1de" stroke="#5c6a66" stroke-width="4"/><line x1="672" y1="614.0" x2="856" y2="614.0" stroke="#5c6a66" stroke-width="3"/>
+<text x="660" y="706" font-size="30" text-anchor="middle">Dra sig fram på mage över bänkar</text>
+<polygon points="58,772 39,820 77,820" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="33" y1="820" x2="83" y2="820" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<path d="M82,880 C-8,868 -4,760 76,730" fill="none" stroke="#1b4fa0" stroke-width="14" stroke-linecap="round" marker-end="url(#pil)"/>
+<path d="M100,894 v40 h84 v-40" fill="none" stroke="#b8402e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/><path d="M166,866 v-40 h84 v40" fill="none" stroke="#b8402e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<text x="152" y="1000" font-size="30" text-anchor="middle">Slalom</text>
+<text x="152" y="1038" font-size="30" text-anchor="middle">innebandymål</text>
+<rect x="340.0" y="744" width="20" height="76" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/><rect x="320.0" y="806" width="60" height="14" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/>
+<rect x="480.0" y="876" width="20" height="120" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/><rect x="460.0" y="982" width="60" height="14" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/>
+<polygon points="356,776 504,918 504,944 356,802" fill="#d9b574" stroke="#8a6a2a" stroke-width="4" stroke-linejoin="round"/><polygon points="356,816 504,958 504,984 356,842" fill="#d9b574" stroke="#8a6a2a" stroke-width="4" stroke-linejoin="round"/>
+<text x="430" y="1050" font-size="30" text-anchor="middle">Kryp mellan bommar</text>
+<path d="M620,884 h34 v76 h-34" fill="none" stroke="#b8402e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="728.9,884 789.1,884 802,960 716,960" fill="#e6ecea" stroke="#5c6a66" stroke-width="4" stroke-linejoin="round"/>
+<line x1="724.643" y1="909.08" x2="793.357" y2="909.08" stroke="#5c6a66" stroke-width="3"/>
+<line x1="720.386" y1="934.16" x2="797.614" y2="934.16" stroke="#5c6a66" stroke-width="3"/>
+<path d="M830,884 h34 v76 h-34" fill="none" stroke="#b8402e" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+<polygon points="932.9,884 993.1,884 1006,960 920,960" fill="#e6ecea" stroke="#5c6a66" stroke-width="4" stroke-linejoin="round"/>
+<line x1="928.643" y1="909.08" x2="997.357" y2="909.08" stroke="#5c6a66" stroke-width="3"/>
+<line x1="924.386" y1="934.16" x2="1001.614" y2="934.16" stroke="#5c6a66" stroke-width="3"/>
+<text x="810" y="1040" font-size="30" text-anchor="middle">Under häckar, över plintar</text>
+<polygon points="1040,768 1021,816 1059,816" fill="#e0a82e" stroke="#8a6a14" stroke-width="4" stroke-linejoin="round"/><line x1="1015" y1="816" x2="1065" y2="816" stroke="#8a6a14" stroke-width="5" stroke-linecap="round"/>
+<path d="M1010,730 C1100,740 1104,850 1020,868" fill="none" stroke="#1b4fa0" stroke-width="14" stroke-linecap="round" marker-end="url(#pil)"/>
+</g>
+</svg>
