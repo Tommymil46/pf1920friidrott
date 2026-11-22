@@ -28,7 +28,7 @@ async function byteLosenord(p, start, nytt) {
 const kollar = [];
 const k = (n, v) => kollar.push([n, !!v]);
 
-await p.goto('http://127.0.0.1:8096/?visa=lopning', { waitUntil: 'networkidle' });
+await p.goto((process.env.BAS || 'http://127.0.0.1:8096') + '/?visa=lopning', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1200);
 k('läser passet från GitHub', (await p.locator('.pass-titel').textContent()).includes('Löpning'));
 

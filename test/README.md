@@ -31,7 +31,7 @@ block, flytta, ta bort, historik, återställ – mot servern på port 8096 ovan
 ```bash
 DATA_DIR=/tmp/pf-webb JWT_SECRET=test PORT=8099 KRAV_LOSENORDSBYTE=1 \
   WEB_DIR=web CONTENT_DIR=content node server/src/index.js &
-npm run test:webb
+npm run test:webb   # annan port: PORT=8097 npm run test:webb (samma port som servern)
 SP=/tmp npm run test:e2e
 node test/arkiv-test.mjs
 ```

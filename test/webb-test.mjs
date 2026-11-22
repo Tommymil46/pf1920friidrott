@@ -1,10 +1,13 @@
 import { chromium } from 'playwright';
+import { readFileSync } from 'node:fs';
+const BAS = process.env.BAS || 'http://127.0.0.1:' + (process.env.PORT || 8099);
+const ANTAL = JSON.parse(readFileSync(new URL('../content/pass/lopning.json', import.meta.url))).moment.length;
 const b = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined, args: ['--no-sandbox'] });
 const p = await b.newPage({ viewport: { width: 1200, height: 900 } });
 const fel = [];
 p.on('pageerror', e => fel.push('PAGEERROR ' + e.message));
 p.on('console', m => { if (m.type()==='error' && !/500|Failed to load resource/.test(m.text())) fel.push('KONSOL ' + m.text()); });
-await p.goto('http://127.0.0.1:8099/', { waitUntil: 'networkidle' });
+await p.goto(BAS + '/', { waitUntil: 'networkidle' });
 await p.waitForTimeout(1800);
 
 /* Appen öppnar lösenordsrutan automatiskt för konton med startlösenord. */
@@ -16,8 +19,8 @@ const stangDialoger = async (p) => {
 const kollar = [];
 const k = (namn, v) => kollar.push([namn, v]);
 k('6 passflikar (5 pass + Lekar)', await p.locator('#pass-tabs button').count() === 6);
-k('4 moment i löpning', await p.locator('.block').count() === 4);
-k('navlänkar', await p.locator('#block-nav a').count() === 4);
+k(ANTAL + ' moment i löpning', await p.locator('.block').count() === ANTAL);
+k('navlänkar', await p.locator('#block-nav a').count() === ANTAL);
 k('utloggad: ingen redigera-knapp', await p.locator('button[data-action=redigera]').count() === 0);
 k('utloggad: user-box dold', !(await p.locator('#user-box').isVisible()));
 k('sidräknare visas', await p.locator('.sidvarning').isVisible());
@@ -28,7 +31,7 @@ await p.click('#form-login button[type=submit]');
 await p.waitForTimeout(1500);
 k('lösenordsrutan öppnas direkt', await p.locator('#dlg-password').evaluate(d => d.open));
 await stangDialoger(p);
-k('inloggad: 4 redigera-knappar', await p.locator('button[data-action=redigera]').count() === 4);
+k('inloggad: en redigera-knapp per moment (' + ANTAL + ')', await p.locator('button[data-action=redigera]').count() === ANTAL);
 k('inloggad: passinfo-knapp', await p.locator('#pass-facts button').count() === 1);
 k('inloggad: lägg till block', await p.locator('#btn-add-block').isVisible());
 
