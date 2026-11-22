@@ -66,6 +66,12 @@
       status(null);
       document.getElementById("arkivlista").hidden = true;
       document.getElementById("arkivpass").hidden = false;
+      /* Lekarna hämtas för att kunna länka dem; saknas de visas bara text. */
+      var lekarKlar = window.API.hamtaLekar()
+        .then(function (l) { window.Render.sattLekar((l.data && l.data.lekar) || [], "index.html"); })
+        .catch(function () { window.Render.sattLekar([], "index.html"); });
+      return lekarKlar.then(function () { return d; });
+    }).then(function (d) {
       window.Render.ritaEnstaka(d.pass, false);
 
       var post = poster.filter(function (p) { return p.fil === fil; })[0] || {};

@@ -68,3 +68,8 @@ node test/pages-test.mjs
 
 Sviterna byter lösenord på ledarkontona. Starta om servern med en tom
 `DATA_DIR` mellan körningarna, annars misslyckas inloggningen andra gången.
+
+## Leklänkar
+
+`node test/leklankar-test.mjs` (eller `npm run test:leklankar`) testar
+matchningen av lekar i passtexter. Kräver ingen server.

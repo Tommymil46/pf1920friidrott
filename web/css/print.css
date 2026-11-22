@@ -102,3 +102,6 @@ body.kompakt .header-text h1{font-size:15pt}
 body.kompakt .logo{width:30pt;height:30pt}
 body.kompakt .bild-rad{display:none}
 body.kompakt .block-head h2{font-size:10.5pt}
+
+/* Lekar som länkar i passtexten ska se ut som vanlig text på papper. */
+.lek-lank,.lek-lank:visited{color:inherit;text-decoration:none;background:none}

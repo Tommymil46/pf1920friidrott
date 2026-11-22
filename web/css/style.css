@@ -304,3 +304,14 @@ main{padding-bottom:48px}
   .navbar a{padding:9px 12px;font-size:14px}
   .topbar-inner{padding-top:6px;padding-bottom:6px}
 }
+
+/* ---------- Lekar länkade från passens texter ---------- */
+.lek-lank{color:var(--bla);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px}
+.lek-lank:hover,.lek-lank:focus-visible{text-decoration-style:solid}
+.block{scroll-margin-top:12px}
+.block.lek-markerad{animation:lek-markering 2.6s ease-out}
+@keyframes lek-markering{
+  0%,40%{box-shadow:0 0 0 4px var(--gul),var(--skugga)}
+  100%{box-shadow:var(--skugga)}
+}
+@media (prefers-reduced-motion:reduce){.block.lek-markerad{animation:none;outline:3px solid var(--gul)}}

@@ -7,6 +7,44 @@
 (function () {
   var CFG = window.PASS_CONFIG || {};
   var LEKAR_ID = "lekar";
+  /* Lekbanken som texter länkas mot, och sidan länkarna pekar på
+     ("" = samma sida; arkivsidan sätter "index.html"). */
+  var lekIndex = {};
+  var lekLankBas = "";
+
+  function sattLekar(lekar, bas) {
+    lekIndex = window.LekLankar ? window.LekLankar.byggIndex(lekar) : {};
+    if (bas != null) lekLankBas = bas;
+  }
+
+  /* Länkar lekarnas namn i redan renderad text. Bara visningen
+     påverkas – råtexten i datat (och i redigeringsformuläret) rörs inte. */
+  function lankaLekar(rot) {
+    if (!rot || !window.LekLankar) return;
+    var walker = document.createTreeWalker(rot, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.parentNode.closest("a") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var noder = [];
+    while (walker.nextNode()) noder.push(walker.currentNode);
+    noder.forEach(function (nod) {
+      var text = nod.nodeValue;
+      var traffar = window.LekLankar.hitta(text, lekIndex);
+      if (!traffar.length) return;
+      var frag = document.createDocumentFragment(), pos = 0;
+      traffar.forEach(function (t) {
+        if (t.start > pos) frag.appendChild(document.createTextNode(text.slice(pos, t.start)));
+        var a = el("a", "lek-lank", text.slice(t.start, t.slut));
+        a.href = lekLankBas + "#lek-" + encodeURIComponent(t.lek.id);
+        a.title = "Öppna leken " + t.lek.namn + " i lekbanken";
+        frag.appendChild(a);
+        pos = t.slut;
+      });
+      if (pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+      nod.parentNode.replaceChild(frag, nod);
+    });
+  }
 
   function el(tagg, klass, text) {
     var n = document.createElement(tagg);
@@ -186,6 +224,7 @@
       d.appendChild(el("h3", null, p[0]));
       var kropp = el("div");
       kropp.innerHTML = window.MD.html(p[1]);
+      lankaLekar(kropp);
       d.appendChild(kropp);
       v.appendChild(d);
     });
@@ -201,6 +240,7 @@
     v.appendChild(el("h3", null, "Avslutning"));
     var kropp = el("div");
     kropp.innerHTML = window.MD.html(text);
+    lankaLekar(kropp);
     v.appendChild(kropp);
   }
 
@@ -231,7 +271,7 @@
     return fig;
   }
 
-  function ritaBlock(moment, kanRedigera, visaFlytta) {
+  function ritaBlock(moment, kanRedigera, visaFlytta, lankaText) {
     var kort = el("article", "block");
     kort.id = "block-" + moment.id;
     kort.dataset.blockId = moment.id;
@@ -264,6 +304,7 @@
 
     var text = el("div", "block-text");
     text.innerHTML = window.MD.html(moment.text);
+    if (lankaText !== false) lankaLekar(text);
     kropp.appendChild(text);
 
     if ((moment.bilder || []).length) {
@@ -372,7 +413,7 @@
 
     var v = document.getElementById("blocks");
     v.innerHTML = "";
-    sorterade.forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera, false)); });
+    sorterade.forEach(function (l) { v.appendChild(ritaBlock(l, kanRedigera, false, false)); });
 
     var avslutning = document.getElementById("pass-avslutning");
     if (avslutning) { avslutning.hidden = true; avslutning.innerHTML = ""; }
@@ -392,6 +433,7 @@
   /* Förstasidan: fem träningspass + lekbanken som flikar. */
   function rita(data, valtId, kanRedigera, vaxlaPass) {
     ritaPassTabs(data, valtId, vaxlaPass);
+    sattLekar(data.lekar || []);
     if (valtId === LEKAR_ID) {
       ritaLekarVy(data.lekar || [], kanRedigera);
       return null;
@@ -410,7 +452,7 @@
   }
 
   window.Render = {
-    rita: rita, ritaEnstaka: ritaEnstaka, hittaPass: hittaPass, LEKAR_ID: LEKAR_ID,
+    rita: rita, sattLekar: sattLekar, ritaEnstaka: ritaEnstaka, hittaPass: hittaPass, LEKAR_ID: LEKAR_ID,
     el: el, datumText: datumText, tidText: tidText
   };
 })();
