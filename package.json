@@ -4,6 +4,7 @@
   "private": true,
   "description": "Aktuellt träningspass – Friidrott PF 19/20, Hagunda IF. Verktyg för utveckling och test.",
   "scripts": {
+    "test:leklankar": "node test/leklankar-test.mjs",
     "test:webb": "node test/webb-test.mjs",
     "test:e2e": "node test/e2e.mjs",
     "test:api": "bash test/api-test.sh",

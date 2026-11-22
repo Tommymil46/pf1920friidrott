@@ -116,8 +116,51 @@
     };
   }
 
+  /* Länk till en lek: #lek-<id>. Öppnar fliken Lekar, scrollar till leken
+     och markerar den en stund. Bakåtknappen tar tillbaka till passet. */
+  var LEK_HASH = /^#lek-(.+)$/;
+  var lekFran = null;
+
+  function lekIdUrHash() {
+    var m = LEK_HASH.exec(location.hash);
+    if (!m) return null;
+    try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; }
+  }
+
+  /* Varifrån man kom lagras i historikposten för lekadressen
+     (history.state.lekFran), inte i hashens form – så Bakåt fungerar även
+     efter att man hoppat till ett moment, och efter ett flikbyte. */
+  function visaLekFranHash(gammalUrl) {
+    var id = lekIdUrHash();
+    if (!id) return false;
+    if (!state.lekar) return false;
+    var sparad = history.state && history.state.lekFran;
+    if (sparad) lekFran = sparad;
+    if (!visarLekar()) {
+      if (!sparad) lekFran = { id: state.valtId, y: window.scrollY, url: gammalUrl || null };
+      state.valtId = window.Render.LEKAR_ID;
+      rita();
+    }
+    if (!sparad && lekFran) history.replaceState({ lekFran: lekFran }, "");
+    var kort = document.getElementById("block-" + id);
+    if (!kort) { window.scrollTo(0, 0); return true; }
+    kort.scrollIntoView({ block: "start" });
+    kort.classList.remove("lek-markerad");
+    void kort.offsetWidth;
+    kort.classList.add("lek-markerad");
+    setTimeout(function () { kort.classList.remove("lek-markerad"); }, 3000);
+    return true;
+  }
+
   function vaxlaPass(id) {
     state.valtId = id;
+    /* Flikbyte från en lekadress: lägg en ny post utan lekhash (så en
+       omladdning inte öppnar Lekar igen) i stället för att skriva över
+       lekposten – då tar Bakåt en tillbaka till leken. */
+    if (LEK_HASH.test(location.hash)) {
+      history.pushState(null, "", location.pathname + location.search);
+    }
+    lekFran = null;
     rita();
     window.scrollTo(0, 0);
   }
@@ -634,8 +677,25 @@
       if (id) window.Edit.lekSomMoment(id);
     });
 
+    /* Lämna inte ett öppet redigeringsformulär av misstag via en leklänk. */
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a.lek-lank");
+      if (a && document.querySelector(".redigera-form") &&
+          !window.confirm("Du har ett öppet redigeringsformulär. Lämna det och öppna leken?")) {
+        e.preventDefault();
+      }
+    });
+
     /* Markera aktiv blocklänk vid scroll */
-    window.addEventListener("hashchange", function () {
+    window.addEventListener("hashchange", function (e) {
+      if (LEK_HASH.test(location.hash)) { visaLekFranHash(e.oldURL); return; }
+      /* Bakåt från en lek: tillbaka till passet man kom från, bara när
+         adressen är exakt den man lämnade (inte vid momentlänkar i Lekar). */
+      if (lekFran && lekFran.url && e.newURL === lekFran.url && visarLekar()) {
+        var fran = lekFran; lekFran = null;
+        state.valtId = fran.id; rita(); window.scrollTo(0, fran.y);
+        return;
+      }
       document.querySelectorAll("#block-nav a").forEach(function (a) {
         a.classList.toggle("aktiv", a.getAttribute("href") === location.hash);
       });
@@ -646,6 +706,11 @@
       /* Djuplänk från schemat och arkivet: index.html?visa=hojd (eller
          ?visa=lekar) öppnar direkt på den fliken i stället för det
          aktuella passet. */
+      if (visaLekFranHash()) {
+        if (!window.API.harApi() || !window.API.anvandare()) return;
+        status("info", "Inloggad som ledare – klicka Redigera i ett moment för att ändra.");
+        return;
+      }
       var visa = new URLSearchParams(location.search).get("visa");
       if (visa === window.Render.LEKAR_ID || state.pass[visa]) vaxlaPass(visa);
       if (!window.API.harApi()) return;
