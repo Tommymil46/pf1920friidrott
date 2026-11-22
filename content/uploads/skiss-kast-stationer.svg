@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+<defs><marker id="pil" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="2.6" markerHeight="2.6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1b4fa0"/></marker></defs>
+<rect width="1920" height="1080" fill="#ffffff"/>
+<g font-family="Helvetica, Arial, sans-serif" fill="#14201c">
+<rect x="944" y="0" width="22" height="1080" fill="#e3e8e6" stroke="#5c6a66" stroke-width="3"/>
+<text x="64" y="70" font-size="44" text-anchor="start" font-weight="bold">Station 2 – Kast över bom</text>
+<text x="1456" y="70" font-size="46" text-anchor="middle" font-weight="bold">Station 3 – Lek</text>
+<rect x="380" y="260" width="44" height="220" rx="4" fill="#d9e1de" stroke="#5c6a66" stroke-width="4"/><line x1="402.0" y1="268" x2="402.0" y2="472" stroke="#5c6a66" stroke-width="3"/>
+<circle cx="520" cy="290" r="22" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="520" cy="342" r="22" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="520" cy="394" r="22" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="520" cy="446" r="22" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="520" cy="498" r="22" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<text x="470" y="560" font-size="32" text-anchor="middle">Rockringar/Bänkar</text>
+<rect x="689.0" y="330" width="22" height="150" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/><rect x="669.0" y="466" width="62" height="14" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/>
+<rect x="849.0" y="330" width="22" height="150" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/><rect x="829.0" y="466" width="62" height="14" rx="4" fill="#aeb9b5" stroke="#5c6a66" stroke-width="4"/>
+<rect x="670" y="322" width="220" height="18" rx="6" fill="#d9b574" stroke="#8a6a2a" stroke-width="4"/>
+<text x="780" y="556" font-size="32" text-anchor="middle">Bom</text>
+<text x="780" y="594" font-size="28" text-anchor="middle">ca 1,5 m över marken</text>
+<path d="M580,250 C640,100 800,80 900,250" fill="none" stroke="#1b4fa0" stroke-width="14" stroke-linecap="round" marker-end="url(#pil)"/>
+<rect x="542" y="266" width="48" height="32" rx="12" fill="#c9543f" stroke="#7d2a1d" stroke-width="3"/><line x1="554" y1="282" x2="578" y2="282" stroke="#ffffff" stroke-width="3" stroke-dasharray="5 4"/>
+<text x="470" y="222" font-size="28" text-anchor="middle" fill="#5c6a66">Ärtpåsar</text>
+<text x="1470" y="625" font-size="46" text-anchor="middle" font-weight="bold">Station 1 – Kast precision</text>
+<circle cx="1384" cy="700" r="24" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="1384" cy="756" r="24" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="1384" cy="812" r="24" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="1384" cy="868" r="24" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<circle cx="1384" cy="924" r="24" fill="#fbf3dc" stroke="#b5811a" stroke-width="7"/>
+<rect x="1650" y="690" width="110" height="64" rx="4" fill="#e6ecea" stroke="#5c6a66" stroke-width="4"/>
+<rect x="1660" y="700" width="90" height="44" rx="3" fill="#ffffff" stroke="#5c6a66" stroke-width="3"/>
+<rect x="1650" y="786" width="110" height="64" rx="4" fill="#e6ecea" stroke="#5c6a66" stroke-width="4"/>
+<rect x="1660" y="796" width="90" height="44" rx="3" fill="#ffffff" stroke="#5c6a66" stroke-width="3"/>
+<rect x="1650" y="882" width="110" height="64" rx="4" fill="#e6ecea" stroke="#5c6a66" stroke-width="4"/>
+<rect x="1660" y="892" width="90" height="44" rx="3" fill="#ffffff" stroke="#5c6a66" stroke-width="3"/>
+<path d="M1430,815 L1630,815" fill="none" stroke="#1b4fa0" stroke-width="10" stroke-linecap="round" marker-end="url(#pil)"/>
+<rect x="1456" y="764" width="48" height="32" rx="12" fill="#c9543f" stroke="#7d2a1d" stroke-width="3"/><line x1="1468" y1="780" x2="1492" y2="780" stroke="#ffffff" stroke-width="3" stroke-dasharray="5 4"/>
+<text x="1560" y="764" font-size="28" text-anchor="middle" fill="#5c6a66">Ärtpåsar</text>
+<text x="1384" y="1040" font-size="32" text-anchor="middle">Rockringar</text>
+<text x="1705" y="1005" font-size="32" text-anchor="middle">Upp och nedvända</text>
+<text x="1705" y="1045" font-size="32" text-anchor="middle">plintar</text>
+</g>
+</svg>
