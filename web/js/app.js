@@ -127,15 +127,21 @@
     try { return decodeURIComponent(m[1]); } catch (e) { return m[1]; }
   }
 
-  function visaLekFranHash() {
+  /* Varifrån man kom lagras i historikposten för lekadressen
+     (history.state.lekFran), inte i hashens form – så Bakåt fungerar även
+     efter att man hoppat till ett moment, och efter ett flikbyte. */
+  function visaLekFranHash(gammalUrl) {
     var id = lekIdUrHash();
     if (!id) return false;
     if (!state.lekar) return false;
+    var sparad = history.state && history.state.lekFran;
+    if (sparad) lekFran = sparad;
     if (!visarLekar()) {
-      lekFran = { id: state.valtId, y: window.scrollY };
+      if (!sparad) lekFran = { id: state.valtId, y: window.scrollY, url: gammalUrl || null };
       state.valtId = window.Render.LEKAR_ID;
       rita();
     }
+    if (!sparad && lekFran) history.replaceState({ lekFran: lekFran }, "");
     var kort = document.getElementById("block-" + id);
     if (!kort) { window.scrollTo(0, 0); return true; }
     kort.scrollIntoView({ block: "start" });
@@ -148,10 +154,11 @@
 
   function vaxlaPass(id) {
     state.valtId = id;
-    /* En flikbytare ska inte lämna kvar en lekadress som skulle öppna
-       Lekar igen vid omladdning. */
+    /* Flikbyte från en lekadress: lägg en ny post utan lekhash (så en
+       omladdning inte öppnar Lekar igen) i stället för att skriva över
+       lekposten – då tar Bakåt en tillbaka till leken. */
     if (LEK_HASH.test(location.hash)) {
-      history.replaceState(null, "", location.pathname + location.search);
+      history.pushState(null, "", location.pathname + location.search);
     }
     lekFran = null;
     rita();
@@ -680,10 +687,11 @@
     });
 
     /* Markera aktiv blocklänk vid scroll */
-    window.addEventListener("hashchange", function () {
-      if (LEK_HASH.test(location.hash)) { visaLekFranHash(); return; }
-      /* Bakåt från en lek: tillbaka till passet man kom från. */
-      if (lekFran && !/^#block-/.test(location.hash) && visarLekar()) {
+    window.addEventListener("hashchange", function (e) {
+      if (LEK_HASH.test(location.hash)) { visaLekFranHash(e.oldURL); return; }
+      /* Bakåt från en lek: tillbaka till passet man kom från, bara när
+         adressen är exakt den man lämnade (inte vid momentlänkar i Lekar). */
+      if (lekFran && lekFran.url && e.newURL === lekFran.url && visarLekar()) {
         var fran = lekFran; lekFran = null;
         state.valtId = fran.id; rita(); window.scrollTo(0, fran.y);
         return;

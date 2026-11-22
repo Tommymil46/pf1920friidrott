@@ -4,7 +4,7 @@ import fs from 'fs';
 const L = createRequire(import.meta.url)('../web/js/leklankar.js');
 const lekar = JSON.parse(fs.readFileSync(new URL('../content/lekar.json', import.meta.url))).lekar;
 const idx = L.byggIndex(lekar);
-const namn = (t) => L.hitta(t, idx).map(x => x.lek.id + '=' + t.slice(x.start, x.slut));
+const namn = (t) => L.hitta(t, idx).map(x => x.lek.id + '=' + t.normalize('NFC').slice(x.start, x.slut));
 let fel = 0;
 const lika = (rubrik, fas, ska) => {
   const a = JSON.stringify(fas), b = JSON.stringify(ska);
@@ -20,5 +20,10 @@ lika('delord matchar inte (Banankullen)', namn('Banankullen och Kullager'), []);
 lika('okänd lek förblir text', namn('Stafett med ärtpåse i ribbstol'), []);
 lika('å/ä/ö skiljs åt', namn('Odlorna på marken'), []);
 lika('Ö-namn', namn('Ödlorna på marken'), ['odlorna-pa-marken=Ödlorna på marken']);
+lika('NFD-lagrade tecken matchar', namn('Ödlorna på marken, Bläckfisken i havet'.normalize('NFD')),
+  ['odlorna-pa-marken=Ödlorna på marken', 'blackfisken-i-havet=Bläckfisken i havet']);
+lika('"alla som" i löpande text länkas inte', namn('Låt alla som är klara hjälpa till. kull och byt bo.'), []);
+lika('liten bokstav i början länkas inte', namn('rött ljus grönt ljus'), []);
+lika('stor bokstav länkas', namn('Alla som'), ['alla-som=Alla som']);
 lika('tom text', namn(''), []);
 process.exit(fel ? 1 : 0);

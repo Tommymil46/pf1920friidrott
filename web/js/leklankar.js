@@ -1,8 +1,8 @@
 /* ===========================================================
    Länkar lekar i löpande text till lekbanken.
 
-   Matchningen sker på ord: skiftläge, kommatecken och andra
-   skiljetecken saknar betydelse, så "Rött ljus grönt ljus"
+   Matchningen sker på ord: skiftläge i resten av namnet, kommatecken och
+   andra skiljetecken saknar betydelse (träffen ska dock börja med stor bokstav), så "Rött ljus grönt ljus"
    matchar leken "Rött ljus, grönt ljus". Längsta träff vinner.
    Inget skrivs in i texten – länkarna läggs på först vid
    rendering, så nya lekar och nya pass fungerar av sig själva.
@@ -12,8 +12,9 @@
 
   function ordLista(text) {
     var ut = [], m;
+    text = String(text || "").normalize("NFC");
     ORD.lastIndex = 0;
-    while ((m = ORD.exec(String(text || "")))) {
+    while ((m = ORD.exec(text))) {
       ut.push({ ord: m[0].toLocaleLowerCase("sv"), start: m.index, slut: m.index + m[0].length });
     }
     return ut;
@@ -33,8 +34,9 @@
     return index;
   }
 
-  /* Returnerar träffar [{start, slut, lek}] i text. */
+  /* Returnerar träffar [{start, slut, lek}]; positionerna gäller texten NFC-normaliserad. */
   function hitta(text, index) {
+    text = String(text || "").normalize("NFC");
     var ord = ordLista(text), traffar = [], i = 0;
     while (i < ord.length) {
       var kandidater = index[ord[i].ord], tr = null;
@@ -42,6 +44,10 @@
         for (var k = 0; k < kandidater.length && !tr; k++) {
           var n = kandidater[k].ord, ok = i + n.length <= ord.length;
           for (var j = 0; ok && j < n.length; j++) if (ord[i + j].ord !== n[j]) ok = false;
+          /* Leknamn skrivs som namn: träffen måste börja med stor bokstav,
+             så att "alla som är klara" eller "byt bo" i löpande text inte länkas. */
+          var f = text.charAt(ord[i].start);
+          if (f === f.toLocaleLowerCase("sv")) ok = false;
           if (ok) tr = { n: n.length, lek: kandidater[k].lek };
         }
       }

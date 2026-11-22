@@ -29,7 +29,7 @@
     var noder = [];
     while (walker.nextNode()) noder.push(walker.currentNode);
     noder.forEach(function (nod) {
-      var text = nod.nodeValue;
+      var text = nod.nodeValue.normalize("NFC");
       var traffar = window.LekLankar.hitta(text, lekIndex);
       if (!traffar.length) return;
       var frag = document.createDocumentFragment(), pos = 0;
