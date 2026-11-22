@@ -169,7 +169,7 @@ main{padding-bottom:48px}
 .bild-rad{display:flex;flex-wrap:wrap;gap:12px;margin-top:10px}
 .bild-kort{width:200px;max-width:100%;margin:0}
 .bild-kort img{border:1px solid var(--linje);border-radius:4px;display:block;width:100%;
-  aspect-ratio:4/3;object-fit:cover;background:#eef0f4}
+  aspect-ratio:4/3;object-fit:contain;background:#eef0f4}
 .bild-kort a{display:block}
 .bild-kort figcaption{font-size:12px;color:var(--text-svag);margin-top:3px}
 

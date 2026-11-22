@@ -84,7 +84,7 @@ main{padding-bottom:0}
 .bild-rad{gap:4pt;margin-top:4pt}
 .bild-kort{width:23%;margin:0}
 /* Fast bildformat => utskriftens höjd går att räkna ut exakt. */
-.bild-kort img{aspect-ratio:4/3;object-fit:cover}
+.bild-kort img{aspect-ratio:4/3;object-fit:contain;background:#fff}
 .bild-kort figcaption{font-size:7pt;margin-top:1pt}
 /* Max tre bilder per block skrivs ut – resten finns kvar på webben */
 .bild-kort:nth-of-type(n+4){display:none}
